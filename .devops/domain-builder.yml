@@ -52,6 +52,6 @@ stages:
             cp -r ../ansible/output/* .
             git commit -am "Domain $(domain-name) built for product: $(product-name)"
             git push --set-upstream origin "domain-builder-$(domain-name)-$(Build.BuildId)"
-            
+            echo "Domain $(domain-name) build completed and pushed to branch domain-builder-$(domain-name)-$(Build.BuildId)"
 
           displayName: 'Build Domain'
