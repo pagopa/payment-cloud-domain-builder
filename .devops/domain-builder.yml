@@ -1,0 +1,57 @@
+# only manual
+trigger: none
+pr: none
+
+parameters:
+  - name: 'domain-name'
+    displayName: 'Domain name'
+    type: string
+  - name: 'product-name'
+    displayName: 'Product name'
+    type: string
+  - name: 'vnet-name'
+    displayName: 'VNet name'
+    type: string
+
+
+resources:
+  repositories:
+    - repository: ansible
+      type: github
+      name: pagopa/payment-cloud-domain-builder
+      ref: refs/heads/main
+      endpoint: "io-azure-devops-github-ro" #fixme
+
+stages:
+    - stage: 'domain-builder'
+      displayName: 'Domain Builder Stage'
+      jobs:
+      - job: 'domain-builder-job'
+        displayName: 'Domain Builder Job'
+        pool:
+        vmImage: 'ubuntu-latest'
+        steps:
+        - checkout: self # product repository
+        - checkout: ansible # domain builder ansible repository
+        - script: |
+            echo "installing Ansible"
+            python3 -m pip install --include-deps ansible
+            
+            echo "switching to ansible folder"
+            cd ansible
+            
+            echo "Building domain $(domain-name) for product: $(product-name)"
+            ansible-playbook -i ansible/inventory/hosts ansible/playbooks/domain-builder.yml \
+              --extra-vars "domain_name=$(domain-name) product_name=$(product-name) vnet_name=$(vnet-name)"
+            
+            # get output files from ansible
+            
+            cd ../CurrentRepo
+            git co -b "domain-builder-$(domain-name)-$(Build.BuildId)"
+            echo "Copying output files to the current repository"
+            cp -r ../ansible/output/* .
+            git commit -am "Domain $(domain-name) built for product: $(product-name)"
+            git push --set-upstream origin "domain-builder-$(domain-name)-$(Build.BuildId)"
+            
+
+          displayName: 'Build Domain'
