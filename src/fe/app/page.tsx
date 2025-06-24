@@ -80,7 +80,7 @@ export default function Wizard() {
             name="is_dev_public"
             checked={formData.is_dev_public}
             onChange={handleChange}
-            className="accent-indigo-600"
+            className={`peer w-4 h-4 appearance-none border border-zinc-600 rounded bg-zinc-900 checked:bg-indigo-600 checked:border-indigo-600 hover:border-indigo-500 transition-colors`}
             id="is_dev_public"
           />
           <label htmlFor="is_dev_public" className="text-zinc-300">
