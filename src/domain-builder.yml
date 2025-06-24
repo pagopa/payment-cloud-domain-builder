@@ -4,21 +4,6 @@
   vars_files:
     - vars/main.yml
   tasks:
-#    - name: Ensure dir common output exists
-#      ansible.builtin.file:
-#        path: output/{{ domain_name }}-common
-#        state: directory
-#        mode: '0755'
-#    - name: Ensure dir secret output exists
-#      ansible.builtin.file:
-#        path: output/{{ domain_name }}-secret
-#        state: directory
-#        mode: '0755'
-#    - name: Ensure dir app output exists
-#      ansible.builtin.file:
-#        path: output/{{ domain_name }}-app
-#        state: directory
-#        mode: '0755'
     - name: Ensure dir app output exists
       ansible.builtin.file:
         path: output/{{ domain_name }}-{{ item }}/env/dev
@@ -70,7 +55,7 @@
       loop: "{{ template_files_secrets.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
-    - name: Genera domain-secrets env
+    - name: Genera domain-secrets  env
       template:
         src: "{{ item.src }}"
         dest: "output/{{ domain_name }}-secrets/env/dev"
