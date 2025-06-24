@@ -366,12 +366,12 @@ export default function Wizard() {
 
   return (
     <div className="flex gap-6 p-6 mx-auto max-w-5xl">
-      <div className="w-64 bg-zinc-900 p-4 rounded-2xl shadow-2xl border border-zinc-700 h-fit hover:shadow-indigo-500/10 transition-all">
-        <h3 className="text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2">
+      <div className={`w-64 bg-zinc-900 p-4 rounded-2xl shadow-2xl border border-zinc-700 h-fit ${step === 1 ? 'hover:shadow-indigo-500/10' : step === 2 ? 'hover:shadow-emerald-500/10' : 'hover:shadow-pink-500/10'} transition-all`}>
+        <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${step === 1 ? 'text-indigo-400' : step === 2 ? 'text-emerald-400' : 'text-pink-400'}`}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
           </svg>
-          Componenti
+          Components
         </h3>
         {['PostgreSQL', 'Network', 'Redis', 'Storage Account', 'Key Vault'].map((component) => (
         <div key={component} className="flex items-center mb-3 hover:bg-zinc-800 p-2 rounded cursor-pointer transition-all group">
@@ -387,17 +387,17 @@ export default function Wizard() {
                   setSelectedComponents(selectedComponents.filter(c => c !== component));
                 }
               }}
-              className="peer w-4 h-4 appearance-none border border-zinc-600 rounded bg-zinc-900 checked:bg-indigo-600 checked:border-indigo-600 hover:border-indigo-500 transition-colors"
+              className={`peer w-4 h-4 appearance-none border border-zinc-600 rounded bg-zinc-900 ${step === 1 ? 'checked:bg-indigo-600 checked:border-indigo-600 hover:border-indigo-500' : step === 2 ? 'checked:bg-emerald-600 checked:border-emerald-600 hover:border-emerald-500 ' : 'checked:bg-pink-600 checked:border-pink-600 hover:border-pink-500'} transition-colors`}
             />
             <svg xmlns="http://www.w3.org/2000/svg" className="absolute w-3 h-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-white ml-0.5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
             </svg>
           </div>
-          <label htmlFor={component} className="text-zinc-300 text-sm group-hover:text-indigo-400 transition-colors select-none ml-2">{component}</label>
+          <label htmlFor={component} style={{ cursor: 'pointer' }} className={`text-zinc-300 text-sm ${step === 1 ? 'group-hover:text-indigo-400' : step === 2 ? 'group-hover:text-emerald-400' : 'group-hover:text-pink-400'} transition-colors select-none ml-2`}>{component}</label>
         </div>
       ))}
       </div>
-      <div className="p-6 flex-1 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 hover:shadow-zinc-500/10 transition-shadow">
+      <div className={`p-6 flex-1 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${step === 1 ? 'hover:shadow-indigo-500/10' : step === 2 ? 'hover:shadow-emerald-500/10' : 'hover:shadow-pink-500/10'} transition-shadow`}>
       <h1 className={`text-3xl font-bold mb-4 text-center ${step === 1 ? 'text-indigo-400' : step === 2 ? 'text-emerald-400' : 'text-pink-400'} drop-shadow`}>
         Wizard modulo Terraform IDH
       </h1>
