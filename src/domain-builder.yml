@@ -46,7 +46,7 @@
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-common/{{ item.path | basename }}"
       loop: "{{ template_files_common.files }}"
-      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
+      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', ''))) | default(false) | bool
 
     - name: Genera domain-common env
       template:
@@ -59,7 +59,7 @@
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-secrets/{{ item.path | basename }}"
       loop: "{{ template_files_secrets.files }}"
-      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
+      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', ''))) | default(false) | bool
 
     - name: Genera domain-secrets  env
       template:
@@ -78,7 +78,7 @@
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-app/{{ item.path | basename }}"
       loop: "{{ template_files_app.files }}"
-      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
+      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', ''))) | default(false) | bool
 
     - name: Genera domain-app env
       template:

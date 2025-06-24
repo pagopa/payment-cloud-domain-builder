@@ -35,7 +35,7 @@ data "azurerm_monitor_action_group" "opsgenie" {
 }
 
 
-{% if include_02_postgresql %}
+{% if include_postgresql %}
 data "azurerm_private_dns_zone" "postgres" {
   {% if is_dev_public %}
   count               = var.env_short != "d" ? 1 : 0

@@ -1,24 +1,23 @@
 
 # General Template vars
-include_99_main: true
-include_99_variables: true
-include_99_locals: true
-include_00_data: true
+include_main: true
+include_variables: true
+include_locals: true
+include_data: true
 
 # Secrets Template vars
-include_00_azuread: true
-include_01_keyvault: true
-include_01_tags: true
-include_02_azdo: true
-include_02_init_sops: true
-include_03_sops_secrets: true
+include_azuread: true
+include_keyvault: true
+include_tags: true
+include_azdo: true
+include_init_sops: true
+include_sops_secrets: true
 
 # Common Template vars
-include_02_postgresql: true
-include_01_tag_config: true
+include_postgresql: true
+include_tag_config: true
 
 tag_source: module.tag_config.tags
-
 
 domain_name: "meme"
 is_dev_public: true

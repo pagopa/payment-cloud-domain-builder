@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "db_rg" {
   name     = "${local.project}-db-rg"
   location = var.location
 
-  tags = {% if include_01_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }
 
@@ -78,6 +78,6 @@ module "postgres_flexible_server_{{ domain_name }}" {
   private_dns_zone_rg_name = data.azurerm_resource_group.rg_vnet.name
   private_dns_record_cname = "${local.domain}-db"
 
-  tags = {% if include_01_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }

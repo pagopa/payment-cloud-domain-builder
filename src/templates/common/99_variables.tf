@@ -36,7 +36,7 @@ variable "location_short" {
 #
 # postgres variables
 #
-{% if include_02_postgresql %}
+{% if include_postgresql %}
 variable "pgres_flex_params" {
   type = object({
     idh_resource                           = string

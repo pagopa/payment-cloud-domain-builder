@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "sec_rg" {
   name     = "${local.product}-${var.location_short}-${var.domain}-sec-rg"
   location = var.location
 
-  tags = {% if include_01_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 }
 
 module "key_vault" {
@@ -14,7 +14,7 @@ module "key_vault" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days = 90
 
-  tags = {% if include_01_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 }
 
 ## ad group policy ##
