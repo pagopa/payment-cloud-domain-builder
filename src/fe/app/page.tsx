@@ -47,6 +47,7 @@ export default function Wizard() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(defaultForm);
   const [showSummary, setShowSummary] = useState(false);
+  const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -364,8 +365,40 @@ export default function Wizard() {
 
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-zinc-900 rounded-2xl mt-10 shadow-2xl border border-zinc-700">
-      <h1 className="text-3xl font-bold mb-4 text-center text-indigo-400 drop-shadow">
+    <div className="flex gap-6 p-6 mx-auto max-w-5xl">
+      <div className="w-64 bg-zinc-900 p-4 rounded-2xl shadow-2xl border border-zinc-700 h-fit hover:shadow-indigo-500/10 transition-all">
+        <h3 className="text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+          </svg>
+          Componenti
+        </h3>
+        {['PostgreSQL', 'Network', 'Redis', 'Storage Account', 'Key Vault'].map((component) => (
+        <div key={component} className="flex items-center mb-3 hover:bg-zinc-800 p-2 rounded cursor-pointer transition-all group">
+          <div className="relative flex items-center">
+            <input
+              type="checkbox"
+              id={component}
+              checked={selectedComponents.includes(component)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedComponents([...selectedComponents, component]);
+                } else {
+                  setSelectedComponents(selectedComponents.filter(c => c !== component));
+                }
+              }}
+              className="peer w-4 h-4 appearance-none border border-zinc-600 rounded bg-zinc-900 checked:bg-indigo-600 checked:border-indigo-600 hover:border-indigo-500 transition-colors"
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" className="absolute w-3 h-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-white ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+            </svg>
+          </div>
+          <label htmlFor={component} className="text-zinc-300 text-sm group-hover:text-indigo-400 transition-colors select-none ml-2">{component}</label>
+        </div>
+      ))}
+      </div>
+      <div className="p-6 flex-1 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 hover:shadow-zinc-500/10 transition-shadow">
+      <h1 className={`text-3xl font-bold mb-4 text-center ${step === 1 ? 'text-indigo-400' : step === 2 ? 'text-emerald-400' : 'text-pink-400'} drop-shadow`}>
         Wizard modulo Terraform IDH
       </h1>
       {!showSummary ? (
@@ -394,7 +427,7 @@ export default function Wizard() {
           {steps[step-1]}
         </form>
       ) : (
-        <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner">
+        <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
           <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
             Anteprima modulo Terraform (IDH)
           </h2>
@@ -410,6 +443,7 @@ export default function Wizard() {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }
