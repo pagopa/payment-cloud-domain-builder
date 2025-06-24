@@ -36,8 +36,8 @@
 
     - name: Genera domain-secret
       template:
-        src: "/secret/{{ item.path }}"
-        dest: "output/secret/{{ item.path | basename }}"
+        src: "/secrets/{{ item.path }}"
+        dest: "output/secrets/{{ item.path | basename }}"
       loop: "{{ template_files.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
