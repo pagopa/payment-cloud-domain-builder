@@ -23,10 +23,32 @@ parameters:
     displayName: 'Terraform expression defining where to retrieve tags from'
     type: stirng
     default: 'module.tag_config.tags'
+  - name: 'log_analytics_ws_name'
+    displayName: 'Log analytics workspace name'
+    type: stirng
+  - name: 'log_analytics_ws_rg_name'
+    displayName: 'Log analytics workspace RG name'
+    type: stirng
   - name: 'include_tag_config_module'
     displayName: 'Use tag_config module to retrieve tags'
     type: boolean
     default: true
+  - name: 'monitor_rg_name'
+    displayName: 'Azure monitor RG name'
+    type: string
+  - name: 'monitor_action_group_slack_name'
+    displayName: 'Action group slack name'
+    type: string
+  - name: 'monitor_action_group_email_name'
+    displayName: 'Action group email name'
+    type: string
+  - name: 'monitor_action_group_opsgenie_name'
+    displayName: 'Action group opsgenie name'
+    type: string
+  - name: 'is_dev_public'
+    displayName: 'True if the dev environment is open to internet'
+    type: boolean
+    default: false
 
 resources:
   repositories:

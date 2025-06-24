@@ -11,6 +11,18 @@ include_01_tag_config: true
 
 tag_source: module.tag_config.tags
 
+
+domain_name: "meme"
+is_dev_public: true
+
+
+
+log_analytics_ws_name: "meme-law"
+log_analytics_ws_rg_name: "meme-monitor-rg"
+monitor_rg_name: "meme-rg"
+monitor_action_group_slack_name: "meme-action-group-slack"
+monitor_action_group_email_name: "meme-action-group-email"
+monitor_action_group_opsgenie_name: "meme-action-group-opsgenie"
 #TEST
 
 vnet_name: "meme-vnet"
