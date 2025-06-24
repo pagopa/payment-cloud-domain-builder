@@ -33,6 +33,12 @@ monitor_rg_name: "meme-rg"
 monitor_action_group_slack_name: "meme-action-group-slack"
 monitor_action_group_email_name: "meme-action-group-email"
 monitor_action_group_opsgenie_name: "meme-action-group-opsgenie"
+
+
+# secrets
+azdo_managed_identity_rg_name: "meme-azdo-managed-identity-rg"
+azdo_managed_identity_iac_prefix: "azdo-${var.env}-pagopa-iac"
+
 #TEST
 
 vnet_name: "meme-vnet"

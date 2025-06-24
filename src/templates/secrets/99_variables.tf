@@ -24,16 +24,6 @@ variable "env_short" {
   }
 }
 
-variable "domain" {
-  type = string
-  validation {
-    condition = (
-      length(var.domain) <= 12
-    )
-    error_message = "Max length is 12 chars."
-  }
-}
-
 variable "location" {
   type        = string
   description = "One of westeurope, northeurope"
@@ -48,11 +38,6 @@ variable "location_short" {
     error_message = "Length must be 3 chars."
   }
   description = "One of weu, itn"
-}
-
-variable "instance" {
-  type        = string
-  description = "One of beta, prod01, prod02"
 }
 
 
@@ -70,26 +55,3 @@ variable "enable_iac_pipeline" {
 }
 
 
-variable "kv-key-permissions-read" {
-  type        = list(string)
-  description = "List of read key permissions"
-  default     = ["Get", "List"]
-}
-
-variable "kv-secret-permissions-read" {
-  type        = list(string)
-  description = "List of read secret permissions"
-  default     = ["Get", "List"]
-}
-
-variable "kv-certificate-permissions-read" {
-  type        = list(string)
-  description = "List of read certificate permissions"
-  default     = ["Get", "GetIssuers", "List", "ListIssuers"]
-}
-
-variable "kv-storage-permissions-read" {
-  type        = list(string)
-  description = "List of read storage permissions"
-  default     = ["Get", "GetSAS", "List", "ListSAS"]
-}

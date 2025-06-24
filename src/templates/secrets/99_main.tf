@@ -16,10 +16,6 @@ terraform {
       source  = "hashicorp/external"
       version = "<= 2.3.4"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "<= 2.33.0"
-    }
   }
 
   backend "azurerm" {}
@@ -33,17 +29,14 @@ provider "azurerm" {
   }
 }
 
-provider "kubernetes" {
-  config_path    = "~/.kube/config-${var.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks"
-  config_context = "${var.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks"
-}
+
 
 data "azurerm_subscription" "current" {}
 
 data "azurerm_client_config" "current" {}
 
 module "__v4__" {
-  # v6.3.0
-  source = "git::https://github.com/pagopa/terraform-azurerm-v4?ref=3d63a1346a3df45e88b0795445e1bbaf1563b87c"
+  # v7.11.0
+  source = "git::https://github.com/pagopa/terraform-azurerm-v4?ref=b17f054eeda04d5ec4173d825cc7b6e4e2901bb6"
 }
 
