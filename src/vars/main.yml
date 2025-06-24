@@ -43,3 +43,11 @@ azdo_managed_identity_iac_prefix: "azdo-${var.env}-pagopa-iac"
 
 vnet_name: "meme-vnet"
 vnet_rg_name: "meme-vnet-rg"
+
+product_name: "pagopa"
+location: westeurope
+
+location_mapping:
+  italynorth: itn
+  westeurope: weu
+  northeurope: neu

@@ -21,7 +21,7 @@ locals {
     }
   ]) : []
 
-  config_secret_data = jsondecode(file(var.input_file))
+  config_secret_data = jsondecode(file("./secret/${var.env}/configs.json"))
   all_config_secrets_value = flatten([
     for kc, vc in local.config_secret_data : {
       valore = vc

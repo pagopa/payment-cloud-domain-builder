@@ -1,8 +1,9 @@
 locals {
   domain        = "{{domain_name}}"
-  product       = "${var.prefix}-${var.env_short}"
-  project_short = "${var.prefix}-${var.env_short}-${local.domain}"
-  project       = "${var.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
+  prefix        = "{{product_name}}"
+  product       = "${local.prefix}-${var.env_short}"
+  project_short = "${local.prefix}-${var.env_short}-${local.domain}"
+  project       = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
   vnet_name = "{{ vnet_name }}"
   vnet_resource_group_name = "{{ vnet_rg_name }}"
 

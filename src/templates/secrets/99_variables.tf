@@ -1,15 +1,4 @@
 # general
-
-variable "prefix" {
-  type = string
-  validation {
-    condition = (
-      length(var.prefix) <= 6
-    )
-    error_message = "Max length is 6 chars."
-  }
-}
-
 variable "env" {
   type = string
 }
@@ -40,13 +29,6 @@ variable "location_short" {
   description = "One of weu, itn"
 }
 
-
-###
-
-variable "input_file" {
-  type        = string
-  description = "secret json file"
-}
 
 variable "enable_iac_pipeline" {
   type        = bool

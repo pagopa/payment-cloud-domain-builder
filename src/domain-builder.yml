@@ -14,6 +14,12 @@
         - common
         - secrets
 
+    - name: Ensure dir secrets output exists
+      ansible.builtin.file:
+        path: output/{{ domain_name }}-secrets/secret/dev
+        state: directory
+        mode: '0755'
+
     - name: Get list of template common
       ansible.builtin.find:
         paths: templates/common
@@ -60,6 +66,12 @@
         src: "{{ item.src }}"
         dest: "output/{{ domain_name }}-secrets/env/dev"
       with_filetree: templates/secrets/env
+
+    - name: Genera domain-secrets env secret
+      template:
+        src: "{{ item.src }}"
+        dest: "output/{{ domain_name }}-secrets/secret/dev"
+      with_filetree: templates/secrets/secret/dev
 
     - name: Genera domain-app
       template:

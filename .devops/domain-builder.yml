@@ -9,6 +9,13 @@ parameters:
   - name: 'product_name'
     displayName: 'Product name'
     type: string
+  - name: 'location'
+    displayName: 'Azure location'
+    type: string
+    default: 'westeurope'
+    values:
+      - westeurope
+      - italynorth
   - name: 'vnet_name'
     displayName: 'VNet name tf variables allowed'
     type: string
