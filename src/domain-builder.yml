@@ -4,22 +4,30 @@
   vars_files:
     - vars/main.yml
   tasks:
-    - name: Ensure dir common output exists
-      ansible.builtin.file:
-        path: output/{{ domain_name }}-common
-        state: directory
-        mode: '0755'
-    - name: Ensure dir secret output exists
-      ansible.builtin.file:
-        path: output/{{ domain_name }}-secret
-        state: directory
-        mode: '0755'
+#    - name: Ensure dir common output exists
+#      ansible.builtin.file:
+#        path: output/{{ domain_name }}-common
+#        state: directory
+#        mode: '0755'
+#    - name: Ensure dir secret output exists
+#      ansible.builtin.file:
+#        path: output/{{ domain_name }}-secret
+#        state: directory
+#        mode: '0755'
+#    - name: Ensure dir app output exists
+#      ansible.builtin.file:
+#        path: output/{{ domain_name }}-app
+#        state: directory
+#        mode: '0755'
     - name: Ensure dir app output exists
       ansible.builtin.file:
-        path: output/{{ domain_name }}-app
+        path: output/{{ domain_name }}-{{ item }}/env/dev
         state: directory
         mode: '0755'
-
+      with_items:
+        - app
+        - common
+        - secrets
 
     - name: Get list of template common
       ansible.builtin.find:
@@ -49,6 +57,12 @@
       loop: "{{ template_files_common.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
+    - name: Genera domain-common env
+      template:
+        src: "{{ item.src }}"
+        dest: "output/{{ domain_name }}-common/env/dev"
+      with_filetree: templates/common/env
+
     - name: Genera domain-secret
       template:
         src: "{{ item.path }}"
@@ -56,9 +70,38 @@
       loop: "{{ template_files_secrets.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
+    - name: Genera domain-secrets env
+      template:
+        src: "{{ item.src }}"
+        dest: "output/{{ domain_name }}-secrets/env/dev"
+      with_filetree: templates/secrets/env
+
     - name: Genera domain-app
       template:
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-app/{{ item.path | basename }}"
       loop: "{{ template_files_app.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
+
+    - name: Genera domain-app env
+      template:
+        src: "{{ item.src }}"
+        dest: "output/{{ domain_name }}-app/env/dev"
+      with_filetree: templates/app/env
+
+#    - name: Genera domain-{{ item.path.split('/')[1] }}
+#      template:
+#        src: "{{ item.path }}"
+#        dest: "output/{{ domain_name }}-{{ item.path.split('/')[1] }}/{{ item.path | basename }}"
+#      loop: "{{ vars['template_files_' + item.path.split('/')[1] + '.files'] }}"
+#      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
+
+
+#    - name: "Genera domain-{{ item.split('/')[1] }} env"
+#      template:
+#        src: "{{ item }}"
+#        dest: "output/{{ domain_name }}-{{ item.split('/')[1] }}/env/dev"
+#      with_items:
+#        - templates/app/env
+#        - templates/common/env
+#        - templates/secrets/env

@@ -22,7 +22,9 @@ tag_source: module.tag_config.tags
 
 domain_name: "meme"
 is_dev_public: true
-
+storage_account_state_name: tfmemestgitnsala
+storage_account_container_state_name: tfstatesala
+subscription: DEV-PagoPA
 
 
 log_analytics_ws_name: "meme-law"
