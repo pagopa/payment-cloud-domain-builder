@@ -416,7 +416,7 @@ export default function Wizard() {
                 className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-base font-bold shadow-md transition
                   ${
                     step === n
-                      ? "border-indigo-400 bg-indigo-500/20 text-indigo-100 scale-110"
+                      ? "border-white-400 bg-white-500/20 text-white-100 scale-110"
                       : "border-zinc-600 bg-zinc-800 text-zinc-500"
                   }`}
                 title={`Passo ${n}`}
