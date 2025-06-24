@@ -3,16 +3,30 @@ trigger: none
 pr: none
 
 parameters:
-  - name: 'domain-name'
+  - name: 'domain_name'
     displayName: 'Domain name'
     type: string
-  - name: 'product-name'
+  - name: 'product_name'
     displayName: 'Product name'
     type: string
-  - name: 'vnet-name'
-    displayName: 'VNet name'
+  - name: 'vnet_name'
+    displayName: 'VNet name tf variables allowed'
     type: string
-
+  - name: 'vnet_rg_name'
+    displayName: 'VNet resource group name. tf variables allowed'
+    type: string
+  - name: 'include_postgresql'
+    displayName: 'Include Postgres in the domain build'
+    type: boolean
+    default: false
+  - name: 'tag_source'
+    displayName: 'Terraform expression defining where to retrieve tags from'
+    type: stirng
+    default: 'module.tag_config.tags'
+  - name: 'include_tag_config_module'
+    displayName: 'Use tag_config module to retrieve tags'
+    type: boolean
+    default: true
 
 resources:
   repositories:
@@ -50,6 +64,7 @@ stages:
             git co -b "domain-builder-$(domain-name)-$(Build.BuildId)"
             echo "Copying output files to the current repository"
             cp -r ../ansible/output/* .
+            # fixme filtrare file vuoti
             git commit -am "Domain $(domain-name) built for product: $(product-name)"
             git push --set-upstream origin "domain-builder-$(domain-name)-$(Build.BuildId)"
             echo "Domain $(domain-name) build completed and pushed to branch domain-builder-$(domain-name)-$(Build.BuildId)"
