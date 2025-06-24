@@ -16,6 +16,7 @@ include_sops_secrets: true
 # Common Template vars
 include_postgresql: true
 include_tag_config: true
+include_kubernetes: true
 
 tag_source: module.tag_config.tags
 

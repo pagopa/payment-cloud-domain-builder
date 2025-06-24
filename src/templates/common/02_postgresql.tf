@@ -26,7 +26,7 @@ module "postgres_flexible_snet" {
 
   env                = var.env
   idh_resource_tier  = "postgres_flexible"
-  product_name       = var.prefix
+  product_name       = local.prefix
 }
 
 module "postgres_flexible_server_{{ domain_name }}" {
@@ -38,7 +38,7 @@ module "postgres_flexible_server_{{ domain_name }}" {
 
   env               = var.env
   idh_resource_tier = var.pgres_flex_params.idh_resource
-  product_name      = var.prefix
+  product_name      = local.prefix
 
 {% if is_dev_public %}
   private_dns_zone_id = var.env_short != "d" ? data.azurerm_private_dns_zone.postgres[0].id : null
