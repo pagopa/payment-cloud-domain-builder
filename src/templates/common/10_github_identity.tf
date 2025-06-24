@@ -2,11 +2,12 @@ data "azurerm_resource_group" "identity_rg" {
   name = "${local.product}-identity-rg"
 }
 
-{% if %}
+{% if include_kubernetes %}
 data "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.product}-${var.location_short}-${var.instance}-aks"
   resource_group_name = "${local.product}-${var.location_short}-${var.instance}-aks-rg"
 }
+{% endif %}
 
 data "azurerm_key_vault" "key_vault" {
   name                = "${local.product}-${var.location_short}-${local.domain}-kv"
@@ -98,6 +99,7 @@ resource "azurerm_key_vault_access_policy" "gha_iac_managed_identities" {
   storage_permissions = []
 }
 
+{% if include_kubernetes %}
 resource "null_resource" "github_runner_app_permissions_to_namespace_cd_01" {
   triggers = {
     aks_id               = data.azurerm_kubernetes_cluster.aks.id
@@ -130,6 +132,7 @@ resource "null_resource" "github_runner_app_permissions_to_namespace_cd_01" {
     module.identity_cd_01
   ]
 }
+{% endif %}
 
 # create a module for each 20 repos
 module "identity_pr_01" {
@@ -208,6 +211,7 @@ resource "azurerm_key_vault_access_policy" "gha_ref_iac_managed_identities" {
   storage_permissions = []
 }
 
+{% if include_kubernetes %}
 module "workload_identity" {
   source = "./.terraform/modules/__v4__/kubernetes_workload_identity_init"
 
@@ -215,3 +219,4 @@ module "workload_identity" {
   workload_identity_resource_group_name = data.azurerm_kubernetes_cluster.aks.resource_group_name
   workload_identity_location            = var.location
 }
+{% endif %}
