@@ -1,0 +1,17 @@
+
+# Statics
+include_99_main: true
+include_99_variables: true
+include_99_locals: true
+include_00_data: true
+
+# Dynamic
+include_02_postgresql: true
+include_01_tag_config: true
+
+tag_source: module.tag_config.tags
+
+#TEST
+
+vnet_name: "meme-vnet"
+vnet_rg_name: "meme-vnet-rg"

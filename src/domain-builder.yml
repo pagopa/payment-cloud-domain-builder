@@ -1,0 +1,49 @@
+---
+- name: Generate Terraform file from Jinja2 templates
+  hosts: localhost
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Ensure dir output exists
+      ansible.builtin.file:
+        path: output
+        state: directory
+        mode: '0755'
+
+    - name: Creating list and dictionary variables
+      ansible.builtin.set_fact:
+        files:
+            - 99_main.tf
+            - 99_locals.tf
+            - 99_variables.tf
+            - 00_data.tf
+            - "{{ '02_postgresql.tf' if include_02_postgresql }}"
+            - "{{ '01_tag_config.tf' if include_01_tag_config }}"
+
+    - name: Cleanup list and dictionary variables
+      ansible.builtin.set_fact:
+        files: "{{ files|select() }}"
+
+    - debug:
+        msg: "{{ files }}"
+
+#    - name: Generate main.tf from template
+#      template:
+#        src: "{{ item }}"
+#        dest: "output/{{ item | basename }}"
+#      with_items: "{{ files }}"
+
+####################################
+
+    - name: Get list of template
+      ansible.builtin.find:
+        paths: templates/
+        patterns: "*.tf"
+      register: template_files
+
+    - name: Genera main.tf da template
+      template:
+        src: "{{ item.path }}"
+        dest: "output/{{ item.path | basename }}"
+      loop: "{{ template_files.files }}"
+      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
