@@ -12,10 +12,12 @@ include_tags: true
 include_azdo: true
 include_init_sops: true
 include_sops_secrets: true
+include_github_identity: true
 
 # Common Template vars
 include_postgresql: true
 include_tag_config: true
+include_kubernetes: true
 
 tag_source: module.tag_config.tags
 
