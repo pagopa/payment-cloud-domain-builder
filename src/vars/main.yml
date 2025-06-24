@@ -1,11 +1,19 @@
 
-# Statics
+# General Template vars
 include_99_main: true
 include_99_variables: true
 include_99_locals: true
 include_00_data: true
 
-# Dynamic
+# Secrets Template vars
+include_00_azuread: true
+include_01_keyvault: true
+include_01_tags: true
+include_02_azdo: true
+include_02_init_sops: true
+include_03_sops_secrets: true
+
+# Common Template vars
 include_02_postgresql: true
 include_01_tag_config: true
 

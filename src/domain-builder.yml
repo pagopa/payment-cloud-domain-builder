@@ -4,46 +4,61 @@
   vars_files:
     - vars/main.yml
   tasks:
-    - name: Ensure dir output exists
+    - name: Ensure dir common output exists
       ansible.builtin.file:
-        path: output/common
+        path: output/{{ domain_name }}-common
         state: directory
         mode: '0755'
-    - name: Ensure dir output exists
+    - name: Ensure dir secret output exists
       ansible.builtin.file:
-        path: output/secret
+        path: output/{{ domain_name }}-secret
         state: directory
         mode: '0755'
-    - name: Ensure dir output exists
+    - name: Ensure dir app output exists
       ansible.builtin.file:
-        path: output/app
+        path: output/{{ domain_name }}-app
         state: directory
         mode: '0755'
 
 
-    - name: Get list of template
+    - name: Get list of template common
       ansible.builtin.find:
-        paths: templates/
+        paths: templates/common
         patterns: "*.tf"
-      register: template_files
+      register: template_files_common
+
+    - debug:
+        msg: "{{ template_files_common }}"
+
+    - name: Get list of template secrets
+      ansible.builtin.find:
+        paths: templates/secrets
+        patterns: "*.tf"
+      register: template_files_secrets
+
+    - name: Get list of template app
+      ansible.builtin.find:
+        paths: templates/app
+        patterns: "*.tf"
+      register: template_files_app
 
     - name: Genera domain-common
       template:
-        src: "/common/{{ item.path }}"
-        dest: "output/common/{{ item.path | basename }}"
-      loop: "{{ template_files.files }}"
+        src: "{{ item.path }}"
+        dest: "output/{{ domain_name }}-common/{{ item.path | basename }}"
+      loop: "{{ template_files_common.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
     - name: Genera domain-secret
       template:
-        src: "/secrets/{{ item.path }}"
-        dest: "output/secrets/{{ item.path | basename }}"
-      loop: "{{ template_files.files }}"
+        src: "{{ item.path }}"
+        dest: "output/{{ domain_name }}-secrets/{{ item.path | basename }}"
+      loop: "{{ template_files_secrets.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
 
     - name: Genera domain-app
       template:
-        src: "/app/{{ item.path }}"
-        dest: "output/app/{{ item.path | basename }}"
-      loop: "{{ template_files.files }}"
+        src: "{{ item.path }}"
+        dest: "output/{{ domain_name }}-app/{{ item.path | basename }}"
+      loop: "{{ template_files_app.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('\.tf$', ''))) | default(false) | bool
