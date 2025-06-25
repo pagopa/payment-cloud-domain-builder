@@ -14,6 +14,7 @@ include_azdo: true
 include_init_sops: true
 include_sops_secrets: true
 include_github_identity: true
+include_apim: true
 
 # Common Template vars
 include_postgresql: true
@@ -30,6 +31,7 @@ domain_name: "meme"
 is_dev_public: true
 storage_account_state_name: tfmemestgitnsala
 storage_account_container_state_name: tfstatesala
+storage_account_state_rg_name: "meme-tfstate-rg"
 subscription: DEV-PagoPA
 
 
@@ -50,6 +52,10 @@ aks_name: "pagopa-d-weu-aks"
 aks_rg_name: "pagopa-d-weu-aks-rg"
 
 internal_dns_zone_resource_group_name: "pagopa-d-weu-internal-dns-zone-rg"
+application_insight_name: "pagopa-d-weu-application-insight"
+
+apim_name: "meme-apim"
+apim_rg_name: "meme-apim-rg"
 
 vnet_name: "meme-vnet"
 vnet_rg_name: "meme-vnet-rg"
