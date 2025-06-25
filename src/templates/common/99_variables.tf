@@ -13,8 +13,6 @@ variable "env_short" {
   }
 }
 
-
-
 variable "location" {
   type        = string
   description = "One of westeurope, northeurope"
@@ -32,11 +30,33 @@ variable "location_short" {
   default     = "itn"
 }
 
+variable "dns_zone_internal_prefix" {
+  type        = string
+  default     = null
+  description = "The dns subdomain."
+}
+
+variable "external_domain" {
+  type        = string
+  default     = null
+  description = "Domain for delegation"
+}
+
+{% if include_kubernetes %}
+#
+# kubernetes variables
+#
+variable "ingress_load_balancer_ip" {
+  type = string
+}
+{% endif %}
+
+
+{% if include_postgresql %}
 
 #
 # postgres variables
 #
-{% if include_postgresql %}
 variable "pgres_flex_params" {
   type = object({
     idh_resource                           = string

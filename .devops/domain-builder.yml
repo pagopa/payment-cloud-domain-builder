@@ -26,6 +26,10 @@ parameters:
     displayName: 'Include Postgres in the domain build'
     type: boolean
     default: false
+  - name: 'include_kubernetes'
+    displayName: 'Include kubernetes in the domain build'
+    type: boolean
+    default: false
   - name: 'tag_source'
     displayName: 'Terraform expression defining where to retrieve tags from'
     type: stirng
@@ -56,6 +60,14 @@ parameters:
     displayName: 'True if the dev environment is open to internet'
     type: boolean
     default: false
+  - name: 'aks_name'
+    displayName: 'Kubernetes cluster name'
+    type: string
+    default: ""
+  - name: 'aks_rg_name'
+    displayName: 'Kubernetes cluster resource group name'
+    type: string
+    default: ""
 
 resources:
   repositories:

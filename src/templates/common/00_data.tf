@@ -34,6 +34,14 @@ data "azurerm_monitor_action_group" "opsgenie" {
   name                = local.monitor_action_group_opsgenie_name
 }
 
+#
+# Private DNS Zones
+#
+data "azurerm_private_dns_zone" "internal" {
+  name                = local.internal_dns_zone_name
+  resource_group_name = local.internal_dns_zone_resource_group_name
+}
+
 
 {% if include_postgresql %}
 data "azurerm_private_dns_zone" "postgres" {

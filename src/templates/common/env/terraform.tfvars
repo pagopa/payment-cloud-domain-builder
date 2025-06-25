@@ -1,10 +1,9 @@
-prefix         = "pagopa"
+prefix         = "{{product_name}}"
 env_short      = "d"
 env            = "dev"
-domain         = "crusc8"
-location       = "italynorth"
-location_short = "itn"
-instance       = "dev"
+domain         = "{{domain_name}}"
+location       = "{{location}}"
+location_short = "{{location_mapping[location]}}"
 
 
 ### External resources
@@ -17,13 +16,19 @@ monitor_resource_group_name                 = "pagopa-d-monitor-rg"
 log_analytics_workspace_name                = "pagopa-d-law"
 log_analytics_workspace_resource_group_name = "pagopa-d-monitor-rg"
 
-### Aks
 
-ingress_load_balancer_ip = "10.3.100.250"
 
 external_domain          = "pagopa.it"
 dns_zone_internal_prefix = "internal.dev.platform"
 
+
+### Aks
+{% if include_kubernetes %}
+ingress_load_balancer_ip = "10.3.100.250"
+{% endif %}
+
+
+{% if include_postgresql %}
 ## CIDR cruscotto per database pgsql
 cidr_subnet_flex_dbms = ["10.3.7.0/27"]
 
@@ -109,3 +114,5 @@ custom_metric_alerts = {
     severity         = 2
   }
 }
+{% endif %}
+

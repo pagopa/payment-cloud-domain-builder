@@ -4,6 +4,7 @@ include_main: true
 include_variables: true
 include_locals: true
 include_data: true
+include_network: true
 
 # Secrets Template vars
 include_azuread: true
@@ -19,7 +20,11 @@ include_postgresql: true
 include_tag_config: true
 include_kubernetes: true
 
+
 tag_source: module.tag_config.tags
+
+
+#TEST
 
 domain_name: "meme"
 is_dev_public: true
@@ -40,7 +45,11 @@ monitor_action_group_opsgenie_name: "meme-action-group-opsgenie"
 azdo_managed_identity_rg_name: "meme-azdo-managed-identity-rg"
 azdo_managed_identity_iac_prefix: "azdo-${var.env}-pagopa-iac"
 
-#TEST
+# aks
+aks_name: "pagopa-d-weu-aks"
+aks_rg_name: "pagopa-d-weu-aks-rg"
+
+internal_dns_zone_resource_group_name: "pagopa-d-weu-internal-dns-zone-rg"
 
 vnet_name: "meme-vnet"
 vnet_rg_name: "meme-vnet-rg"

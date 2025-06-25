@@ -14,4 +14,15 @@ locals {
   monitor_action_group_slack_name = "{{monitor_action_group_slack_name}}"
   monitor_action_group_email_name = "{{monitor_action_group_email_name}}"
   monitor_action_group_opsgenie_name = "{{monitor_action_group_opsgenie_name}}"
+
+
+  internal_dns_zone_name                = "${var.dns_zone_internal_prefix}.${var.external_domain}"
+  internal_dns_zone_resource_group_name = "{{internal_dns_zone_resource_group_name}}"
+
+{% if include_kubernetes %}
+  aks_name = "{{aks_name}}"
+  aks_rg_name = "{{aks_rg_name}}"
+  ingress_hostname = "${var.location_short}.${local.domain}"
+{% endif %}
+
 }
