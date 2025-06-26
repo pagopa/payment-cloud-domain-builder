@@ -6,5 +6,5 @@ location       = "{{location}}"
 location_short = "{{location_mapping[location]}}"
 
 
-external_domain          = "pagopa.it"
-dns_zone_internal_prefix = "internal.dev.platform"
+external_domain          =  "{{external_domain}}"
+dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"

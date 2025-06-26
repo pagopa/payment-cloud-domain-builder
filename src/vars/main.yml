@@ -2,6 +2,7 @@
 include_postgresql: true
 include_tag_config: true
 include_kubernetes: true
+include_apim: true
 
 
 tag_source: module.tag_config.tags
@@ -15,6 +16,8 @@ storage_account_state_name: tfmemestgitnsala
 storage_account_container_state_name: tfstatesala
 storage_account_state_rg_name: "meme-tfstate-rg"
 subscription: DEV-PagoPA
+external_domain: "pagopa.it"
+dns_zone_internal_prefix: "internal.dev.platform"
 
 
 log_analytics_ws_name: "meme-law"
@@ -32,6 +35,7 @@ azdo_managed_identity_iac_prefix: "azdo-${var.env}-pagopa-iac"
 # aks
 aks_name: "pagopa-d-weu-aks"
 aks_rg_name: "pagopa-d-weu-aks-rg"
+ingress_load_balancer_ip: "10.1.100.250"
 
 internal_dns_zone_resource_group_name: "pagopa-d-weu-internal-dns-zone-rg"
 application_insight_name: "pagopa-d-weu-application-insight"

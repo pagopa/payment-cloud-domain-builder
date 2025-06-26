@@ -7,22 +7,19 @@ location_short = "{{location_mapping[location]}}"
 
 
 
-external_domain          = "pagopa.it"
-dns_zone_internal_prefix = "internal.dev.platform"
+external_domain          =  "{{external_domain}}"
+dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"
 
 
 ### Aks
 {% if include_kubernetes %}
-ingress_load_balancer_ip = "10.3.100.250"
+ingress_load_balancer_ip = "{{ingress_load_balancer_ip}}"
 {% endif %}
 
 
 {% if include_postgresql %}
-## CIDR cruscotto per database pgsql
-cidr_subnet_flex_dbms = ["10.3.7.0/27"]
-
 pgres_flex_params = {
-  idh_resource = "pgflex2" # https://github.com/pagopa/terraform-azurerm-v4/blob/44df8cdf0615a2d1c39efd05996edc4bf28e0dec/IDH/postgres_flexible_server/LIBRARY.md
+  idh_resource = "pgflex2"
   sku_name     = "GP_Standard_D2ds_v4"
   db_version   = "16"
   # Possible values are 32768, 65536, 131072, 262144, 524288, 1048576,
@@ -47,8 +44,7 @@ pgres_flex_params = {
 }
 
 pgres_flex_db_names = [
-  "cruscotto",
-  "cruscotto-replica"
+# FIXME add here tour database names
 ]
 
 custom_metric_alerts = {

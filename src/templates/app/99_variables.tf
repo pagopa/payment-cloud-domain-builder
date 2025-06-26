@@ -61,4 +61,10 @@ variable "pod_disruption_budgets" {
   description = "Pod disruption budget for domain namespace"
   default     = {}
 }
+
+variable "dns_zone_prefix" {
+  type        = string
+  default     = null
+  description = "The wallet dns subdomain."
+}
 {% endif %}

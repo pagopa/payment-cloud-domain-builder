@@ -29,7 +29,7 @@ resource "azurerm_key_vault_secret" "aks_apiserver_url" {
   value        = "https://${local.aks_api_url}:443"
   content_type = "text/plain"
 
-  key_vault_id = data.azurerm_key_vault.kv.id
+  key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 {% endif %}
