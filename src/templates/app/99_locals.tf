@@ -20,6 +20,12 @@ locals {
   internal_dns_zone_name                = "${var.dns_zone_internal_prefix}.${var.external_domain}"
   internal_dns_zone_resource_group_name = "{{internal_dns_zone_resource_group_name}}"
 
+  gh_runner_cae_name = "{{gh_runner_cae_name}}"
+  gh_runner_cae_rg = "{{gh_runner_cae_rg}}"
+  gh_runner_pat_key = "{{gh_runner_pat_key}}"
+  gh_runner_pat_kv_name = "{{gh_runner_pat_kv_name}}"
+  gh_runner_pat_kv_rg = "{{gh_runner_pat_kv_rg}}"
+
 
 {% if include_apim %}
   apim_name = "{{apim_name}}"

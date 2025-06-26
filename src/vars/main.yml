@@ -42,6 +42,13 @@ apim_rg_name: "meme-apim-rg"
 vnet_name: "meme-vnet"
 vnet_rg_name: "meme-vnet-rg"
 
+# cae
+gh_runner_cae_name: "meme-cae"
+gh_runner_cae_rg: "meme-cae-rg"
+gh_runner_pat_key: "meme-runner-pat"
+gh_runner_pat_kv_name: "meme-kv-core"
+gh_runner_pat_kv_rg: "meme-kv-core-rg"
+
 product_name: "pagopa"
 location: westeurope
 
