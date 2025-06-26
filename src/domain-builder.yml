@@ -78,7 +78,7 @@
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-app/{{ item.path | basename }}"
       loop: "{{ template_files_app.files }}"
-      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', ''))) | default(false) | bool
+      when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', '')), errors='ignore', default='true') | default(true) | bool
 
     - name: Genera domain-app env
       template:

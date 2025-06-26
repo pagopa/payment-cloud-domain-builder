@@ -1,21 +1,3 @@
-
-# General Template vars
-include_main: true
-include_variables: true
-include_locals: true
-include_data: true
-include_network: true
-
-# Secrets Template vars
-include_azuread: true
-include_keyvault: true
-include_tags: true
-include_azdo: true
-include_init_sops: true
-include_sops_secrets: true
-include_github_identity: true
-include_apim: true
-
 # Common Template vars
 include_postgresql: true
 include_tag_config: true

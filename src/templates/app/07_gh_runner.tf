@@ -13,6 +13,7 @@ module "gh_runner_job" {
   gh_identity_suffix = "job-01"
   gh_env             = var.env
   runner_labels      = ["self-hosted-job", "${var.env}"]
+  # FIXME: configure here the repositories to be used by the job
   gh_repositories = [
 
   ]
