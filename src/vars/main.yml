@@ -12,46 +12,46 @@ tag_source: module.tag_config.tags
 
 domain_name: "meme"
 is_dev_public: true
-storage_account_state_name: tfmemestgitnsala
-storage_account_container_state_name: tfstatesala
-storage_account_state_rg_name: "meme-tfstate-rg"
+storage_account_state_name: tfinfdevpagopa
+storage_account_container_state_name: terraform-state
+storage_account_state_rg_name: "terraform-state-rg"
 subscription: DEV-PagoPA
 external_domain: "pagopa.it"
 dns_zone_internal_prefix: "internal.dev.platform"
 
 
-log_analytics_ws_name: "meme-law"
-log_analytics_ws_rg_name: "meme-monitor-rg"
-monitor_rg_name: "meme-rg"
-monitor_action_group_slack_name: "meme-action-group-slack"
-monitor_action_group_email_name: "meme-action-group-email"
-monitor_action_group_opsgenie_name: "meme-action-group-opsgenie"
+log_analytics_ws_name: "${local.prefix}-${var.env_short}-itn-core-law"
+log_analytics_ws_rg_name: "${local.prefix}-${var.env_short}-itn-core-monitor-rg"
+monitor_rg_name: "${local.prefix}-${var.env_short}-itn-core-monitor-rg" #fixme serve?
+monitor_action_group_slack_name: "SlackPagoPA"
+monitor_action_group_email_name: "PagoPA"
+monitor_action_group_opsgenie_name: "Opsgenie"
 
 
 # secrets
-azdo_managed_identity_rg_name: "meme-azdo-managed-identity-rg"
-azdo_managed_identity_iac_prefix: "azdo-${var.env}-pagopa-iac"
+azdo_managed_identity_rg_name: "${local.prefix}-${var.env_short}-identity-rg"
+azdo_managed_identity_iac_prefix: "azdo-${var.env}-${local.prefix}-iac"
 
 # aks
-aks_name: "pagopa-d-weu-aks"
-aks_rg_name: "pagopa-d-weu-aks-rg"
+aks_name: "${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks"
+aks_rg_name: "${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg"
 ingress_load_balancer_ip: "10.1.100.250"
 
-internal_dns_zone_resource_group_name: "pagopa-d-weu-internal-dns-zone-rg"
-application_insight_name: "pagopa-d-weu-application-insight"
+internal_dns_zone_resource_group_name: "${local.prefix}-${var.env_short}-vnet-rg"
+application_insight_name: "${local.prefix}-${var.env_short}-itn-core-appinsights"
 
-apim_name: "meme-apim"
-apim_rg_name: "meme-apim-rg"
+apim_name: "${local.prefix}-${var.env_short}-apim"
+apim_rg_name: "${local.prefix}-${var.env_short}-api-rg"
 
-vnet_name: "meme-vnet"
-vnet_rg_name: "meme-vnet-rg"
+vnet_name: "${local.prefix}-${var.env_short}-vnet"
+vnet_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
 
 # cae
-gh_runner_cae_name: "meme-cae"
-gh_runner_cae_rg: "meme-cae-rg"
-gh_runner_pat_key: "meme-runner-pat"
-gh_runner_pat_kv_name: "meme-kv-core"
-gh_runner_pat_kv_rg: "meme-kv-core-rg"
+gh_runner_cae_name: "${local.prefix}-${var.env_short}-tools-cae"
+gh_runner_cae_rg: "${local.prefix}-${var.env_short}-tools-rg"
+gh_runner_pat_key: "gh-runner-job-pat"
+gh_runner_pat_kv_name: "${local.prefix}-${var.env_short}-kv"
+gh_runner_pat_kv_rg: "${local.prefix}-${var.env_short}-sec-rg"
 
 product_name: "pagopa"
 location: westeurope
@@ -60,3 +60,8 @@ location_mapping:
   italynorth: itn
   westeurope: weu
   northeurope: neu
+
+location_string_mapping:
+  italynorth: "Italy North"
+  westeurope: "West Europe"
+  northeurope: "North Europe"

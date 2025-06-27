@@ -4,7 +4,9 @@ env            = "dev"
 domain         = "{{domain_name}}"
 location       = "{{location}}"
 location_short = "{{location_mapping[location]}}"
+location_string = "{{location_string_mapping[location]}}"
 
 
 external_domain          =  "{{external_domain}}"
 dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"
+dns_zone_prefix          = "{{domain_name}}.{{location_mapping[location]}}"

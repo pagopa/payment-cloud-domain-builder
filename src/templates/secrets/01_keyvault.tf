@@ -1,8 +1,9 @@
 resource "azurerm_resource_group" "sec_rg" {
-  name     = "${local.product}-${var.location_short}-${var.domain}-sec-rg"
+  name     = "${local.product}-${var.location_short}-${local.domain}-sec-rg"
   location = var.location
 
   tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+
 }
 
 module "key_vault" {
@@ -15,6 +16,7 @@ module "key_vault" {
   soft_delete_retention_days = 90
 
   tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+
 }
 
 ## ad group policy ##
@@ -94,7 +96,7 @@ resource "azurerm_key_vault_access_policy" "azdevops_iac_policy" {
 module "letsencrypt_{{ domain_name }}" {
   source = "./.terraform/modules/__v4__/letsencrypt_credential"
 
-  prefix            = var.prefix
+  prefix            = local.prefix
   env               = var.env_short
   key_vault_name    = module.key_vault.name
   subscription_name = data.azurerm_subscription.current.display_name

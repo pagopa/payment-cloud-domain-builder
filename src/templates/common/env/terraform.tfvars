@@ -10,6 +10,7 @@ location_short = "{{location_mapping[location]}}"
 external_domain          =  "{{external_domain}}"
 dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"
 
+alert_use_opsgenie = false
 
 ### Aks
 {% if include_kubernetes %}
@@ -21,6 +22,7 @@ ingress_load_balancer_ip = "{{ingress_load_balancer_ip}}"
 pgres_flex_params = {
   idh_resource_tier = "pgflex2"
   db_version        = "16"
+  pgres_flex_diagnostic_settings_enabled = false
 }
 
 pgres_flex_db_names = [

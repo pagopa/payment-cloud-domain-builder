@@ -42,6 +42,12 @@ variable "external_domain" {
   description = "Domain for delegation"
 }
 
+variable "alert_use_opsgenie" {
+  type        = bool
+  default     = true
+  description = "Use opsgenie for alerts"
+}
+
 {% if include_kubernetes %}
 #
 # kubernetes variables
@@ -60,6 +66,8 @@ variable "ingress_load_balancer_ip" {
 variable "pgres_flex_params" {
   type = object({
     idh_resource_tier                      = string
+    pgres_flex_diagnostic_settings_enabled = bool
+    db_version = string
   })
 
 }

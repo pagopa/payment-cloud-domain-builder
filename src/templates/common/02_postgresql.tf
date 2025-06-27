@@ -56,7 +56,8 @@ module "postgres_flexible_server_{{ domain_name }}" {
 
   custom_metric_alerts = var.custom_metric_alerts
 
-  alert_action = var.pgres_flex_params.alerts_enabled ? [
+  alert_action = concat(
+  [
     {
       action_group_id    = data.azurerm_monitor_action_group.email.id
       webhook_properties = null
@@ -64,12 +65,13 @@ module "postgres_flexible_server_{{ domain_name }}" {
     {
       action_group_id    = data.azurerm_monitor_action_group.slack.id
       webhook_properties = null
-    },
+    }
+  ], var.alert_use_opsgenie ? [
     {
       action_group_id    = data.azurerm_monitor_action_group.opsgenie[0].id
       webhook_properties = null
     }
-  ] : []
+  ] : [])
 
   databases = var.pgres_flex_db_names
 

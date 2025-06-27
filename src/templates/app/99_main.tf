@@ -13,6 +13,7 @@ terraform {
       source  = "hashicorp/null"
       version = "<= 3.2.3"
     }
+{% if include_kubernetes %}
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "<= 2.33.0"
@@ -21,6 +22,7 @@ terraform {
       source  = "hashicorp/helm"
       version = "<= 2.16.0"
     }
+{% endif %}
   }
 
   backend "azurerm" {}
@@ -38,6 +40,7 @@ data "azurerm_subscription" "current" {}
 
 data "azurerm_client_config" "current" {}
 
+{% if include_kubernetes %}
 provider "kubernetes" {
   config_path = "${var.k8s_kube_config_path_prefix}/config-${local.aks_name}"
 }
@@ -47,7 +50,7 @@ provider "helm" {
     config_path = "${var.k8s_kube_config_path_prefix}/config-${local.aks_name}"
   }
 }
-
+{% endif %}
 module "__v4__" {
   # v6.3.0
   source = "git::https://github.com/pagopa/terraform-azurerm-v4?ref=3d63a1346a3df45e88b0795445e1bbaf1563b87c"
