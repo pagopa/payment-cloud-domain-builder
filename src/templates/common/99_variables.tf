@@ -59,26 +59,7 @@ variable "ingress_load_balancer_ip" {
 #
 variable "pgres_flex_params" {
   type = object({
-    idh_resource                           = string
-    sku_name                               = string
-    db_version                             = string
-    storage_mb                             = string
-    zone                                   = number
-    standby_zone                           = optional(number, 1)
-    backup_retention_days                  = number
-    geo_redundant_backup_enabled           = bool
-    create_mode                            = string
-    pgres_flex_private_endpoint_enabled    = bool
-    pgres_flex_ha_enabled                  = bool
-    pgres_flex_pgbouncer_enabled           = bool
-    pgres_flex_diagnostic_settings_enabled = bool
-    alerts_enabled                         = bool
-    max_connections                        = number
-    pgbouncer_min_pool_size                = number
-    max_worker_process                     = number
-    wal_level                              = string
-    shared_preoload_libraries              = string
-    public_network_access_enabled          = bool
+    idh_resource_tier                      = string
   })
 
 }

@@ -37,7 +37,7 @@ module "postgres_flexible_server_{{ domain_name }}" {
   resource_group_name = azurerm_resource_group.db_rg.name
 
   env               = var.env
-  idh_resource_tier = var.pgres_flex_params.idh_resource
+  idh_resource_tier = var.pgres_flex_params.idh_resource_tier
   product_name      = local.prefix
 
 {% if is_dev_public %}
