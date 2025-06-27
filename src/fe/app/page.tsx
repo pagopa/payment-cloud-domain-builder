@@ -325,7 +325,7 @@ export default function Wizard() {
             onClick={() => setShowSummary(true)}
             className="bg-pink-600 hover:bg-pink-700 transition text-white px-4 py-2 rounded w-1/2"
           >
-            Anteprima Modulo
+            Genera IDH Domain
           </button>
         </div>
       </div>
@@ -436,10 +436,35 @@ export default function Wizard() {
           </div>
           {renderTerraformPreview(formData)}
           <button
-            className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow"
+            className="mt-6 bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow"
             onClick={() => setShowSummary(false)}
           >
             Torna al wizard
+          </button>
+          <button
+            className="mt-6 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow float-right flex items-center gap-2 group transition-all hover:scale-[1.02]"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                const modal = document.createElement('dialog');
+                modal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg bg-zinc-800 border border-zinc-600 text-white shadow-xl';
+                modal.innerHTML = `
+                  <h2 class="text-xl font-bold mb-4">Generazione in corso</h2>
+                  <p class="mb-4">Il modulo sta venendo generato...</p>
+                  <div class="animate-spin w-8 h-8 border-4 border-pink-600 border-t-transparent rounded-full mx-auto"></div>
+                `;
+                document.body.appendChild(modal);
+                modal.showModal();
+                setTimeout(() => {
+                  modal.close();
+                  modal.remove();
+                }, 2000);
+              }
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+            </svg>
+            Genera!
           </button>
         </div>
       )}
