@@ -125,4 +125,4 @@ jobs:
         echo "Domain $DOMAIN_NAME build completed and pushed to branch domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
 
     - name: Show result
-      run: tree -R -a src/output
+      run: tree -R -a main-repo/src/output
