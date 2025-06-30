@@ -449,7 +449,7 @@ export default function Wizard() {
                 modal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg bg-zinc-800 border border-zinc-600 text-white shadow-xl';
                 modal.innerHTML = `
                   <h2 class="text-xl font-bold mb-4">Generazione in corso</h2>
-                  <p class="mb-4">Il modulo sta venendo generato...</p>
+                  <p class="mb-4">Run github workflow...</p>
                   <a class="mb-4 text-pink-400 hover:text-pink-500 transition-colors underline flex items-center gap-2" target="_blank" type="button" href="https://github.com/ffppa/test-runners/actions/workflows/test-wk.yml">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clip-rule="evenodd"/>
@@ -462,7 +462,12 @@ export default function Wizard() {
                 document.body.appendChild(modal);
                 modal.showModal();
 
+                let responseData: any = null;
+                let duration = 0;
+
                 try {
+                  const startTime = Date.now();
+
                   const response = await fetch('/api/github-dispatch', {
                     method: 'POST',
                     headers: {
@@ -473,21 +478,60 @@ export default function Wizard() {
                     })
                   });
 
+                  responseData = await response.json();
+                  duration = Date.now() - startTime;
+
+                  // Log per debug
+                  console.log('Request ID:', responseData?.requestId);
+                  console.log('Response OK:', response.ok);
+
+                  // Aggiorna il Request ID nella modale se presente
+                  if (responseData && responseData.requestId) {
+                    const requestIdElement = modal.querySelector('#request-id') as HTMLElement;
+                    if (requestIdElement) {
+                      requestIdElement.textContent = responseData.requestId;
+                    }
+                  }
 
                   if (!response.ok) {
                     throw new Error('Network response was not ok');
                   }
 
                 } catch (error) {
-                  console.error('Error:', error);
+                  console.error('Trace:', error);
                 } finally {
                   setTimeout(() => {
                     modal.close();
                     modal.remove();
-                  }, 3000);
+
+                    const successModal = document.createElement('dialog');
+                    successModal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg bg-emerald-800 border border-emerald-600 text-white shadow-xl max-w-md w-full';
+                    successModal.innerHTML = `
+                      <h2 class="text-xl font-bold mb-4">Completato!</h2>
+                      <div class="mb-4 p-3 bg-emerald-700 rounded-md border border-emerald-500">
+                        <p class="text-sm text-emerald-200">Request ID:</p>
+                        <p class="font-mono text-xs text-white">${responseData?.requestId || 'N/A'}</p>
+                      </div>
+                      <p class="mb-4">Il modulo è stato mandato in generazione! </p>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      <div class="mt-4 text-center">
+                        <p class="text-xs text-emerald-200">Durata: ${duration}ms</p>
+                      </div>
+                    `;
+                    document.body.appendChild(successModal);
+                    successModal.showModal();
+
+                    setTimeout(() => {
+                      successModal.close();
+                      successModal.remove();
+                    }, 5000);
+                  }, 2000);
                 }
-              }
-            }}
+            }
+          }
+        }
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
