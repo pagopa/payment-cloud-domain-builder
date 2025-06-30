@@ -1,0 +1,182 @@
+name: Domain Builder
+
+# Manual execution only
+on:
+  workflow_dispatch:
+    inputs:
+      domain_name:
+        description: 'Domain name'
+        required: true
+        type: string
+      product_name:
+        description: 'Product name'
+        required: true
+        type: string
+      location:
+        description: 'Azure location'
+        required: false
+        type: choice
+        default: 'westeurope'
+        options:
+          - westeurope
+          - italynorth
+      vnet_name:
+        description: 'VNet name tf variables allowed'
+        required: true
+        type: string
+      vnet_rg_name:
+        description: 'VNet resource group name. tf variables allowed'
+        required: true
+        type: string
+      include_postgresql:
+        description: 'Include Postgres in the domain build'
+        required: false
+        type: boolean
+        default: false
+      include_kubernetes:
+        description: 'Include kubernetes in the domain build'
+        required: false
+        type: boolean
+        default: false
+      tag_source:
+        description: 'Terraform expression defining where to retrieve tags from'
+        required: false
+        type: string
+        default: 'module.tag_config.tags'
+      log_analytics_ws_name:
+        description: 'Log analytics workspace name'
+        required: true
+        type: string
+      log_analytics_ws_rg_name:
+        description: 'Log analytics workspace RG name'
+        required: true
+        type: string
+      include_tag_config_module:
+        description: 'Use tag_config module to retrieve tags'
+        required: false
+        type: boolean
+        default: true
+      monitor_rg_name:
+        description: 'Azure monitor RG name'
+        required: true
+        type: string
+      monitor_action_group_slack_name:
+        description: 'Action group slack name'
+        required: true
+        type: string
+      monitor_action_group_email_name:
+        description: 'Action group email name'
+        required: true
+        type: string
+      monitor_action_group_opsgenie_name:
+        description: 'Action group opsgenie name'
+        required: true
+        type: string
+      is_dev_public:
+        description: 'True if the dev environment is open to internet'
+        required: false
+        type: boolean
+        default: false
+      aks_name:
+        description: 'Kubernetes cluster name'
+        required: false
+        type: string
+        default: ""
+      aks_rg_name:
+        description: 'Kubernetes cluster resource group name'
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  domain-builder:
+    name: Domain Builder Job
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main repository
+      uses: actions/checkout@v4
+      with:
+        path: main-repo
+
+    - name: Checkout ansible repository
+      uses: actions/checkout@v4
+      with:
+        repository: pagopa/payment-cloud-domain-builder
+        ref: main
+        path: ansible
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Build Domain
+      run: |
+        echo "Installing Ansible"
+        python3 -m pip install --include-deps ansible
+        
+        echo "Switching to ansible folder"
+        cd ansible
+        
+        echo "Building domain ${{ inputs.domain_name }} for product: ${{ inputs.product_name }}"
+        
+        # Build extra variables for Ansible
+        EXTRA_VARS="domain_name=${{ inputs.domain_name }}"
+        EXTRA_VARS="$EXTRA_VARS product_name=${{ inputs.product_name }}"
+        EXTRA_VARS="$EXTRA_VARS location=${{ inputs.location }}"
+        EXTRA_VARS="$EXTRA_VARS vnet_name=${{ inputs.vnet_name }}"
+        EXTRA_VARS="$EXTRA_VARS vnet_rg_name=${{ inputs.vnet_rg_name }}"
+        EXTRA_VARS="$EXTRA_VARS include_postgresql=${{ inputs.include_postgresql }}"
+        EXTRA_VARS="$EXTRA_VARS include_kubernetes=${{ inputs.include_kubernetes }}"
+        EXTRA_VARS="$EXTRA_VARS tag_source='${{ inputs.tag_source }}'"
+        EXTRA_VARS="$EXTRA_VARS log_analytics_ws_name=${{ inputs.log_analytics_ws_name }}"
+        EXTRA_VARS="$EXTRA_VARS log_analytics_ws_rg_name=${{ inputs.log_analytics_ws_rg_name }}"
+        EXTRA_VARS="$EXTRA_VARS include_tag_config_module=${{ inputs.include_tag_config_module }}"
+        EXTRA_VARS="$EXTRA_VARS monitor_rg_name=${{ inputs.monitor_rg_name }}"
+        EXTRA_VARS="$EXTRA_VARS monitor_action_group_slack_name=${{ inputs.monitor_action_group_slack_name }}"
+        EXTRA_VARS="$EXTRA_VARS monitor_action_group_email_name=${{ inputs.monitor_action_group_email_name }}"
+        EXTRA_VARS="$EXTRA_VARS monitor_action_group_opsgenie_name=${{ inputs.monitor_action_group_opsgenie_name }}"
+        EXTRA_VARS="$EXTRA_VARS is_dev_public=${{ inputs.is_dev_public }}"
+        
+        #################
+        # OPTIONAL VARS #
+        #################
+        # Add optional parameters only if they are not empty
+        if [ "${{ inputs.aks_name }}" != "" ]; then
+          EXTRA_VARS="$EXTRA_VARS aks_name=${{ inputs.aks_name }}"
+        fi
+        
+        if [ "${{ inputs.aks_rg_name }}" != "" ]; then
+          EXTRA_VARS="$EXTRA_VARS aks_rg_name=${{ inputs.aks_rg_name }}"
+        fi
+        
+        echo "Extra vars: $EXTRA_VARS"
+        
+        # Execute Ansible with all variables
+        ansible-playbook -i ansible/inventory/hosts ansible/playbooks/domain-builder.yml \
+          --extra-vars "$EXTRA_VARS"
+        
+        # Get output files from ansible
+        cd ../main-repo
+        
+        # TODO enable git when ready
+        # Configure git
+#        git config user.name "github-actions[bot]"
+#        git config user.email "github-actions[bot]@users.noreply.github.com"
+#
+#        # Create new branch
+#        git checkout -b "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
+#
+#        echo "Copying output files to the current repository"
+#        cp -r ../ansible/output/* .
+#
+#        # Add and commit changes
+#        git add .
+#        git commit -m "Domain ${{ inputs.domain_name }} built for product: ${{ inputs.product_name }}"
+#
+#        # Push the branch
+#        git push --set-upstream origin "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
+
+        echo "Domain ${{ inputs.domain_name }} build completed and pushed to branch domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
