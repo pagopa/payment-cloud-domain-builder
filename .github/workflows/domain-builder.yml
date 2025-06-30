@@ -108,7 +108,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
@@ -163,20 +163,20 @@ jobs:
         
         # TODO enable git when ready
         # Configure git
-#        git config user.name "github-actions[bot]"
-#        git config user.email "github-actions[bot]@users.noreply.github.com"
-#
-#        # Create new branch
-#        git checkout -b "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
-#
-#        echo "Copying output files to the current repository"
-#        cp -r ../ansible/output/* .
-#
-#        # Add and commit changes
-#        git add .
-#        git commit -m "Domain ${{ inputs.domain_name }} built for product: ${{ inputs.product_name }}"
-#
-#        # Push the branch
-#        git push --set-upstream origin "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
+        #git config user.name "github-actions[bot]"
+        #git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+        ## Create new branch
+        #git checkout -b "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
+
+        #echo "Copying output files to the current repository"
+        #cp -r ../ansible/output/* .
+             
+        ## Add and commit changes
+        #git add .
+        #git commit -m "Domain ${{ inputs.domain_name }} built for product: ${{ inputs.product_name }}"
+
+        ## Push the branch
+        #git push --set-upstream origin "domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
 
         echo "Domain ${{ inputs.domain_name }} build completed and pushed to branch domain-builder-${{ inputs.domain_name }}-${{ github.run_id }}"
