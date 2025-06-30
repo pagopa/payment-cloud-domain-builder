@@ -57,7 +57,7 @@ jobs:
     - name: Parse and Build Domain
       run: |
         echo "Installing Ansible"
-        python3 -m pip install --include-deps ansible
+        python3 -m pip install ansible
         
         echo "Parsing configuration"
         CONFIG='${{ inputs.config }}'
