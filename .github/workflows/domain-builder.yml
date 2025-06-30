@@ -123,3 +123,6 @@ jobs:
         #git push --set-upstream origin "domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
         
         echo "Domain $DOMAIN_NAME build completed and pushed to branch domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
+
+    - name: Show result
+      run: tree -R -d -a .
