@@ -69,6 +69,7 @@ jobs:
         import os
         
         config = json.loads('''${{ inputs.config }}''')
+        # TODO When switched to repository_dispatch use: config = json.loads('''${{ github.event.client_payload.formData }}''')
         
         # Build extra vars string
         extra_vars = []

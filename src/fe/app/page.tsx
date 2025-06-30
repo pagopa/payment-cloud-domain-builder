@@ -443,21 +443,49 @@ export default function Wizard() {
           </button>
           <button
             className="mt-6 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow float-right flex items-center gap-2 group transition-all hover:scale-[1.02]"
-            onClick={() => {
+            onClick={async () => {
               if (typeof window !== 'undefined') {
                 const modal = document.createElement('dialog');
                 modal.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg bg-zinc-800 border border-zinc-600 text-white shadow-xl';
                 modal.innerHTML = `
                   <h2 class="text-xl font-bold mb-4">Generazione in corso</h2>
                   <p class="mb-4">Il modulo sta venendo generato...</p>
+                  <a class="mb-4 text-pink-400 hover:text-pink-500 transition-colors underline flex items-center gap-2" target="_blank" type="button" href="https://github.com/ffppa/test-runners/actions/workflows/test-wk.yml">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Guarda qui
+                  </a>
+                  <br>
                   <div class="animate-spin w-8 h-8 border-4 border-pink-600 border-t-transparent rounded-full mx-auto"></div>
                 `;
                 document.body.appendChild(modal);
                 modal.showModal();
-                setTimeout(() => {
-                  modal.close();
-                  modal.remove();
-                }, 2000);
+
+                try {
+                  const response = await fetch('/api/github-dispatch', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      formData: formData
+                    })
+                  });
+
+
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+
+                } catch (error) {
+                  console.error('Error:', error);
+                } finally {
+                  setTimeout(() => {
+                    modal.close();
+                    modal.remove();
+                  }, 3000);
+                }
               }
             }}
           >
