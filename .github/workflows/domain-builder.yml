@@ -99,7 +99,7 @@ jobs:
         echo "Extra vars: $EXTRA_VARS"
         
         # Execute Ansible with all variables
-        ansible-playbook -i ansible/inventory/hosts ansible/playbooks/domain-builder.yml \
+        ansible-playbook -i src/inventory/hosts src/domain-builder.yml \
           --extra-vars "$EXTRA_VARS"
         
         # Get output files from ansible
