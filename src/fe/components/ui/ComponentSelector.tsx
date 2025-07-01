@@ -17,7 +17,7 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
 
   return (
     <div className="bg-zinc-900 rounded-2xl p-4 w-72 border border-zinc-700 h-fit">
-      <h2 className="text-xl font-bold text-zinc-200 mb-4">Select Components</h2>
+      <h2 className="text-xl font-bold text-zinc-200 mb-4">Add Components</h2>
       <div className="space-y-3">
         {COMPONENTS.map(component => (
           <div key={component} className="relative flex items-center">

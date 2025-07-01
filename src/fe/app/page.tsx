@@ -291,7 +291,7 @@ export default function Wizard() {
       <ErrorModal
         isOpen={showErrorModal}
         onClose={() => setShowErrorModal(false)}
-        error={errorDetails}
+        details={errorDetails}
         onRetry={handleGenerateWorkflow}
       />
     </>
