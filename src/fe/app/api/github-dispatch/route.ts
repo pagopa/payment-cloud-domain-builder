@@ -5,44 +5,42 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
   const requestId = Math.random().toString(36).substring(2, 15);
 
-  // 🚀 Log inizio richiesta
-  console.log(`🚀  [${requestId}] GitHub Dispatch API chiamata iniziata`);
+  // 🚀 Log request start
+  console.log(`🚀  [${requestId}] GitHub Dispatch API call started`);
   console.log(`    [${requestId}] IP: ${request.ip || 'unknown'}`);
   console.log(`    [${requestId}] Origin: ${request.headers.get('origin') || 'none'}`);
   console.log(`    [${requestId}] User-Agent: ${request.headers.get('user-agent') || 'unknown'}`);
 
   try {
-    // Verifica origine
+    // Verify origin
     const origin = request.headers.get('origin');
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://tuo-dominio.com',
-      'https://tuo-dominio.vercel.app'
+      'https://18a4-87-8-39-152.ngrok-free.app'
     ];
 
     if (!origin || !allowedOrigins.includes(origin)) {
-      console.log(`❌  [${requestId}] Origine non autorizzata: ${origin}`);
+      console.log(`❌  [${requestId}] Unauthorized origin: ${origin}`);
       return NextResponse.json(
         { error: 'Unauthorized origin' },
         { status: 403 }
       );
     }
 
-    console.log(`✅  [${requestId}] Origine verificata con successo`);
+    console.log(`✅  [${requestId}] Origin verified successfully`);
 
-    // Parse del body
+    // Parse body
     const body = await request.json();
 
-    console.log(`    [${requestId}] Form data ricevuto:`, {
-      domain_name: body.formData?.domain_name || 'N/A',
-      product_name: body.formData?.product_name || 'N/A',
-      location: body.formData?.location || 'N/A',
-      // Non loggare dati sensibili completi
-      fieldsCount: Object.keys(body.formData || {}).length
+    console.log(`    [${requestId}] Form data received:`,
+      {
+        domain_name: body.formData?.domain_name || 'N/A',
+        product_name: body.formData?.product_name || 'N/A',
+        location: body.formData?.location || 'N/A',
+        fieldsCount: Object.keys(body.formData || {}).length
     });
 
-    // Chiamata a GitHub
-    console.log(`🐙  [${requestId}] Invio richiesta a GitHub API...`);
+    console.log(`🐙  [${requestId}] Sending request to GitHub API...`);
     const githubStartTime = Date.now();
 
     const response = await fetch('https://api.github.com/repos/ffppa/test-runners/dispatches', {
@@ -59,7 +57,6 @@ export async function POST(request: NextRequest) {
           metadata: {
             requestId,
             timestamp: new Date().toISOString(),
-            origin
           }
         }
       })
@@ -68,7 +65,7 @@ export async function POST(request: NextRequest) {
     const githubDuration = Date.now() - githubStartTime;
 
     if (!response.ok) {
-      console.log(`    [${requestId}] GitHub API errore:`, {
+      console.log(`    [${requestId}] GitHub API error:`, {
         status: response.status,
         statusText: response.statusText,
         duration: `${githubDuration}ms`
@@ -80,22 +77,23 @@ export async function POST(request: NextRequest) {
       throw new Error(`GitHub API error: ${response.status} - ${response.statusText}`);
     }
 
-    console.log(`    [${requestId}] GitHub API chiamata completata con successo!`);
-    console.log(`    [${requestId}] Durata chiamata GitHub: ${githubDuration}ms`);
+    console.log(`    [${requestId}] GitHub API call completed successfully!`);
+    console.log(`    [${requestId}] GitHub call duration: ${githubDuration}ms`);
 
     const totalDuration = Date.now() - startTime;
-    console.log(`    [${requestId}] Richiesta completata con successo in ${totalDuration}ms`);
+    console.log(`    [${requestId}] Request completed successfully in ${totalDuration}ms`);
 
     return NextResponse.json({
       success: true,
       requestId,
-      duration: totalDuration
+      duration: totalDuration,
+      status: response.status
     });
 
   } catch (error) {
     const totalDuration = Date.now() - startTime;
 
-    console.log(`    [${requestId}] Errore durante la richiesta:`, {
+    console.log(`    [${requestId}] Error on request:`, {
       error: error instanceof Error ? error.message : 'Unknown error',
       duration: `${totalDuration}ms`,
       stack: error instanceof Error ? error.stack : undefined
@@ -113,7 +111,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  console.log(`ℹ️  GitHub Dispatch API - Health check chiamato`);
+  console.log(`ℹ️  GitHub Dispatch API - Health check called`);
   return NextResponse.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
