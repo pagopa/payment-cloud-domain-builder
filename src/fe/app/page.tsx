@@ -151,7 +151,7 @@ export default function Wizard() {
         {/* Main content */}
         <div className={`p-6 flex-1 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
           <h1 className={`text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
-            Terraform IDH Module Wizard
+            IDH Domain Wizard
           </h1>
 
           {showSummary ? (
