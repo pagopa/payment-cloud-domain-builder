@@ -4,7 +4,7 @@ export const COMPONENTS = [
   'Redis',
 //   'Storage Account',
 //   'Key Vault',
-//   'MongoDB'
+  'MongoDB'
 ];
 
 export const LOCATIONS = [

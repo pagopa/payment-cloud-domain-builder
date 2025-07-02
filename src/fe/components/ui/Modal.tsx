@@ -1,10 +1,9 @@
-// components/ui/Modal.tsx
 import React, { useEffect } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   className?: string;
 }
@@ -14,7 +13,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  className = ''
+  className = 'max-w-md w-full mx-4'
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -36,8 +35,8 @@ export const Modal: React.FC<ModalProps> = ({
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={onClose}
       />
-      <div className={`relative bg-zinc-800 border border-zinc-600 text-white shadow-xl rounded-lg p-8 max-w-md w-full mx-4 ${className}`}>
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
+      <div className={`relative bg-zinc-800 border border-zinc-600 text-white shadow-xl rounded-lg p-8 ${className}`}>
+        {title && <h2 className="text-xl font-bold mb-4">{title}</h2>}
         {children}
       </div>
     </div>

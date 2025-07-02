@@ -1,6 +1,4 @@
 // utils/terraform.ts
-import { FormData } from '../types/form';
-
 export function renderTerraformPreview(data: FormData): string {
   return `module "idh" {
   source = "./modules/idh"

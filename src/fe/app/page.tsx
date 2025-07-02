@@ -6,6 +6,7 @@ import { Step2 } from '../components/steps/step2';
 import { Step3 } from '../components/steps/step3';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
 import { StepIndicator } from '../components/ui/StepIndicator';
+import { Helper } from '../components/ui/Helper';
 import { Modal } from '../components/ui/Modal';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import { renderTerraformPreview } from '../utils/terraform';
@@ -140,7 +141,7 @@ export default function Wizard() {
 
   return (
     <>
-      <div className="flex gap-6 p-6 mx-auto max-w-5xl">
+              <div className="flex gap-6 p-6 mx-auto max-w-7xl">
         {/* Components sidebar */}
         <ComponentSelector
           selectedComponents={selectedComponents}
@@ -230,6 +231,34 @@ export default function Wizard() {
             </form>
           )}
         </div>
+
+
+      {/* Helper panel */}
+      <Helper
+        currentStep={step}
+        title={`Step ${step} Variables`}
+        helpContent={{
+          title: `Guida Step ${step}`,
+          description: `Configurazione dettagliata per lo step ${step}. Queste variabili sono utilizzabili per la generazione.`,
+          tips: [
+            "Le variabili sono predefinite e testate",
+            "Prega sempre i sistemisti.",
+            "Consulta la documentazione per maggiori dettagli"
+          ],
+          examples: [
+            {
+              variable: "domain",
+              value: "${var.domain}-meme",
+              explanation: "Prefisso standard per tutte le risorse PagoPA"
+            },
+            {
+              variable: "env",
+              value: "${var.env}",
+              explanation: "Ambiente di destinazione per il deployment"
+            }
+          ]
+        }}
+      />
       </div>
 
       {/* Loading Modal */}
@@ -267,7 +296,8 @@ export default function Wizard() {
                 <p>Status: <span className="text-green-400">{apiResponse.status}</span></p>
                 <p>Duration: <span className="text-blue-400">{apiResponse.duration}ms</span></p>
                 {apiResponse.requestId && <p>Request ID: <span className="text-yellow-400">{apiResponse.requestId}</span></p>}
-                <a 
+                {apiResponse.requestId && <p>Branch Name: <span className="text-purple-400">domain-builder-{apiResponse.requestId}-{formData?.domain_name}</span></p>}
+                <a
                   href="https://github.com/ffppa/test-runners/actions/workflows/test-wk.yml"
                   target="_blank"
                   rel="noopener noreferrer"
