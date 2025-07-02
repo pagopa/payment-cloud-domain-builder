@@ -8,8 +8,6 @@ include_apim: true
 tag_source: module.tag_config.tags
 
 
-#TEST
-
 domain_name: "meme"
 is_dev_public: true
 storage_account_state_name: tfinfdevpagopa

@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
     const origin = request.headers.get('origin');
     const allowedOrigins = [
       'http://localhost:3000',
+      'https://f89d-87-8-39-152.ngrok-free.app'
     ];
 
     if (!origin || !allowedOrigins.includes(origin)) {
@@ -51,8 +52,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         event_type: 'test-wk',
         client_payload: {
-          foo: "bar",
-          formData: body.formData,
+          data: body.data,
           metadata: {
             requestId,
             timestamp: new Date().toISOString(),
