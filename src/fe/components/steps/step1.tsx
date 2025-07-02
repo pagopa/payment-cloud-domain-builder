@@ -22,6 +22,7 @@ export const Step1: React.FC<Step1Props> = ({ formData, handleChange, onNext }) 
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. meme"
+            required
           />
         </div>
 

@@ -9,6 +9,7 @@ import { StepIndicator } from '../components/ui/StepIndicator';
 import { Helper } from '../components/ui/Helper';
 import { Modal } from '../components/ui/Modal';
 import { ErrorModal } from '../components/ui/ErrorModal';
+import { Navbar } from '../components/ui/Navbar';
 import { renderTerraformPreview } from '../utils/terraform';
 import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
@@ -34,46 +35,59 @@ export default function Wizard() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [errorDetails, setErrorDetails] = useState<string>('');
+  
+  // Mode state per la navbar
+  const [currentMode, setCurrentMode] = useState<'domain-builder' | 'idh-advisor'>('domain-builder');
 
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
 
-  const handleGenerateWorkflow = async () => {
-      console.log('handleGenerateWorkflow called'); // Debug
-  console.log('Form data:', formData); // Debug
-
-    setShowLoadingModal(true);
-    setErrorDetails('');
-
-    try {
-      const startTime = Date.now();
-      const responseData = await triggerGithubWorkflow(formData);
-      const duration = Date.now() - startTime;
-
-      setApiResponse({ ...responseData, duration });
-
-      // Simulate a small delay to show loading
-      setTimeout(() => {
-        setShowLoadingModal(false);
-        setShowSuccessModal(true);
-
-        // Auto-close success modal after 5 seconds
-        setTimeout(() => {
-          setShowSuccessModal(false);
-        }, 60000);
-      }, 2000);
-
-    } catch (error) {
-      console.error('Error during workflow generation:', error);
-      setShowLoadingModal(false);
-
-      // Set error details for the modal
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      const errorStack = error instanceof Error ? error.stack : undefined;
-
-      setErrorDetails(errorStack || errorMessage);
-      setShowErrorModal(true);
-    }
+  const handleModeChange = (mode: 'domain-builder' | 'idh-advisor') => {
+    setCurrentMode(mode);
+    // Qui puoi aggiungere logica per cambiare il contenuto della pagina
+    console.log('Mode changed to:', mode);
   };
+
+const handleGenerateWorkflow = async () => {
+
+  if (!formData.domain_name || formData.domain_name.trim() === '') {
+    setErrorDetails('Domain name is required before generating the workflow.');
+    setShowErrorModal(true);
+    return;
+  }
+
+  setShowLoadingModal(true);
+  setErrorDetails('');
+
+  try {
+    const startTime = Date.now();
+    const responseData = await triggerGithubWorkflow(formData);
+    const duration = Date.now() - startTime;
+
+    setApiResponse({ ...responseData, duration });
+
+    // Simulate a small delay to show loading
+    setTimeout(() => {
+      setShowLoadingModal(false);
+      setShowSuccessModal(true);
+
+      // Auto-close success modal after 5 seconds
+      setTimeout(() => {
+        setShowSuccessModal(false);
+      }, 60000);
+    }, 2000);
+
+  } catch (error) {
+    console.error('Error during workflow generation:', error);
+    setShowLoadingModal(false);
+
+    // Set error details for the modal
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    setErrorDetails(errorStack || errorMessage);
+    setShowErrorModal(true);
+  }
+};
 
   const TerraformPreview = () => (
     <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
@@ -139,9 +153,25 @@ export default function Wizard() {
     return components;
   }, [selectedComponents]);
 
-  return (
-    <>
-              <div className="flex gap-6 p-6 mx-auto max-w-7xl">
+  // Renderizza contenuto diverso in base alla modalità
+  const renderContent = () => {
+    if (currentMode === 'idh-advisor') {
+      return (
+        <div className="flex justify-center items-center min-h-[60vh]">
+          <div className="text-center p-8 bg-zinc-800 rounded-2xl border border-zinc-700">
+            <h2 className="text-2xl font-bold text-indigo-400 mb-4">IDH Module Advisor</h2>
+            <p className="text-zinc-300 mb-6">Coming soon! This feature will help you choose the best IDH modules for your infrastructure.</p>
+            <div className="text-zinc-500">
+              🚧 Under development 🚧
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Domain Builder mode (contenuto originale)
+    return (
+      <div className="flex gap-6 p-6 mx-auto max-w-7xl mt-16">
         {/* Components sidebar */}
         <ComponentSelector
           selectedComponents={selectedComponents}
@@ -232,34 +262,44 @@ export default function Wizard() {
           )}
         </div>
 
-
-      {/* Helper panel */}
-      <Helper
-        currentStep={step}
-        title={`Step ${step} Variables`}
-        helpContent={{
-          title: `Guida Step ${step}`,
-          description: `Configurazione dettagliata per lo step ${step}. Queste variabili sono utilizzabili per la generazione.`,
-          tips: [
-            "Le variabili sono predefinite e testate",
-            "Prega sempre i sistemisti.",
-            "Consulta la documentazione per maggiori dettagli"
-          ],
-          examples: [
-            {
-              variable: "domain",
-              value: "${var.domain}-meme",
-              explanation: "Prefisso standard per tutte le risorse PagoPA"
-            },
-            {
-              variable: "env",
-              value: "${var.env}",
-              explanation: "Ambiente di destinazione per il deployment"
-            }
-          ]
-        }}
-      />
+        {/* Helper panel */}
+        <Helper
+          currentStep={step}
+          title={`Step ${step} Variables`}
+          helpContent={{
+            title: `Guida Step ${step}`,
+            description: `Configurazione dettagliata per lo step ${step}. Queste variabili sono utilizzabili per la generazione.`,
+            tips: [
+              "Le variabili sono predefinite e testate",
+              "Prega sempre i sistemisti.",
+              "Consulta la documentazione per maggiori dettagli"
+            ],
+            examples: [
+              {
+                variable: "domain",
+                value: "${var.domain}-meme",
+                explanation: "Prefisso standard per tutte le risorse PagoPA"
+              },
+              {
+                variable: "env",
+                value: "${var.env}",
+                explanation: "Ambiente di destinazione per il deployment"
+              }
+            ]
+          }}
+        />
       </div>
+    );
+  };
+
+  return (
+    <>
+      <Navbar 
+        mode={currentMode}
+        onModeChange={handleModeChange}
+      />
+    
+      {renderContent()}
 
       {/* Loading Modal */}
       <Modal
