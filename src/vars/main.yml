@@ -2,6 +2,7 @@
 include_postgresql: true
 include_tag_config: true
 include_kubernetes: true
+include_redis: true
 include_apim: true
 
 
@@ -53,6 +54,11 @@ gh_runner_pat_kv_rg: "${local.prefix}-${var.env_short}-sec-rg"
 
 product_name: "pagopa"
 location: westeurope
+
+private_endpoint_subnet_name: "${local.prefix}-${var.env_short}-common-private-endpoint-snet"
+private_endpoint_subnet_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
+private_endpoint_subnet_vnet_name: "${local.prefix}-${var.env_short}-vnet"
+private_dns_zone_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
 
 location_mapping:
   italynorth: itn

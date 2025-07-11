@@ -80,6 +80,54 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
         </div>
 
         <div>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">Priavete endpoint subnet name</label>
+          <input
+            type="text"
+            name="private_endpoint_subnet_name"
+            value={formData.private_endpoint_subnet_name}
+            onChange={handleChange}
+            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-common-private-endpoint-snet"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">Private endpoint subnet resource group name</label>
+          <input
+            type="text"
+            name="private_endpoint_subnet_rg_name"
+            value={formData.private_endpoint_subnet_rg_name}
+            onChange={handleChange}
+            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-vnet-rg"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">Private endpoint subnet vnet name</label>
+          <input
+            type="text"
+            name="private_endpoint_subnet_vnet_name"
+            value={formData.private_endpoint_subnet_vnet_name}
+            onChange={handleChange}
+            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-vnet"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">Private link dns zone rg name</label>
+          <input
+            type="text"
+            name="private_dns_zone_rg_name"
+            value={formData.private_dns_zone_rg_name}
+            onChange={handleChange}
+            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-vnet-rg"
+          />
+        </div>
+
+        <div>
           <label className="block mb-1 text-sm font-semibold text-zinc-300">Location</label>
           <select
             name="location"
