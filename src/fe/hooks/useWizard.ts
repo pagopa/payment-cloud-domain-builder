@@ -18,6 +18,10 @@ export const useWizard = () => {
     }));
   };
 
+  const updateFormData = (updates: Partial<FormData>) => {
+    setFormData(prev => ({ ...prev, ...updates }));
+  };
+
   const nextStep = () => {
     if (step < 15) {
       setStep(prev => prev + 1);

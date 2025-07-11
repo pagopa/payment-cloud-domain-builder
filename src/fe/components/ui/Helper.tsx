@@ -19,36 +19,32 @@ export const Helper: React.FC<HelperProps> = ({
   variables = [
     {
       name: 'prefix',
-      description: 'pagopa'
+      description: 'e.g pagopa'
     },
     {
       name: 'env_short',
-      description: 'p'
+      description: 'e.g p'
     },
     {
       name: 'env',
-      description: 'prod'
+      description: 'e.g prod'
     },
     {
       name: 'domain',
-      description: 'core'
+      description: 'e.g core'
     },
     {
       name: 'location',
-      description: 'italynorth'
+      description: 'e.g italynorth'
     },
     {
       name: 'location_string',
-      description: 'Italy North'
+      description: 'e.g Italy North'
     },
     {
       name: 'location_short',
-      description: 'itn'
+      description: 'e.g itn'
     },
-    {
-      name: 'location_westeurope',
-      description: 'westeurope'
-    }
   ],
   currentStep,
   helpContent = {
@@ -63,6 +59,34 @@ export const Helper: React.FC<HelperProps> = ({
 }) => {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleDrop = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const droppedValue = e.dataTransfer.getData('text/plain');
+
+    if (droppedValue) {
+      setInputValue(prevValue => {
+        const newValue = prevValue && prevValue.trim() !== '' 
+          ? `${prevValue}-${droppedValue}`
+          : droppedValue;
+        return newValue;
+      });
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   return (
     <>
@@ -97,11 +121,32 @@ export const Helper: React.FC<HelperProps> = ({
 
         <div className="space-y-2">
           {variables.map((variable, index) => (
-            <div key={index} className="border-b border-zinc-700 pb-2 last:border-0">
+            <div
+              key={index}
+              className="border-b cursor-pointer border-zinc-700 pb-2 last:border-0"
+              draggable
+              onDragStart={(e) => {
+                e.dataTransfer.setData('text/plain', "${local."+variable.name+"}");
+              }}
+            >
               <span className={`${stepColor.text} font-mono`}>{variable.name}</span>
               <p className="text-sm text-zinc-400">{variable.description}</p>
             </div>
           ))}
+        </div>
+        
+        {/* Input posizionato sotto le variabili */}
+        <div className="mt-4 pt-3 border-t border-zinc-700">
+          <textarea
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            className="w-full border border-zinc-600 bg-zinc-700 text-zinc-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical min-h-[80px]"
+            placeholder="Trascina qui le variabili per comporre..."
+            rows={3}
+          />
         </div>
       </div>
 

@@ -20,6 +20,7 @@ export default function Wizard() {
     formData,
     showSummary,
     selectedComponents,
+    updateFormData,
     handleChange,
     nextStep,
     prevStep,
@@ -251,6 +252,7 @@ const handleGenerateWorkflow = async () => {
                       handleChange={handleChange}
                       onNext={nextStep}
                       onPrev={prevStep}
+                      updateFormData={updateFormData}
                       currentStep={componentStepNumber}
                       isLastStep={isLastStep}
                       onComplete={isLastStep ? () => setShowSummary(true) : undefined}

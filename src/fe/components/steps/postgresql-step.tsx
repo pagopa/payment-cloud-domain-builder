@@ -1,25 +1,49 @@
-// components/steps/postgresql-step.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
-
 
 interface PostgreSQLStepProps {
   formData: FormData;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  updateFormData?: (updates: Partial<FormData>) => void;
   onNext: () => void;
   onPrev: () => void;
   onComplete: () => void;
   isLastStep: boolean;
+  currentStep: number;
 }
 
-export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({ currentStep, formData, handleChange, isLastStep, onNext, onPrev, onComplete }) => {
+export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({ 
+  currentStep, 
+  formData, 
+  handleChange, 
+  updateFormData,
+  isLastStep, 
+  onNext, 
+  onPrev, 
+  onComplete 
+}) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
+
+  // Aggiorna include_postgresql basandosi sul campo database
+  useEffect(() => {
+    if (updateFormData) {
+      const hasDatabase = formData.database && formData.database.trim() !== '';
+      updateFormData({ include_postgresql: hasDatabase });
+    }
+  }, [formData.database, updateFormData]);
 
   return (
     <div>
       <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>PostgreSQL Configuration</h2>
       <div className="space-y-4">
+        {/* Campo nascosto per include_postgresql */}
+        <input
+          type="hidden"
+          name="include_postgresql"
+          value={formData.include_postgresql ? 'true' : 'false'}
+        />
+
         <div>
           <label className="block mb-1 text-sm font-semibold text-zinc-300">Host</label>
           <input
@@ -79,6 +103,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({ currentStep, for
             placeholder="Enter password"
           />
         </div>
+        
         <div className="flex gap-4 mt-3">
           <button
             type="button"
