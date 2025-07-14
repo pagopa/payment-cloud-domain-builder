@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "redis_rg" {
   name     = "${local.project}-redis-rg"
   location = var.location
 
-  # tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }
 
@@ -65,7 +65,7 @@ module "redis" {
     }
   ]
 
-  # tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }
 
