@@ -56,3 +56,43 @@ data "azurerm_private_dns_zone" "postgres" {
   resource_group_name = data.azurerm_resource_group.rg_vnet.name
 }
 {% endif %}
+
+
+data "azurerm_subnet" "private_endpoint_subnet" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                 = "{{ private_endpoint_subnet_name }}"
+  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
+  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
+}
+
+{% if include_redis %}
+data "azurerm_private_dns_zone" "privatelink_redis_cache_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.redis.cache.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if include_cosmos %}
+{% if cosmosdb_account_database_type == "mongo" %}
+data "azurerm_private_dns_zone" "privatelink_mongo_cosmos_azure_com" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.mongo.cosmos.azure.com"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% else %}
+data "azurerm_private_dns_zone" "privatelink_documents_azure_com" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.documents.azure.com"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+{% endif %}

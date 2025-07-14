@@ -4,6 +4,7 @@ include_tag_config: true
 include_kubernetes: true
 include_redis: true
 include_apim: true
+include_cosmos: true
 
 
 tag_source: module.tag_config.tags
@@ -60,6 +61,8 @@ private_endpoint_subnet_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
 private_endpoint_subnet_vnet_name: "${local.prefix}-${var.env_short}-vnet"
 private_dns_zone_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
 
+cosmosdb_account_database_type: "mongo"
+
 location_mapping:
   italynorth: itn
   westeurope: weu
@@ -69,3 +72,5 @@ location_string_mapping:
   italynorth: "Italy North"
   westeurope: "West Europe"
   northeurope: "North Europe"
+
+terraform_module_v4_hash: 85e4ec77e6b7e918de10108e052aba4348695e8d #7.21.0

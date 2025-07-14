@@ -6,17 +6,6 @@ resource "azurerm_resource_group" "redis_rg" {
 
 }
 
-data "azurerm_subnet" "private_endpoint_subnet" {
-  name                 = "{{ private_endpoint_subnet_name }}"
-  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
-  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
-}
-
-data "azurerm_private_dns_zone" "privatelink_redis_cache_windows_net" {
-  name                = "privatelink.redis.cache.windows.net"
-  resource_group_name = "{{ private_dns_zone_rg_name }}"
-}
-
 module "redis" {
   source = "./.terraform/modules/__v4__/IDH/redis"
 
@@ -29,10 +18,17 @@ module "redis" {
   resource_group_name = azurerm_resource_group.redis_rg.name
   alert_action_group_ids = concat([data.azurerm_monitor_action_group.email.id, data.azurerm_monitor_action_group.slack.id], var.alert_use_opsgenie ? [] : [])
 
-  private_endpoint = {
+{% if is_dev_public %}
+  private_endpoint = var.env_short != "d" ? {
+    subnet_id            = data.azurerm_subnet.private_endpoint_subnet[0].id
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net[0].id]
+  } : null
+{% else %}
+  private_dns_zone_id = {
     subnet_id            = data.azurerm_subnet.private_endpoint_subnet.id
     private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net.id]
   }
+{% endif %}
 
   patch_schedules = [
     {
