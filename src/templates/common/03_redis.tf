@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "redis_rg" {
   name     = "${local.project}-redis-rg"
   location = var.location
 
-  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  # tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }
 
@@ -65,6 +65,24 @@ module "redis" {
     }
   ]
 
-  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+  # tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
+}
+
+resource "azurerm_key_vault_secret" "redis_{{domain_name}}_access_key" {
+  name         = "redis-{{domain_name}}-access-key"
+  value        = module.redis.primary_access_key
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
+}
+
+resource "azurerm_key_vault_secret" "redis_{{domain_name}}_hostname" {
+  name         = "redis-{{domain_name}}-hostname"
+  value        = module.redis.hostname
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
+}
+
+resource "azurerm_key_vault_secret" "redis_{{domain_name}}_connection_string" {
+  name         = "redis-{{domain_name}}-hostname"
+  value        = module.redis.primary_connection_string
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
 }

@@ -34,6 +34,10 @@ data "azurerm_monitor_action_group" "opsgenie" {
   name                = local.monitor_action_group_opsgenie_name
 }
 
+data "azurerm_key_vault" "domain_kv" {
+  name                = "${local.project}-kv"
+  resource_group_name = "${local.project}-sec-rg"
+}
 #
 # Private DNS Zones
 #
