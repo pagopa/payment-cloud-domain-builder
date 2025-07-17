@@ -54,7 +54,7 @@ module "postgres_flexible_server_{{ domain_name }}" {
   diagnostic_settings_enabled = var.pgres_flex_params.pgres_flex_diagnostic_settings_enabled
   log_analytics_workspace_id  = var.env_short != "d" ? data.azurerm_log_analytics_workspace.log_analytics_workspace.id : null
 
-  custom_metric_alerts = var.custom_metric_alerts
+  custom_metric_alerts = var.postgres_custom_metric_alerts
 
   alert_action = concat(
   [

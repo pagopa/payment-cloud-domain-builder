@@ -26,10 +26,10 @@ pgres_flex_params = {
 }
 
 pgres_flex_db_names = [
-# FIXME add here tour database names
+# FIXME add here your database names
 ]
 
-custom_metric_alerts = {
+postgres_custom_metric_alerts = {
   cpu_percent = {
     frequency        = "PT5M"
     window_size      = "PT30M"
@@ -83,3 +83,10 @@ custom_metric_alerts = {
 }
 {% endif %}
 
+{% if include_redis %}
+redis_idh_resource_tier = "basic"
+{% endif %}
+
+{% if include_cosmosdb %}
+cosmos_idh_resource_tier = "cosmos_{{cosmosdb_account_database_type}}4"
+{% endif %}

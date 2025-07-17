@@ -10,7 +10,7 @@ module "redis" {
   source = "./.terraform/modules/__v4__/IDH/redis"
 
   env = var.env
-  idh_resource_tier = "basic"
+  idh_resource_tier = var.redis_idh_resource_tier
   product_name = local.prefix
 
   location = var.location
@@ -66,19 +66,19 @@ module "redis" {
 }
 
 resource "azurerm_key_vault_secret" "redis_{{domain_name}}_access_key" {
-  name         = "redis-{{domain_name}}-access-key"
+  name         = "redis-${local.domain}-access-key"
   value        = module.redis.primary_access_key
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
 resource "azurerm_key_vault_secret" "redis_{{domain_name}}_hostname" {
-  name         = "redis-{{domain_name}}-hostname"
+  name         = "redis-${local.domain}-hostname"
   value        = module.redis.hostname
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
 resource "azurerm_key_vault_secret" "redis_{{domain_name}}_connection_string" {
-  name         = "redis-{{domain_name}}-hostname"
+  name         = "redis-${local.domain}-hostname"
   value        = module.redis.primary_connection_string
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }

@@ -21,10 +21,10 @@ module "cosmos" {
   source = "./.terraform/modules/__v4__/IDH/cosmosdb_account"
 
   env = var.env
-  idh_resource_tier = "cosmos_{{cosmosdb_account_database_type}}4"
+  idh_resource_tier = var.cosmos_idh_resource_tier
   product_name = local.prefix
 
-  domain                     = "{{domain_name}}"
+  domain                     = local.domain
   name                       = "${local.project}-cosmos-account"
   resource_group_name        = azurerm_resource_group.cosmos_rg.name
   location                   = var.location
@@ -44,24 +44,24 @@ module "cosmos" {
     enabled              = var.env_short != "d"
 {% if cosmosdb_account_database_type == "mongo" %}
     private_dns_zone_mongo_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com[0].id : null
-    service_connection_name_mongo = var.env_short != "d" ?  "${local.project}-{{domain_name}}-cosmos-mongo-endpoint" : null
-    name_mongo = var.env_short != "d" ? "${local.project}-{{domain_name}}-cosmos-mongo-endpoint" : null
+    service_connection_name_mongo = var.env_short != "d" ?  "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
+    name_mongo = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
 {% endif %}
 {% if cosmosdb_account_database_type == "sql" %}
     private_dns_zone_sql_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id : null
-    name_sql = var.env_short != "d" ? "${local.project}-{{domain_name}}-cosmos-mongo-endpoint" : null
+    name_sql = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-sql-endpoint" : null
 {% endif %}
 
 {% else %}
       enabled = true
 {% if cosmosdb_account_database_type == "mongo" %}
     private_dns_zone_mongo_ids = data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id
-    service_connection_name_mongo = "${local.project}-{{domain_name}}-cosmos-mongo-endpoint"
-    name_mongo = "${local.project}-{{domain_name}}-cosmos-mongo-endpoint"
+    service_connection_name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
+    name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
 {% endif %}
 {% if cosmosdb_account_database_type == "sql" %}
     private_dns_zone_sql_ids = data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id
-    name_sql = "${local.project}-{{domain_name}}-cosmos-mongo-endpoint"
+    name_sql = "${local.project}-${local.domain}-cosmos-sql-endpoint"
 {% endif %}
 {% endif %}
 
@@ -75,9 +75,9 @@ module "cosmos" {
 
 
 resource "azurerm_key_vault_secret" "cosmos_{{domain_name}}_pkey" {
-  name         = "afm-marketplace-${var.env_short}-cosmos-pkey"
+  name         = "${local.domain}-${var.env_short}-cosmos-pkey"
   value        = module.cosmos.primary_key
   content_type = "text/plain"
 
-  key_vault_id = module.key_vault.id
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
 }

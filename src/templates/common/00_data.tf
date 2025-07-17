@@ -77,7 +77,7 @@ data "azurerm_private_dns_zone" "privatelink_redis_cache_windows_net" {
 }
 {% endif %}
 
-{% if include_cosmos %}
+{% if include_cosmosdb %}
 {% if cosmosdb_account_database_type == "mongo" %}
 data "azurerm_private_dns_zone" "privatelink_mongo_cosmos_azure_com" {
   {% if is_dev_public %}

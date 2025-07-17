@@ -4,7 +4,7 @@ include_tag_config: true
 include_kubernetes: true
 include_redis: true
 include_apim: true
-include_cosmos: true
+include_cosmosdb: true
 
 
 tag_source: module.tag_config.tags

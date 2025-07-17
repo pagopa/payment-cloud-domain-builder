@@ -72,7 +72,7 @@ variable "pgres_flex_params" {
 
 }
 
-variable "custom_metric_alerts" {
+variable "postgres_custom_metric_alerts" {
 
   description = <<EOD
   Map of name = criteria objects
@@ -162,3 +162,20 @@ variable "postgres_dns_registration_enabled" {
   default     = false
 }
 {% endif %}
+
+
+{% if include_redis %}
+variable "redis_idh_resource_tier" {
+    type        = string
+    description = "The IDH resource tier for the Redis cache."
+}
+{% endif %}
+
+
+{% if include_cosmosdb %}
+variable "cosmos_idh_resource_tier" {
+    type        = string
+    description = "The IDH resource tier for the cosmosdb "
+}
+{% endif %}
+
