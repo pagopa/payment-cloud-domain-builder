@@ -5,6 +5,7 @@ include_kubernetes: true
 include_redis: true
 include_apim: true
 include_cosmosdb: true
+include_storage_account: true
 
 
 tag_source: module.tag_config.tags
@@ -62,6 +63,12 @@ private_endpoint_subnet_vnet_name: "${local.prefix}-${var.env_short}-vnet"
 private_dns_zone_rg_name: "${local.prefix}-${var.env_short}-vnet-rg"
 
 cosmosdb_account_database_type: "mongo"
+
+
+storage_account_scope_name: "myscope"
+storage_account_data_types:
+  - "blob"
+  - "queue"
 
 location_mapping:
   italynorth: itn

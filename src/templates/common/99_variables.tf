@@ -179,3 +179,4 @@ variable "cosmos_idh_resource_tier" {
 }
 {% endif %}
 
+

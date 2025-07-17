@@ -96,3 +96,67 @@ data "azurerm_private_dns_zone" "privatelink_documents_azure_com" {
 }
 {% endif %}
 {% endif %}
+
+
+
+{% if include_storage_account %}
+{% if "blob" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_blob_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.blob.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if "queue" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_queue_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.queue.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if "dfs" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_dfs_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.dfs.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if "file" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_file_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.file.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if "file" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_table_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.table.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+
+{% if "file" in storage_account_data_types  %}
+data "azurerm_private_dns_zone" "privatelink_web_core_windows_net" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.web.core.windows.net"
+  resource_group_name = "{{ private_dns_zone_rg_name }}"
+}
+{% endif %}
+{% endif %}
