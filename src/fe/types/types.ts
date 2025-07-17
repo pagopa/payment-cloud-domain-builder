@@ -6,6 +6,8 @@ export type FormData = {
   include_tag_config: boolean;
   include_kubernetes: boolean;
   include_apim: boolean;
+  include_cosmosdb: boolean;
+  include_redis: boolean;
   tag_source: string;
 
   domain_name: string;
@@ -61,6 +63,8 @@ export const defaultForm: FormData = {
   include_tag_config: false,
   include_kubernetes: false,
   include_apim: false,
+  include_cosmosdb: false,
+  include_redis: false,
   tag_source: "",
 
   domain_name: "",

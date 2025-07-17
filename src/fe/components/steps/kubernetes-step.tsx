@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
 
-interface PostgreSQLStepProps {
+interface KubernetesStepProps {
   formData: FormData;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   updateFormData?: (updates: Partial<FormData>) => void;
@@ -13,7 +13,7 @@ interface PostgreSQLStepProps {
   currentStep: number;
 }
 
-export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({ 
+export const KubernetesStep: React.FC<PostgreSQLStepProps> = ({
   currentStep, 
   formData, 
   handleChange, 
@@ -28,82 +28,59 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
   // Aggiorna include_postgresql basandosi sul campo database
   useEffect(() => {
     if (updateFormData) {
-      const hasDatabase = formData.database && formData.database.trim() !== ''; // FIXME la property database non è presente in FormData
+      const hasDatabase = formData.database && formData.database.trim() !== '';
       updateFormData({ include_postgresql: hasDatabase });
     }
   }, [formData.database, updateFormData]);
 
   return (
     <div>
-      <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>PostgreSQL Configuration</h2>
+      <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>Kubernetes Configuration</h2>
       <div className="space-y-4">
-        {/* Campo nascosto per include_postgresql */}
+        {/* Campo nascosto per include_kubernetes */}
         <input
           type="hidden"
-          name="include_postgresql"
-          value={formData.include_postgresql ? 'true' : 'false'}
+          name="include_kubernetes"
+          value={formData.include_kubernetes ? 'true' : 'false'}
         />
 
         <div>
-          <label className="block mb-1 text-sm font-semibold text-zinc-300">Host</label>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">AKS name</label>
           <input
             type="text"
-            name="host"
-            value={formData.host || ''}
+            name="aks_name"
+            value={formData.aks_name || ''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            placeholder="e.g. localhost"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-semibold text-zinc-300">Port</label>
-          <input
-            type="number"
-            name="port"
-            value={formData.port || ''}
-            onChange={handleChange}
-            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            placeholder="e.g. 5432"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 text-sm font-semibold text-zinc-300">Database Name</label>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">AKS Resource Group name</label>
           <input
             type="text"
-            name="database"
-            value={formData.database || ''}
+            name="aks_rg_name"
+            value={formData.aks_rg_name || ''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            placeholder="e.g. myapp_db"
+            placeholder="e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-semibold text-zinc-300">Username</label>
+          <label className="block mb-1 text-sm font-semibold text-zinc-300">Ingress load balancer IP</label>
           <input
             type="text"
-            name="username"
-            value={formData.username || ''}
+            name="ingress_load_balancer_ip"
+            value={formData.ingress_load_balancer_ip || ''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            placeholder="e.g. postgres"
+            placeholder="e.g. 10.1.100.250"
           />
         </div>
 
-        <div>
-          <label className="block mb-1 text-sm font-semibold text-zinc-300">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password || ''}
-            onChange={handleChange}
-            className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            placeholder="Enter password"
-          />
-        </div>
-        
+
         <div className="flex gap-4 mt-3">
           <button
             type="button"

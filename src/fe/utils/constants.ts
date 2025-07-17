@@ -2,9 +2,8 @@
 export const COMPONENTS = [
   'PostgreSQL',
   'Redis',
-//   'Storage Account',
-//   'Key Vault',
-  'MongoDB'
+  'CosmosDB',
+  'Kubernetes'
 ];
 
 export const LOCATIONS = [
