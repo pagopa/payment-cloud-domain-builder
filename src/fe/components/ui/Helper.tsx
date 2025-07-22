@@ -19,32 +19,54 @@ export const Helper: React.FC<HelperProps> = ({
   variables = [
     {
       name: 'prefix',
+      source: 'local',
       description: 'e.g pagopa'
     },
     {
       name: 'env_short',
+      source: 'var',
       description: 'e.g p'
     },
     {
       name: 'env',
+      source: 'var',
       description: 'e.g prod'
     },
     {
       name: 'domain',
+      source: 'local',
       description: 'e.g core'
     },
     {
       name: 'location',
+      source: 'local',
       description: 'e.g italynorth'
     },
     {
       name: 'location_string',
+      source: 'local',
       description: 'e.g Italy North'
     },
     {
       name: 'location_short',
+      source: 'local',
       description: 'e.g itn'
     },
+    {
+        name: 'product',
+        source: 'local',
+        description: 'e.g ${local.prefix}-${var.env_short}'
+    },
+    {
+        name: 'project_short',
+        source: 'local',
+        description: 'e.g ${local.prefix}-${var.env_short}-${local.domain}'
+    },
+    {
+        name: 'project',
+        source: 'local',
+        description: 'e.g ${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}'
+    }
   ],
   currentStep,
   helpContent = {
@@ -126,7 +148,7 @@ export const Helper: React.FC<HelperProps> = ({
               className="border-b cursor-pointer border-zinc-700 pb-2 last:border-0"
               draggable
               onDragStart={(e) => {
-                e.dataTransfer.setData('text/plain', "${local."+variable.name+"}");
+                e.dataTransfer.setData('text/plain', "${"+variable.source+"."+variable.name+"}");
               }}
             >
               <span className={`${stepColor.text} font-mono`}>{variable.name}</span>
