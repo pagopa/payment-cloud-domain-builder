@@ -4,6 +4,10 @@
   vars_files:
     - vars/main.yml
   tasks:
+    - name: load statics variables
+      ansible.builtin.include_vars:
+        file: vars/statics.yml
+
     - name: Ensure dir app output exists
       ansible.builtin.file:
         path: output/{{ domain_name }}-{{ item }}/env/dev
@@ -56,13 +60,13 @@
         file_type: "link"
       register: symlink_app
 
+    # COMMON folder
     - name: Genera domain-common
       template:
         src: "{{ item.path }}"
         dest: "output/{{ domain_name }}-common/{{ item.path | basename }}"
       loop: "{{ template_files_common.files }}"
       when: lookup('vars', 'include_' + (item.path | basename | regex_replace('^\d+_|\.tf$', '')), errors='ignore', default='true') | default(true) | bool
-
 
     - name: Create common symlink
       ansible.builtin.file:
@@ -73,13 +77,13 @@
         force: yes
       loop: "{{ symlink_common.files }}"
 
-
     - name: Genera domain-common env
       template:
         src: "{{ item.src }}"
         dest: "output/{{ domain_name }}-common/env/dev"
       with_filetree: templates/common/env
 
+    # SECRETS folder
     - name: Genera domain-secret
       template:
         src: "{{ item.path }}"
@@ -96,8 +100,6 @@
         force: yes
       loop: "{{ symlink_secrets.files }}"
 
-
-
     - name: Genera domain-secrets  env
       template:
         src: "{{ item.src }}"
@@ -110,6 +112,7 @@
         dest: "output/{{ domain_name }}-secrets/secret/dev"
       with_filetree: templates/secrets/secret/dev
 
+    # APP folder
     - name: Genera domain-app
       template:
         src: "{{ item.path }}"

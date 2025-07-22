@@ -1,0 +1,11 @@
+location_mapping:
+  italynorth: itn
+  westeurope: weu
+  northeurope: neu
+
+location_string_mapping:
+  italynorth: "Italy North"
+  westeurope: "West Europe"
+  northeurope: "North Europe"
+
+terraform_module_v4_hash: 85e4ec77e6b7e918de10108e052aba4348695e8d #7.21.0
