@@ -3,7 +3,11 @@ export const COMPONENTS = [
   'PostgreSQL',
   'Redis',
   'CosmosDB',
-  'Kubernetes'
+  'Kubernetes',
+  'APIM',
+  'Storage Account',
+  'GitHub Runner',
+  'Tag Config'
 ];
 
 export const LOCATIONS = [
