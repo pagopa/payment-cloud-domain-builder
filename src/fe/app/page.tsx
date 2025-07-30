@@ -172,17 +172,19 @@ const handleGenerateWorkflow = async () => {
 
     // Domain Builder mode (contenuto originale)
     return (
-      <div className="flex gap-6 p-6 mx-auto max-w-7xl mt-16">
+      <div className="flex flex-col lg:flex-row gap-6 p-3 lg:p-6 mx-auto max-w-10xl mt-8 lg:mt-16">
         {/* Components sidebar */}
-        <ComponentSelector
-          selectedComponents={selectedComponents}
-          onToggle={toggleComponent}
-          currentStep={step}
-        />
+        <div className="w-full lg:w-auto">
+          <ComponentSelector
+            selectedComponents={selectedComponents}
+            onToggle={toggleComponent}
+            currentStep={step}
+          />
+        </div>
 
         {/* Main content */}
-        <div className={`p-6 flex-1 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
-          <h1 className={`text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
+        <div className={`p-4 lg:p-6 flex-1 w-full max-w-5xl bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
+          <h1 className={`text-2xl lg:text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
             IDH Domain Wizard
           </h1>
 
