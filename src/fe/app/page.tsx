@@ -129,22 +129,26 @@ const handleGenerateWorkflow = async () => {
     
     selectedComponents.forEach(component => {
       const kebabCase = component.toLowerCase().replace(/([A-Z])/g, '-$1');
-      console.log(`Creating lazy component for: ${component}`);
-      console.log(`Kebab case: ${kebabCase}`);
-      console.log(`Import path: ../components/steps/${kebabCase}-step`);
-      
+
       components[component] = React.lazy(async () => {
-        const importPath = `../components/steps/${kebabCase}-step`;
-        console.log(`Actually importing: ${importPath}`);
-        
+        // Importa la configurazione del componente
+        const configPath = `../components/config/${kebabCase}.config`;
+
         try {
-          const module = await import(importPath);
-          console.log(`Successfully imported ${importPath}:`, Object.keys(module));
+          const config = await import(configPath);
+          const GenericStep = (await import('../components/steps/generic-step')).default;
+
           return {
-            default: module.default || module[Object.keys(module)[0]]
+            default: (props: any) => (
+              <GenericStep
+                {...props}
+                config={config.default}
+                componentName={component}
+              />
+            )
           };
         } catch (error) {
-          console.error(`Failed to import ${importPath}:`, error);
+          console.error(`Failed to load config for ${component}:`, error);
           throw error;
         }
       });
@@ -244,6 +248,15 @@ const handleGenerateWorkflow = async () => {
                 }
 
                 console.log(`Rendering ${component} at step ${componentStepNumber}`);
+                const kebabCase = component.toLowerCase().replace(/([A-Z])/g, '-$1');
+                const configPath = `../components/config/${kebabCase}.config`;
+                const config = require(configPath);
+
+                console.log('=== Generic step Debug ===');
+                console.log('component:', component);
+                console.log('kebab:', kebabCase);
+                console.log('config:', config);
+                console.log('===============================');
 
                 return (
                   <React.Suspense fallback={<div>Loading...</div>} key={component}>
@@ -256,6 +269,8 @@ const handleGenerateWorkflow = async () => {
                       currentStep={componentStepNumber}
                       isLastStep={isLastStep}
                       onComplete={isLastStep ? () => setShowSummary(true) : undefined}
+                      stepConf={config}
+                      stepName={component}
                     />
                   </React.Suspense>
                 );
