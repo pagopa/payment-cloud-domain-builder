@@ -290,7 +290,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                         </code>
                         <span className="text-zinc-500">=</span>
                         <code className="text-green-400 font-mono text-sm">
-                          "{example.value}"
+                          &quot;{example.value}
                         </code>
                       </div>
                       <p className="text-zinc-400 text-xs">

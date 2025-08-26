@@ -14,7 +14,7 @@ interface KubernetesStepProps {
   currentStep: number;
 }
 
-export const KubernetesStep: React.FC<KubernetesStepProps> = ({
+const KubernetesStep: React.FC<KubernetesStepProps> = ({
   currentStep, 
   formData, 
   handleChange, 
@@ -84,3 +84,4 @@ export const KubernetesStep: React.FC<KubernetesStepProps> = ({
     </div>
   );
 };
+export default KubernetesStep;

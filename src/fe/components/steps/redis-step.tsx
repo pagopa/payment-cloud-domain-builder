@@ -14,7 +14,7 @@ interface RedisStepProps {
   currentStep: number;
 }
 
-export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
+const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
   return (
@@ -106,3 +106,4 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
     </div>
   );
 };
+export default RedisStep;
