@@ -14,7 +14,7 @@ interface PostgreSQLStepProps {
   currentStep: number;
 }
 
-export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({ 
+const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
   currentStep, 
   formData, 
   handleChange, 
@@ -108,3 +108,4 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
     </div>
   );
 };
+export default PostgreSQLStep;

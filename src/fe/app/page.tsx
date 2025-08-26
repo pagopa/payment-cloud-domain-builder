@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useMemo } from 'react';
 import { useWizard } from '../hooks/useWizard';
+import { componentsMap } from '../components/componentsMap';
 import { Step1 } from '../components/steps/step1';
 import { Step2 } from '../components/steps/step2';
 import { Step3 } from '../components/steps/step3';
@@ -26,8 +27,7 @@ export default function Wizard() {
     prevStep,
     goToStep,
     setShowSummary,
-    toggleComponent,
-    resetWizard
+    toggleComponent
   } = useWizard();
 
   // Modal states
@@ -123,36 +123,36 @@ const handleGenerateWorkflow = async () => {
     </div>
   );
 
-  // LAZY Components Selector
-  const lazyComponents = useMemo(() => {
-  const components: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
-    
-    selectedComponents.forEach(component => {
-      const kebabCase = component.toLowerCase().replace(/([A-Z])/g, '-$1');
-      console.log(`Creating lazy component for: ${component}`);
-      console.log(`Kebab case: ${kebabCase}`);
-      console.log(`Import path: ../components/steps/${kebabCase}-step`);
-      
-      components[component] = React.lazy(async () => {
-        const importPath = `../components/steps/${kebabCase}-step`;
-        console.log(`Actually importing: ${importPath}`);
-        
-        try {
-          const module = await import(importPath);
-          console.log(`Successfully imported ${importPath}:`, Object.keys(module));
-          return {
-            default: module.default || module[Object.keys(module)[0]]
-          };
-        } catch (error) {
-          console.error(`Failed to import ${importPath}:`, error);
-          throw error;
-        }
-      });
-    });
-    
-    console.log('Created lazy components:', Object.keys(components));
-    return components;
-  }, [selectedComponents]);
+
+// LAZY Components Selector
+const lazyComponents = useMemo(() => {
+  const components: {
+    [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  } = {};
+
+  selectedComponents.forEach((component) => {
+    if (componentsMap[component]) {
+      // Se il componente esiste nella mappa
+      components[component] = React.lazy(componentsMap[component]);
+    } else {
+      console.error(`Component "${component}" not found in componentsMap.`);
+      components[component] = React.lazy(() =>
+        Promise.resolve({
+          default: () => (
+            <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
+              <h3 className="text-lg font-bold">Component Not Found</h3>
+              <p className="text-sm">
+                The component {component} could not be loaded.
+              </p>
+            </div>
+          ),
+        })
+      );
+    }
+  });
+
+  return components;
+}, [selectedComponents]);
 
   // Renderizza contenuto diverso in base alla modalità
   const renderContent = () => {
@@ -196,6 +196,7 @@ const handleGenerateWorkflow = async () => {
                 currentStep={step}
                 totalSteps={3 + selectedComponents.length}
                 onStepClick={goToStep}
+                stepNames={["Domain & State", "Configuration", "Networking", ...selectedComponents]} // I nomi dei tuoi step
               />
 
               {step === 1 && (

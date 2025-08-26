@@ -1,10 +1,10 @@
-// components/steps/redis-step.tsx
+// components/steps/cosmosdb-step.tsx
 import React from 'react';
 import { CustomFormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
 
-interface RedisStepProps {
+interface CosmosDBStepProps {
   formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
@@ -14,7 +14,7 @@ interface RedisStepProps {
   currentStep: number;
 }
 
-export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
+const CosmosDBStep: React.FC<CosmosDBStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
   return (
@@ -51,3 +51,4 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
     </div>
   );
 };
+export default CosmosDBStep;
