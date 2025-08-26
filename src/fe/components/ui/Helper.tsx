@@ -4,8 +4,8 @@ import { Modal } from './Modal'; // Assumendo che tu abbia già il componente Mo
 
 interface HelperProps {
   title: string;
-  variables: { name: string; description: string }[] | undefined;
-  currentStep: string;
+  variables?: { source: string, name: string; description: string }[] | undefined;
+  currentStep: number;
   helpContent?: {
     title: string;
     description: string;
@@ -84,31 +84,32 @@ export const Helper: React.FC<HelperProps> = ({
 
   const [inputValue, setInputValue] = useState('');
 
-  const handleDrop = (e: React.DragEvent<HTMLInputElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const droppedValue = e.dataTransfer.getData('text/plain');
 
     if (droppedValue) {
       setInputValue(prevValue => {
-        const newValue = prevValue && prevValue.trim() !== '' 
-          ? `${prevValue}-${droppedValue}`
-          : droppedValue;
-        return newValue;
-      });
-    }
-  };
+        const newValue =
+          prevValue && prevValue.trim() !== ''
+            ? `${prevValue}-${droppedValue}`
+            : droppedValue;
+      return newValue;
+    });
+  }
+};
 
-  const handleDragOver = (e: React.DragEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
 
-  const handleDragEnter = (e: React.DragEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
 
   return (
     <>

@@ -192,7 +192,7 @@ function getUncategorizedFields(data: FormData): [string, any][] {
 }
 
 function getFieldLabel(key: string): string {
-  return FIELD_LABELS[key] || key.split('_').map(word => 
+  return FIELD_LABELS[key as keyof typeof FIELD_LABELS] || key.split('_').map(word =>
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(' ');
 }

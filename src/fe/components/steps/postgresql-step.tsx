@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { FormData } from '../../types/form';
+import { CustomFormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
 
 interface PostgreSQLStepProps {
-  formData: FormData;
+  formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   updateFormData?: (updates: Partial<FormData>) => void;
   onNext: () => void;
@@ -26,14 +26,6 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
-  // Aggiorna include_postgresql basandosi sul campo database
-  useEffect(() => {
-    if (updateFormData) {
-      const hasDatabase = formData.database && formData.database.trim() !== ''; // FIXME la property database non è presente in FormData
-      updateFormData({ include_postgresql: hasDatabase });
-    }
-  }, [formData.database, updateFormData]);
-
   return (
     <div>
       <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>PostgreSQL Configuration</h2>
@@ -50,7 +42,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
           <input
             type="text"
             name="host"
-            value={formData.host || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. localhost"
@@ -62,7 +54,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
           <input
             type="number"
             name="port"
-            value={formData.port || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. 5432"
@@ -74,7 +66,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
           <input
             type="text"
             name="database"
-            value={formData.database || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. myapp_db"
@@ -86,7 +78,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
           <input
             type="text"
             name="username"
-            value={formData.username || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. postgres"
@@ -98,7 +90,7 @@ export const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
           <input
             type="password"
             name="password"
-            value={formData.password || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="Enter password"

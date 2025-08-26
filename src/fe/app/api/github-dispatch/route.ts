@@ -7,7 +7,10 @@ export async function POST(request: NextRequest) {
 
   // 🚀 Log request start
   console.log(`🚀  [${requestId}] GitHub Dispatch API call started`);
-  console.log(`    [${requestId}] IP: ${request.ip || 'unknown'}`);
+  const forwarded = request.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0] : 'unknown';
+
+  console.log(`    [${requestId}] IP: ${ip}`);
   console.log(`    [${requestId}] Origin: ${request.headers.get('origin') || 'none'}`);
   console.log(`    [${requestId}] User-Agent: ${request.headers.get('user-agent') || 'unknown'}`);
 

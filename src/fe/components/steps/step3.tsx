@@ -1,10 +1,10 @@
 // components/steps/Step3.tsx
 import React from 'react';
-import { FormData } from '../../types/form';
+import { CustomFormData } from '../../types/form';
 import { LOCATIONS } from '../../utils/constants';
 
 interface Step3Props {
-  formData: FormData;
+  formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onPrev: () => void;
   onComplete: () => void;
@@ -84,7 +84,7 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
           <input
             type="text"
             name="private_endpoint_subnet_name"
-            value={formData.private_endpoint_subnet_name}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. ${local.prefix}-${var.env_short}-common-private-endpoint-snet"
@@ -96,7 +96,7 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
           <input
             type="text"
             name="private_endpoint_subnet_rg_name"
-            value={formData.private_endpoint_subnet_rg_name}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. ${local.prefix}-${var.env_short}-vnet-rg"
@@ -108,7 +108,7 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
           <input
             type="text"
             name="private_endpoint_subnet_vnet_name"
-            value={formData.private_endpoint_subnet_vnet_name}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. ${local.prefix}-${var.env_short}-vnet"
@@ -120,7 +120,7 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
           <input
             type="text"
             name="private_dns_zone_rg_name"
-            value={formData.private_dns_zone_rg_name}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. ${local.prefix}-${var.env_short}-vnet-rg"

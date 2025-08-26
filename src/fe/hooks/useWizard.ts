@@ -1,10 +1,10 @@
 // hooks/useWizard.ts
 import { useState } from 'react';
-import { FormData, defaultForm } from '../types/types';
+import { CustomFormData, defaultForm } from '../types/form';
 
 export const useWizard = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>(defaultForm);
+  const [formData, setFormData] = useState<CustomFormData>(defaultForm);
   const [showSummary, setShowSummary] = useState(false);
   const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
 
@@ -18,7 +18,7 @@ export const useWizard = () => {
     }));
   };
 
-  const updateFormData = (updates: Partial<FormData>) => {
+  const updateFormData = (updates: Partial<CustomFormData>) => {
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
@@ -70,6 +70,7 @@ export const useWizard = () => {
     goToStep,
     setShowSummary,
     toggleComponent,
-    resetWizard
+    resetWizard,
+    updateFormData
   };
 };

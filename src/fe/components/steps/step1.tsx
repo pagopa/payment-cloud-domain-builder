@@ -1,9 +1,9 @@
 // components/steps/Step1.tsx
 import React from 'react';
-import { FormData } from '../../types/form';
+import { CustomFormData } from '../../types/form';
 
 interface Step1Props {
-  formData: FormData;
+  formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
 }
