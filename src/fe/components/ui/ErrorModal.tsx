@@ -6,8 +6,9 @@ interface ErrorModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  message: string;
+  message?: string;
   details?: string;
+  onRetry?: () => void;
 }
 
 export const ErrorModal: React.FC<ErrorModalProps> = ({
@@ -15,7 +16,8 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   onClose,
   title = "Error",
   message,
-  details
+  details,
+  onRetry
 }) => {
   return (
     <Modal
@@ -36,6 +38,16 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
           </div>
         )}
       </div>
+
+      {onRetry && (
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded mr-4 transition-colors"
+          onClick={onRetry}
+        >
+          Retry
+        </button>
+      )}
+
       <button
         className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded transition-colors"
         onClick={onClose}

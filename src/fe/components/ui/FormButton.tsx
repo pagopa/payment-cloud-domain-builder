@@ -7,6 +7,7 @@ interface FormButtonProps {
   onPrev: () => void;
   onComplete: () => void;
   isLastStep: boolean;
+  currentStep: number;
 }
 
 export const FormButton: React.FC<FormButtonProps> = ({

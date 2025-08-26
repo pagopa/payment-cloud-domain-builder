@@ -1,6 +1,6 @@
 
 // types/form.ts
-export type FormData = {
+export type CustomFormData = {
   // Common template vars
   include_postgresql: boolean;
   include_tag_config: boolean;
@@ -55,9 +55,11 @@ export type FormData = {
   location: string;
   location_mapping: Record<string, string>;
   location_string_mapping: Record<string, string>;
+
+  cosmosdb_account_database_type: string;
 };
 
-export const defaultForm: FormData = {
+export const defaultForm: CustomFormData = {
   // Common template vars
   include_postgresql: false,
   include_tag_config: false,
@@ -112,4 +114,6 @@ export const defaultForm: FormData = {
   location: "",
   location_mapping: {},
   location_string_mapping: {},
+
+  cosmosdb_account_database_type: "",
 };

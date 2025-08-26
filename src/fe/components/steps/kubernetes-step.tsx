@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { FormData } from '../../types/form';
+import { CustomFormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
 
 interface KubernetesStepProps {
-  formData: FormData;
+  formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   updateFormData?: (updates: Partial<FormData>) => void;
   onNext: () => void;
@@ -14,7 +14,7 @@ interface KubernetesStepProps {
   currentStep: number;
 }
 
-export const KubernetesStep: React.FC<PostgreSQLStepProps> = ({
+export const KubernetesStep: React.FC<KubernetesStepProps> = ({
   currentStep, 
   formData, 
   handleChange, 
@@ -25,14 +25,6 @@ export const KubernetesStep: React.FC<PostgreSQLStepProps> = ({
   onComplete 
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
-
-  // Aggiorna include_postgresql basandosi sul campo database
-  useEffect(() => {
-    if (updateFormData) {
-      const hasDatabase = formData.database && formData.database.trim() !== '';
-      updateFormData({ include_postgresql: hasDatabase });
-    }
-  }, [formData.database, updateFormData]);
 
   return (
     <div>

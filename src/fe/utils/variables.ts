@@ -1,17 +1,19 @@
-export const filterEmptyFields = (data: FormData): Partial<FormData> => {
-  const filtered: Partial<FormData> = {};
-  
+import { CustomFormData } from '../types/form';
+
+export const filterEmptyFields = <T extends Record<string, any>>(data: T): Partial<T> => {
+  const filtered: Record<string, any> = {};
+
   Object.entries(data).forEach(([key, value]) => {
-    if (value !== "" && value !== false && value !== null && value !== undefined) {
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        if (Object.keys(value).length > 0) {
-          filtered[key as keyof FormData] = value;
-        }
-      } else {
-        filtered[key as keyof FormData] = value;
-      }
+    if (
+      value !== "" &&
+      value !== false &&
+      value !== null &&
+      value !== undefined &&
+      !(typeof value === "object" && Object.keys(value).length === 0)
+    ) {
+      filtered[key] = value;
     }
   });
-  
-  return filtered;
+
+  return filtered as Partial<T>;
 };

@@ -1,16 +1,17 @@
 // components/steps/redis-step.tsx
 import React from 'react';
-import { FormData } from '../../types/form';
+import { CustomFormData } from '../../types/form';
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
 
 interface RedisStepProps {
-  formData: FormData;
+  formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
   onPrev: () => void;
   onComplete: () => void;
   isLastStep: boolean;
+  currentStep: number;
 }
 
 export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
@@ -25,7 +26,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="text"
             name="redis_host"
-            value={formData.redis_host || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. localhost"
@@ -37,7 +38,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="number"
             name="redis_port"
-            value={formData.redis_port || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. 6379"
@@ -49,7 +50,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="number"
             name="redis_db"
-            value={formData.redis_db || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. 0"
@@ -61,7 +62,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="password"
             name="redis_password"
-            value={formData.redis_password || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="Enter password (optional)"
@@ -72,7 +73,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="checkbox"
             name="redis_ssl"
-            checked={formData.redis_ssl || false}
+            checked={false}
             onChange={handleChange}
             className="peer w-4 h-4 appearance-none border border-zinc-600 rounded bg-zinc-900 checked:bg-indigo-600 checked:border-indigo-600 hover:border-indigo-500 transition-colors"
             id="redis_ssl"
@@ -87,7 +88,7 @@ export const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, han
           <input
             type="number"
             name="redis_timeout"
-            value={formData.redis_timeout || ''}
+            value={''}
             onChange={handleChange}
             className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
             placeholder="e.g. 30"

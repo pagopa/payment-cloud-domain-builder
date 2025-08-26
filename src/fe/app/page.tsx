@@ -125,7 +125,7 @@ const handleGenerateWorkflow = async () => {
 
   // LAZY Components Selector
   const lazyComponents = useMemo(() => {
-    const components: { [key: string]: React.LazyExoticComponent<any> } = {};
+  const components: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
     
     selectedComponents.forEach(component => {
       const kebabCase = component.toLowerCase().replace(/([A-Z])/g, '-$1');

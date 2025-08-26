@@ -1,8 +1,15 @@
 // services/api.ts
-import { FormData } from '../types/types';
+import { CustomFormData } from '../types/form';
 import { filterEmptyFields } from '../utils/variables';
 
-export async function triggerGithubWorkflow(formData: FormData): Promise<any> {
+export interface ApiResponse {
+  status: string;
+  requestId?: string;
+  duration?: number;
+}
+
+
+export async function triggerGithubWorkflow(formData: CustomFormData): Promise<any> {
   const filteredData = filterEmptyFields(formData);
 
   const response = await fetch('/api/github-dispatch', {
