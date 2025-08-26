@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
 import { componentsMap } from '../components/componentsMap';
 import { Step1 } from '../components/steps/step1';
@@ -14,6 +14,8 @@ import { Navbar } from '../components/ui/Navbar';
 import { renderTerraformPreview } from '../utils/terraform';
 import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
+import { Login } from "../components/ui/Login";
+import { Logout } from "../components/ui/Logout";
 
 export default function Wizard() {
   const {
@@ -36,9 +38,10 @@ export default function Wizard() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [errorDetails, setErrorDetails] = useState<string>('');
-  
+
   // Mode state per la navbar
   const [currentMode, setCurrentMode] = useState<'domain-builder' | 'idh-advisor'>('domain-builder');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // Stato inizialmente "null" per evitare rendering
 
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
 
@@ -46,6 +49,28 @@ export default function Wizard() {
     setCurrentMode(mode);
     // Qui puoi aggiungere logica per cambiare il contenuto della pagina
     console.log('Mode changed to:', mode);
+  };
+
+  // Persistenza del login tramite localStorage
+  useEffect(() => {
+    const storedLoginStatus = localStorage.getItem("isLoggedIn");
+    if (storedLoginStatus === "true") {
+      setIsLoggedIn(true); // Ripristina lo stato loggato
+    } else {
+      setIsLoggedIn(false); // Utente non loggato
+    }
+  }, []);
+
+  // Callback per gestire il login
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true); // Imposta lo stato di autenticazione
+    localStorage.setItem("isLoggedIn", "true"); // Salva lo stato nel localStorage
+  };
+
+  // Callback per gestire il logout
+  const handleLogout = () => {
+    setIsLoggedIn(false); // Resetta lo stato al logout
+    localStorage.removeItem("isLoggedIn"); // Rimuovi lo stato dal localStorage per interrompere la sessione
   };
 
 const handleGenerateWorkflow = async () => {
@@ -182,6 +207,9 @@ const lazyComponents = useMemo(() => {
           />
         </div>
 
+        <Logout onLogout={handleLogout} />
+
+
         {/* Main content */}
         <div className={`p-4 lg:p-6 flex-1 w-full max-w-5xl bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
           <h1 className={`text-2xl lg:text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
@@ -297,14 +325,25 @@ const lazyComponents = useMemo(() => {
     );
   };
 
+
+  if (isLoggedIn === null) {
+    return null; // Non mostra nulla fino a quando il controllo non è completato
+  };
   return (
     <>
-      <Navbar 
-        mode={currentMode}
-        onModeChange={handleModeChange}
-      />
-    
-      {renderContent()}
+      <div>
+        {!isLoggedIn ? (
+          // Mostra la componente Login se l'utente non è loggato
+          <Login onLoginSuccess={handleLoginSuccess} />
+        ) : (
+          // Mostra il contenuto principale dell'applicazione
+          <>
+            <Navbar mode={currentMode} onModeChange={handleModeChange} />
+            {renderContent()}
+          </>
+        )}
+      </div>
+
 
       {/* Loading Modal */}
       <Modal
@@ -333,7 +372,7 @@ const lazyComponents = useMemo(() => {
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">Workflow Generated Successfully!</h3>
           <p className="text-zinc-400 mb-4">Your GitHub Actions workflow has been created.</p>
-          
+
           {apiResponse && (
             <div className="bg-zinc-800 rounded-lg p-4 text-left">
               <p className="text-sm text-zinc-300 mb-2">Response Details:</p>

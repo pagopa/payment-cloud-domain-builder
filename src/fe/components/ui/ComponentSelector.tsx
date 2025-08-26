@@ -41,18 +41,6 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
         ))}
       </div>
 
-      {selectedComponents.length > 0 && (
-        <div className="mt-4 p-3 bg-zinc-800 rounded border border-zinc-600">
-          <p className="text-sm text-zinc-400 mb-2">Selected ({selectedComponents.length}):</p>
-          <div className="flex flex-wrap gap-1">
-            {selectedComponents.map(comp => (
-              <span key={comp} className="text-xs bg-zinc-700 text-zinc-200 px-2 py-1 rounded">
-                {comp}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
