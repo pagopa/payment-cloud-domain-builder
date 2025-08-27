@@ -5,8 +5,6 @@ export function generateTableSummaryData(data: FormData) {
   const summary: { category: string; rows: { field: string; value: any }[] }[] = [];
 
   Object.entries(formConfig.steps).forEach(([stepName, stepConfig]) => {
-    if (!stepConfig.include) return;
-
     const stepFields = stepConfig.formFields || [];
     const rows = stepFields.map((field) => {
       const fieldKey = formatFieldKey(field.name);

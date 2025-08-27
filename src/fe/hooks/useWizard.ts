@@ -35,7 +35,7 @@ export const useWizard = () => {
   };
 
   const goToStep = (targetStep: number) => {
-    const maxAllowedStep = 3 + selectedComponents.length;
+    const maxAllowedStep = 4 + selectedComponents.length;
 
     if (targetStep >= 1 && targetStep <= maxAllowedStep) {
       setStep(targetStep);
@@ -47,7 +47,7 @@ export const useWizard = () => {
   };
 
   const goToLast = () => {
-    const maxAllowedStep = 3 + selectedComponents.length;
+    const maxAllowedStep = 4 + selectedComponents.length;
     goToStep(maxAllowedStep); // Naviga all’ultimo step dinamicamente calcolato
   };
 

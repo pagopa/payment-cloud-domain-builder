@@ -1,7 +1,7 @@
 export const formConfig = {
   steps: {
-    common: {
-      include: true,
+    domain: {
+      default: true,
       formFields: [
         { name: "Domain Name", type: "text", placeholder: "e.g. meme" },
         { name: "Is Dev Public", type: "checkbox", placeholder: "Enable public access in dev?" },
@@ -14,7 +14,7 @@ export const formConfig = {
       ],
     },
     monitoring: {
-      include: true,
+      default: true,
       formFields: [
         { name: "Application Insight Name", type: "text", placeholder: "e.g. appinsights name" },
         { name: "Log Analytics Workspace Name", type: "text", placeholder: "e.g. law name" },
@@ -25,15 +25,8 @@ export const formConfig = {
         { name: "Opsgenie Action Group Name", type: "text", placeholder: "e.g. Opsgenie" },
       ],
     },
-    devops: {
-      include: true,
-      formFields: [
-        { name: "Azure DevOps RG Name", type: "text", placeholder: "e.g. identity-rg" },
-        { name: "Azure DevOps IAC Prefix", type: "text", placeholder: "e.g. azdo-iac" },
-      ],
-    },
     networking: {
-      include: true,
+      default: true,
       formFields: [
         { name: "VNet Name", type: "text", placeholder: "e.g. vnet" },
         { name: "VNet RG Name", type: "text", placeholder: "e.g. vnet-rg" },
@@ -45,21 +38,29 @@ export const formConfig = {
         { name: "DNS Zone Internal Prefix", type: "text", placeholder: "e.g. internal" },
       ],
     },
+    devops: {
+      default: false,
+      formFields: [
+        { name: "Azure DevOps RG Name", type: "text", placeholder: "e.g. identity-rg" },
+        { name: "Azure DevOps IAC Prefix", type: "text", placeholder: "e.g. azdo-iac" },
+      ],
+    },
     apim: {
-      include: true,
+      default: false,
       formFields: [
         { name: "APIM Name", type: "text", placeholder: "e.g. apim name" },
         { name: "APIM RG Name", type: "text", placeholder: "e.g. apim-rg" },
+        { name: "APIM SKU", type: "text", placeholder: "e.g. apim-sku" },
       ],
     },
-    cosmosdb: {
-      include: true,
+    cosmos_db: {
+      default: false,
       formFields: [
         { name: "CosmosDB Account Database Type", type: "text", placeholder: "e.g. mongo or sql" },
       ],
     },
     github_runner: {
-      include: true,
+      default: false,
       formFields: [
         { name: "GitHub Runner CAE Name", type: "text", placeholder: "e.g. tools-cae" },
         { name: "GitHub Runner RG", type: "text", placeholder: "e.g. tools-rg" },
@@ -69,7 +70,7 @@ export const formConfig = {
       ],
     },
     kubernetes: {
-      include: true,
+      default: false,
       formFields: [
         { name: "AKS Name", type: "text", placeholder: "e.g. aks name" },
         { name: "AKS RG Name", type: "text", placeholder: "e.g. aks resource group" },
@@ -77,10 +78,17 @@ export const formConfig = {
       ],
     },
     storage_account: {
-      include: true,
+      default: false,
       formFields: [
         { name: "Storage Account Scope Name", type: "text", placeholder: "e.g. myscope" },
         { name: "Storage Account Data Types", type: "checkbox", options: ["blob", "queue"] },
+      ],
+    },
+    event_hub: {
+      default: false,
+      formFields: [
+        { name: "Evh name", type: "text", placeholder: "e.g. myscope" },
+        { name: "Evh RG", type: "text", placeholder: "e.g. evh rg here"},
       ],
     },
   },

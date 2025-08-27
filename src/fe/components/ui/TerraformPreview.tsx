@@ -1,44 +1,62 @@
 import React from "react";
-import { generateTableSummaryData } from "../../utils/terraform"; // Funzionalità per creare i dati del riassunto
+import { generateTableSummaryData } from "../../utils/terraform";
 
 interface Summary {
   category: string;
   rows: { field: string; value: string }[];
 }
 
-const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({
-  summaryData,
-}) => (
-  <div className="overflow-auto bg-zinc-800 rounded-lg border border-zinc-700 shadow-lg">
+export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData }) => (
+  <div className="overflow-auto bg-zinc-900 rounded-lg border border-zinc-800 shadow-md">
     <table className="min-w-full table-auto text-left text-sm text-zinc-300">
-      <thead className="bg-zinc-700">
-        <tr>
-          <th className="px-4 py-2">Campo</th>
-          <th className="px-4 py-2">Valore</th>
+      <thead>
+        <tr className="bg-zinc-700">
+          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-200">
+            Campo
+          </th>
+          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-200">
+            Valore
+          </th>
         </tr>
       </thead>
       <tbody>
-        {summaryData.map((section) => (
-          <React.Fragment key={section.category}>
-            <tr className="bg-indigo-700 text-white">
-              <td colSpan={2} className="p-4 font-semibold">
-                {section.category}
-              </td>
-            </tr>
-            {section.rows.map((row, index) => (
-              <tr key={index} className="border-b border-zinc-600">
-                <td className="p-4">{row.field}</td>
-                <td className="p-4">{row.value}</td>
+        {summaryData
+          // Filtra le categorie che hanno almeno un campo configurato
+          .filter((section) => section.rows.some((row) => row.value.trim() !== ""))
+          .map((section, index) => (
+            <React.Fragment key={section.category}>
+              {/* Separatore Evidenziato per Categoria */}
+              <tr>
+                <td
+                  colSpan={2}
+                  className="px-4 py-3 font-semibold uppercase bg-emerald-900 text-white border border-blue-500"
+                >
+                  {section.category}
+                </td>
               </tr>
-            ))}
-          </React.Fragment>
-        ))}
+              {/* Righe dei Campi Configurati */}
+              {section.rows
+                .filter((row) => row.value.trim() !== "") // Mostra solo campi configurati
+                .map((row, rowIndex) => (
+                  <tr
+                    key={rowIndex}
+                    className="hover:bg-zinc-700 transition-colors duration-150"
+                  >
+                    <td className="px-4 py-2 border-b border-zinc-800">{row.field}</td>
+                    <td className="px-4 py-2 border-b border-zinc-800 font-semibold text-zinc-100">
+                      {row.value}
+                    </td>
+                  </tr>
+                ))}
+            </React.Fragment>
+          ))}
       </tbody>
     </table>
   </div>
 );
 
-export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSummary}: { formData: any }, ) => {
+
+export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSummary}, ) => {
   // Genera il riassunto a partire dai dati del form
   const summaryData = generateTableSummaryData(formData);
 
@@ -78,7 +96,7 @@ export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSumm
               clipRule="evenodd"
             />
           </svg>
-          Genera Workflow!
+          Genera Dominio!
         </button>
       </div>
     </div>

@@ -58,7 +58,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
             onClick={onComplete}
             className={`${stepColor.bg} hover:bg-pink-700 transition text-white px-4 py-2 rounded w-1/2`}
           >
-            Generate IDH Domain
+            Preview IDH Domain
           </button>
         ) : (
           <button

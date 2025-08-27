@@ -1,16 +1,63 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-export const ExportImport: React.FC = () => {
+interface ExportImportProps {
+  formData: any;
+}
+
+export const ExportImport: React.FC<ExportImportProps> = ({ formData }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleImport = () => {
-    // TODO: Implement import logic
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target?.result as string);
+          if (importedData.formData) {
+            // Update formData with imported values
+            Object.assign(formData, importedData.formData);
+          }
+        } catch (error) {
+          console.error('Error parsing JSON file:', error);
+        }
+      };
+      reader.readAsText(file);
+    }
   };
 
   const handleExport = () => {
-    // TODO: Implement export logic
+    const dataToExport = {
+      formData: formData,
+    };
+    
+    const jsonString = JSON.stringify(dataToExport, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `domain_builder_config_export_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    document.body.removeChild(link);
   };
 
   return (
     <div className="flex items-center gap-2">
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept=".json"
+        style={{ display: 'none' }}
+      />
       <button
         onClick={handleImport}
         className="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700 border border-zinc-700 flex items-center gap-2"

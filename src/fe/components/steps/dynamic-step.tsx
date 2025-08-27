@@ -19,7 +19,7 @@ const config = {
 interface DynamicStepProps {
   formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  updateFormData?: (updates: Partial<FormData>) => void;
+  updateFormData?: (updates: Partial<CustomFormData>) => void;
   onNext: () => void;
   onPrev: () => void;
   goToFirst: () => void;
@@ -50,7 +50,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
 
   const stepConfig = formConfig.steps[stepName.toLowerCase().replace(/\s+/g, "_")];
 
-  if (!stepConfig || !stepConfig.include) {
+  if (!stepConfig) {
     return (
       <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
         <h3 className="text-lg font-bold">Component Not Found</h3>
@@ -63,7 +63,8 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
 
   return (
     <div>
-      <h3>{stepName.toUpperCase()} Configuration</h3>
+      <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>{stepName.toUpperCase()} Configuration</h2>
+      <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
             <label className="block text-sm font-semibold">{field.name}</label>
@@ -88,5 +89,6 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
           isLastStep={isLastStep}
         />
       </div>
+    </div>
   );
 };

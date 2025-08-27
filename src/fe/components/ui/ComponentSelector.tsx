@@ -1,6 +1,7 @@
 // components/ui/ComponentSelector.tsx
 import React from 'react';
-import { COMPONENTS, STEP_COLORS } from '../../utils/constants';
+import { STEP_COLORS } from '../../utils/constants';
+import { formConfig } from '../../utils/inputs'; // Importa il file inputs per ottenere i componenti
 
 interface ComponentSelectorProps {
   selectedComponents: string[];
@@ -15,11 +16,21 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
+  // Filtra i componenti escludendo quelli con "default: true"
+  // Ordina e formatta i nomi. Prima lettera maiuscola e sostituisci "_" con spazi
+  const components = Object.keys(formConfig.steps)
+    .filter(component => !formConfig.steps[component].default)
+    .map(component =>
+      component
+        .replace(/_/g, ' ') // Sostituisci i caratteri "_" con spazi
+        .replace(/^\w/, c => c.toUpperCase()) // Prima lettera maiuscola
+    );
+
   return (
     <div className="bg-zinc-900 rounded-2xl p-4 w-72 border border-zinc-700 h-fit">
       <h2 className="text-xl font-bold text-zinc-200 mb-4">Add Components</h2>
       <div className="space-y-3">
-        {COMPONENTS.map(component => (
+        {components.map(component => (
           <div key={component} className="relative flex items-center">
             <input
               type="checkbox"
@@ -40,7 +51,6 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
           </div>
         ))}
       </div>
-
     </div>
   );
 };

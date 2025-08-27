@@ -2,9 +2,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
 import { componentsMap } from '../components/componentsMap';
-import { Step1 } from '../components/steps/step1';
-import { Step2 } from '../components/steps/step2';
-import { Step3 } from '../components/steps/step3';
 import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
 import { ExportImport } from '../components/ui/ExportImport';
@@ -18,6 +15,7 @@ import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
 import { Login } from "../components/ui/Login";
 import { Logout } from "../components/ui/Logout";
+import { formConfig } from '../utils/inputs'; // Importa formConfig
 
 export default function Wizard() {
   const {
@@ -164,21 +162,22 @@ const lazyComponents = useMemo(() => {
     if (componentsMap[component]) {
       // Se il componente esiste nella mappa
       components[component] = React.lazy(componentsMap[component]);
-    } else {
-      console.error(`Component "${component}" not found in componentsMap.`);
-      components[component] = React.lazy(() =>
-        Promise.resolve({
-          default: () => (
-            <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
-              <h3 className="text-lg font-bold">Component Not Found</h3>
-              <p className="text-sm">
-                The component {component} could not be loaded.
-              </p>
-            </div>
-          ),
-        })
-      );
     }
+//     else {
+//       console.error(`Component "${component}" not found in componentsMap.`);
+//       components[component] = React.lazy(() =>
+//         Promise.resolve({
+//           default: () => (
+//             <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
+//               <h3 className="text-lg font-bold">Component Not Found</h3>
+//               <p className="text-sm">
+//                 The component {component} could not be loaded.
+//               </p>
+//             </div>
+//           ),
+//         })
+//       );
+//     }
   });
 
   return components;
@@ -211,7 +210,7 @@ const lazyComponents = useMemo(() => {
             currentStep={step}
           />
           <div className="mt-3">
-            <ExportImport />
+            <ExportImport formData={formData} />
           </div>
 
           <div className="mt-3">
@@ -263,64 +262,70 @@ const lazyComponents = useMemo(() => {
             <form onSubmit={(e) => { e.preventDefault(); setShowSummary(true); }}>
               <StepIndicator
                 currentStep={step}
-                totalSteps={3 + selectedComponents.length}
+                totalSteps={defaultSteps.length + selectedComponents.length}
                 onStepClick={goToStep}
-                stepNames={["Domain & State", "Configuration", "Networking", ...selectedComponents]} // I nomi dei tuoi step
+                stepNames={[
+                  ...defaultSteps.map((step) =>
+                    step
+                      .replace(/_/g, ' ')
+                      .replace(/^\w/, (c) => c.toUpperCase())
+                  ),
+                  ...selectedComponents.map((component) =>
+                    component
+                      .replace(/_/g, ' ')
+                      .replace(/^\w/, (c) => c.toUpperCase())
+                  ),
+                ]}
               />
 
-              {step === 1 && (
-                <Step1
-                  formData={formData}
-                  handleChange={handleChange}
-                  onNext={nextStep}
-                  goToLast={goToLast}
-                />
-              )}
-
-              {step === 2 && (
-                <Step2
-                  formData={formData}
-                  handleChange={handleChange}
-                  onNext={nextStep}
-                  onPrev={prevStep}
-                  goToFirst={goToFirst}
-                  goToLast={goToLast}
-                />
-              )}
-
-              {step === 3 && (
-                <Step3
-                  formData={formData}
-                  handleChange={handleChange}
-                  onComplete={() => setShowSummary(true)}
-                  onNext={nextStep}
-                  onPrev={prevStep}
-                  goToFirst={goToFirst}
-                  goToLast={goToLast}
-                  isLastStep={selectedComponents.length === 0}
-                />
-              )}
-              {selectedComponents.map((component, index) => {
-                const ComponentStep = lazyComponents[component];
-                const isLastStep = index === selectedComponents.length - 1;
-                const componentStepNumber = 4 + index;
-                const shouldRender = step === componentStepNumber;
-
-                console.log('=== Component Render Debug ===');
-                console.log('Component:', component);
-                console.log('Index:', index);
-                console.log('Component step number:', componentStepNumber);
-                console.log('Current step:', step);
-                console.log('Should render:', shouldRender);
-                console.log('Selected components:', selectedComponents);
-                console.log('===============================');
+            <React.Fragment>
+              {/* Rendering degli step di default */}
+              {defaultSteps.map((defaultStep, index) => {
+                const stepNumber = index + 1; // Gli step di default iniziano con 1
+                const isLastStep = index === defaultSteps.length - 1 && selectedComponents.length === 0;
+                const shouldRender = step === stepNumber;
 
                 if (!shouldRender) {
-                  console.log(`Skipping ${component} - step mismatch`);
+                  console.log(`Skipping default step ${defaultStep} - step mismatch`);
                   return null;
                 }
 
-                console.log(`Rendering ${component} at step ${componentStepNumber}`);
+                console.log(`Rendering Default Step: ${defaultStep} at step ${stepNumber}`);
+
+                return (
+                  <React.Suspense fallback={<div>Loading...</div>} key={defaultStep}>
+                    <DynamicStep
+                      formData={formData}
+                      handleChange={handleChange}
+                      onNext={nextStep}
+                      onPrev={prevStep}
+                      goToFirst={goToFirst}
+                      goToLast={goToLast}
+                      updateFormData={updateFormData}
+                      currentStep={stepNumber}
+                      stepName={formatStepName(defaultStep)}
+                      isLastStep={isLastStep}
+                      onComplete={
+                        isLastStep ? () => setShowSummary(true) : undefined
+                      }
+                    />
+                  </React.Suspense>
+                );
+              })}
+
+              {/* Rendering degli step dinamici */}
+              {selectedComponents.map((component, index) => {
+                const ComponentStep = lazyComponents[component];
+                const componentStepNumber = defaultSteps.length + 1 + index; // Gli step dinamici iniziano dopo gli step di default
+                const isLastStep = index === selectedComponents.length - 1;
+                const shouldRender = step === componentStepNumber;
+
+                if (!shouldRender) {
+                  console.log(`Skipping dynamic component ${component} - step mismatch`);
+                  return null;
+                }
+
+                console.log(`Rendering Dynamic Component: ${component} at step ${componentStepNumber}`);
 
                 return (
                   <React.Suspense fallback={<div>Loading...</div>} key={component}>
@@ -335,11 +340,14 @@ const lazyComponents = useMemo(() => {
                       currentStep={componentStepNumber}
                       stepName={component}
                       isLastStep={isLastStep}
-                      onComplete={isLastStep ? () => setShowSummary(true) : undefined}
+                      onComplete={
+                        isLastStep ? () => setShowSummary(true) : undefined
+                      }
                     />
                   </React.Suspense>
                 );
               })}
+            </React.Fragment>
             </form>
           )}
         </div>
@@ -378,6 +386,19 @@ const lazyComponents = useMemo(() => {
   if (isLoggedIn === null) {
     return null; // Non mostra nulla fino a quando il controllo non è completato
   };
+
+  // Genera un array dinamico di step basati su quelli con `default: true`
+  const defaultSteps = Object.keys(formConfig.steps).filter(
+    step => formConfig.steps[step].default
+  );
+
+  // Usa una funzione di utilità per rendere i nomi leggibili
+  const formatStepName = (name: string) =>
+    name
+      .replace(/_/g, ' ') // Sostituisci `_` con spazi
+      .replace(/^\w/, c => c.toUpperCase()); // Prima lettera maiuscola
+
+
   return (
     <>
       <div>
