@@ -7,7 +7,8 @@ export const COMPONENTS = [
   'APIM',
   'Storage Account',
   'GitHub Runner',
-  'Tag Config'
+  'Tag Config',
+  'Dynamic'
 ];
 
 export const LOCATIONS = [

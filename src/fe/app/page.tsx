@@ -5,13 +5,15 @@ import { componentsMap } from '../components/componentsMap';
 import { Step1 } from '../components/steps/step1';
 import { Step2 } from '../components/steps/step2';
 import { Step3 } from '../components/steps/step3';
+import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
+import { ExportImport } from '../components/ui/ExportImport';
 import { StepIndicator } from '../components/ui/StepIndicator';
 import { Helper } from '../components/ui/Helper';
 import { Modal } from '../components/ui/Modal';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import { Navbar } from '../components/ui/Navbar';
-import { renderTerraformPreview } from '../utils/terraform';
+import { TerraformPreview } from "../components/ui/TerraformPreview";
 import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
 import { Login } from "../components/ui/Login";
@@ -31,7 +33,8 @@ export default function Wizard() {
     goToFirst,
     goToLast,
     setShowSummary,
-    toggleComponent
+    toggleComponent,
+    resetWizard
   } = useWizard();
 
   // Modal states
@@ -49,7 +52,6 @@ export default function Wizard() {
 
   const handleModeChange = (mode: 'domain-builder' | 'idh-advisor') => {
     setCurrentMode(mode);
-    // Qui puoi aggiungere logica per cambiare il contenuto della pagina
     console.log('Mode changed to:', mode);
   };
 
@@ -57,22 +59,23 @@ export default function Wizard() {
   useEffect(() => {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
     if (storedLoginStatus === "true") {
-      setIsLoggedIn(true); // Ripristina lo stato loggato
+      setIsLoggedIn(true);
     } else {
-      setIsLoggedIn(false); // Utente non loggato
+      setIsLoggedIn(false);
     }
   }, []);
 
   // Callback per gestire il login
   const handleLoginSuccess = () => {
-    setIsLoggedIn(true); // Imposta lo stato di autenticazione
-    localStorage.setItem("isLoggedIn", "true"); // Salva lo stato nel localStorage
+    setIsLoggedIn(true);
+    localStorage.setItem("isLoggedIn", "true");
   };
 
   // Callback per gestire il logout
   const handleLogout = () => {
-    setIsLoggedIn(false); // Resetta lo stato al logout
-    localStorage.removeItem("isLoggedIn"); // Rimuovi lo stato dal localStorage per interrompere la sessione
+    setIsLoggedIn(false);
+    localStorage.removeItem("isLoggedIn");
+    resetWizard();
   };
 
 const handleGenerateWorkflow = async () => {
@@ -117,38 +120,38 @@ const handleGenerateWorkflow = async () => {
   }
 };
 
-  const TerraformPreview = () => (
-    <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
-      <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
-        Terraform Module Preview (IDH)
-      </h2>
-      <div className="text-zinc-200 mb-2 text-sm">
-        Copy the code below and use it as your IDH module!
-      </div>
-      <pre className="mt-4 bg-zinc-950 text-green-400 rounded-lg p-4 overflow-auto text-xs border border-zinc-700 whitespace-pre-wrap">
-        {renderTerraformPreview(formData)}
-      </pre>
-
-      <div className="flex gap-4 mt-6">
-        <button
-          className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
-          onClick={() => setShowSummary(false)}
-        >
-          Back to wizard
-        </button>
-
-        <button
-          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 group transition-all hover:scale-[1.02] ml-auto"
-          onClick={handleGenerateWorkflow}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-          </svg>
-          Generate!
-        </button>
-      </div>
-    </div>
-  );
+//   const TerraformPreview = () => (
+//     <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
+//       <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
+//         Terraform Module Preview (IDH)
+//       </h2>
+//       <div className="text-zinc-200 mb-2 text-sm">
+//         Copy the code below and use it as your IDH module!
+//       </div>
+//       <pre className="mt-4 bg-zinc-950 text-green-400 rounded-lg p-4 overflow-auto text-xs border border-zinc-700 whitespace-pre-wrap">
+//         {generateCleanSummary(formData)}
+//       </pre>
+//
+//       <div className="flex gap-4 mt-6">
+//         <button
+//           className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
+//           onClick={() => setShowSummary(false)}
+//         >
+//           Back to wizard
+//         </button>
+//
+//         <button
+//           className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 group transition-all hover:scale-[1.02] ml-auto"
+//           onClick={handleGenerateWorkflow}
+//         >
+//           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
+//             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+//           </svg>
+//           Generate!
+//         </button>
+//       </div>
+//     </div>
+//   );
 
 
 // LAZY Components Selector
@@ -207,6 +210,38 @@ const lazyComponents = useMemo(() => {
             onToggle={toggleComponent}
             currentStep={step}
           />
+          <div className="mt-3">
+            <ExportImport />
+          </div>
+
+          <div className="mt-3">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                  <div class="bg-zinc-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+                    <h3 class="text-xl font-semibold text-white mb-4">Reset Wizard</h3>
+                    <p class="text-zinc-300 mb-6">Are you sure you want to reset the wizard? All data will be lost.</p>
+                    <div class="flex justify-end gap-4">
+                      <button class="px-4 py-2 text-zinc-300 hover:text-white" onclick="this.closest('.fixed').remove()">Cancel</button>
+                      <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded" onclick="this.closest('.fixed').remove(); window.resetWizardConfirmed();">Reset</button>
+                    </div>
+                  </div>
+                `;
+                document.body.appendChild(modal);
+                window.resetWizardConfirmed = () => resetWizard();
+              }}
+              className="w-full mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition-colors flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+              </svg>
+              Reset Wizard
+            </button>
+          </div>
+
         </div>
 
         <Logout onLogout={handleLogout} />
@@ -219,7 +254,11 @@ const lazyComponents = useMemo(() => {
           </h1>
 
           {showSummary ? (
-            <TerraformPreview />
+            <TerraformPreview
+              formData={formData}
+              handleGenerateWorkflow={handleGenerateWorkflow}
+              setShowSummary={setShowSummary}
+            />
           ) : (
             <form onSubmit={(e) => { e.preventDefault(); setShowSummary(true); }}>
               <StepIndicator
@@ -285,7 +324,7 @@ const lazyComponents = useMemo(() => {
 
                 return (
                   <React.Suspense fallback={<div>Loading...</div>} key={component}>
-                    <ComponentStep
+                    <DynamicStep
                       formData={formData}
                       handleChange={handleChange}
                       onNext={nextStep}
@@ -294,6 +333,7 @@ const lazyComponents = useMemo(() => {
                       goToLast={goToLast}
                       updateFormData={updateFormData}
                       currentStep={componentStepNumber}
+                      stepName={component}
                       isLastStep={isLastStep}
                       onComplete={isLastStep ? () => setShowSummary(true) : undefined}
                     />

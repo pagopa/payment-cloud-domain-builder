@@ -75,7 +75,7 @@ export const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess
               type="submit" // Il tasto Invio ora attiverà questo bottone
               className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-all"
             >
-              Login come Admin
+              Login
             </button>
           </form>
 
