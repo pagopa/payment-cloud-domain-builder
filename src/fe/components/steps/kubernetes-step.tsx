@@ -9,6 +9,8 @@ interface KubernetesStepProps {
   updateFormData?: (updates: Partial<FormData>) => void;
   onNext: () => void;
   onPrev: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
   onComplete: () => void;
   isLastStep: boolean;
   currentStep: number;
@@ -21,7 +23,9 @@ const KubernetesStep: React.FC<KubernetesStepProps> = ({
   updateFormData,
   isLastStep, 
   onNext, 
-  onPrev, 
+  onPrev,
+  goToFirst,
+  goToLast,
   onComplete 
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
@@ -74,11 +78,13 @@ const KubernetesStep: React.FC<KubernetesStepProps> = ({
         </div>
 
         <FormButton
-          isLastStep={isLastStep}
+          currentStep={currentStep}
           onNext={onNext}
           onPrev={onPrev}
+          goToFirst={goToFirst}
+          goToLast={goToLast}
           onComplete={onComplete}
-          currentStep={currentStep}
+          isLastStep={isLastStep}
         />
       </div>
     </div>

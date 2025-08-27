@@ -1,15 +1,25 @@
 // components/steps/Step2.tsx
 import React from 'react';
 import { CustomFormData } from '../../types/form';
+import { FormButton } from '../ui/FormButton';
 
 interface Step2Props {
   formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
   onPrev: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
 }
 
-export const Step2: React.FC<Step2Props> = ({ formData, handleChange, onNext, onPrev }) => {
+export const Step2: React.FC<Step2Props> = ({
+  formData,
+  handleChange,
+  onNext,
+  onPrev,
+  goToFirst,
+  goToLast
+ }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-2 text-emerald-400">Step 2: Monitoring</h2>
@@ -98,22 +108,14 @@ export const Step2: React.FC<Step2Props> = ({ formData, handleChange, onNext, on
           />
         </div>
 
-        <div className="flex gap-4 mt-3">
-          <button
-            type="button"
-            onClick={onPrev}
-            className="bg-zinc-700 hover:bg-zinc-600 transition text-zinc-200 px-4 py-2 rounded w-1/2"
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={onNext}
-            className="bg-emerald-600 hover:bg-emerald-700 transition text-white px-4 py-2 rounded w-1/2"
-          >
-            Next
-          </button>
-        </div>
+          <FormButton
+            currentStep="2"
+            onNext={onNext}
+            onPrev={onPrev}
+            goToFirst={goToFirst}
+            goToLast={goToLast}
+            isLastStep={false}
+          />
       </div>
     </div>
   );

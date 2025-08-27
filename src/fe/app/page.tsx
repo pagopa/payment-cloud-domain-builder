@@ -28,6 +28,8 @@ export default function Wizard() {
     nextStep,
     prevStep,
     goToStep,
+    goToFirst,
+    goToLast,
     setShowSummary,
     toggleComponent
   } = useWizard();
@@ -232,6 +234,7 @@ const lazyComponents = useMemo(() => {
                   formData={formData}
                   handleChange={handleChange}
                   onNext={nextStep}
+                  goToLast={goToLast}
                 />
               )}
 
@@ -241,6 +244,8 @@ const lazyComponents = useMemo(() => {
                   handleChange={handleChange}
                   onNext={nextStep}
                   onPrev={prevStep}
+                  goToFirst={goToFirst}
+                  goToLast={goToLast}
                 />
               )}
 
@@ -251,6 +256,8 @@ const lazyComponents = useMemo(() => {
                   onComplete={() => setShowSummary(true)}
                   onNext={nextStep}
                   onPrev={prevStep}
+                  goToFirst={goToFirst}
+                  goToLast={goToLast}
                   isLastStep={selectedComponents.length === 0}
                 />
               )}
@@ -283,6 +290,8 @@ const lazyComponents = useMemo(() => {
                       handleChange={handleChange}
                       onNext={nextStep}
                       onPrev={prevStep}
+                      goToFirst={goToFirst}
+                      goToLast={goToLast}
                       updateFormData={updateFormData}
                       currentStep={componentStepNumber}
                       isLastStep={isLastStep}

@@ -9,6 +9,8 @@ interface PostgreSQLStepProps {
   updateFormData?: (updates: Partial<FormData>) => void;
   onNext: () => void;
   onPrev: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
   onComplete: () => void;
   isLastStep: boolean;
   currentStep: number;
@@ -21,8 +23,10 @@ const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
   updateFormData,
   isLastStep, 
   onNext, 
-  onPrev, 
-  onComplete 
+  onPrev,
+  goToFirst,
+  goToLast,
+  onComplete,
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
@@ -98,12 +102,15 @@ const PostgreSQLStep: React.FC<PostgreSQLStepProps> = ({
         </div>
 
         <FormButton
-          isLastStep={isLastStep}
+          currentStep={currentStep}
           onNext={onNext}
           onPrev={onPrev}
+          goToFirst={goToFirst}
+          goToLast={goToLast}
           onComplete={onComplete}
-          currentStep={currentStep}
+          isLastStep={isLastStep}
         />
+
       </div>
     </div>
   );

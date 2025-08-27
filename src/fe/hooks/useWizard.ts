@@ -42,6 +42,15 @@ export const useWizard = () => {
     }
   };
 
+  const goToFirst = () => {
+    goToStep(1); // Naviga sempre al primo step
+  };
+
+  const goToLast = () => {
+    const maxAllowedStep = 3 + selectedComponents.length;
+    goToStep(maxAllowedStep); // Naviga all’ultimo step dinamicamente calcolato
+  };
+
   const toggleComponent = (component: string) => {
     setSelectedComponents(prev => {
       if (prev.includes(component)) {
@@ -68,6 +77,8 @@ export const useWizard = () => {
     nextStep,
     prevStep,
     goToStep,
+    goToFirst,
+    goToLast,
     setShowSummary,
     toggleComponent,
     resetWizard,

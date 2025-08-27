@@ -1,14 +1,16 @@
 // components/steps/Step1.tsx
 import React from 'react';
 import { CustomFormData } from '../../types/form';
+import { FormButton } from '../ui/FormButton';
 
 interface Step1Props {
   formData: CustomFormData
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
+  goToLast: () => void;
 }
 
-export const Step1: React.FC<Step1Props> = ({ formData, handleChange, onNext }) => {
+export const Step1: React.FC<Step1Props> = ({ formData, handleChange, onNext, goToLast }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-2 text-indigo-400">Step 1: Domain & State</h2>
@@ -80,13 +82,12 @@ export const Step1: React.FC<Step1Props> = ({ formData, handleChange, onNext }) 
           />
         </div>
 
-        <button
-          type="button"
-          onClick={onNext}
-          className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-4 py-2 rounded w-full mt-4"
-        >
-          Next
-        </button>
+        <FormButton
+          currentStep="1"
+          onNext={onNext}
+          goToLast={goToLast}
+          isLastStep={false}
+        />
       </div>
     </div>
   );

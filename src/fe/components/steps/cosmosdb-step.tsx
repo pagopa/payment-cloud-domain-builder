@@ -9,12 +9,24 @@ interface CosmosDBStepProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
   onPrev: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
   onComplete: () => void;
   isLastStep: boolean;
   currentStep: number;
 }
 
-const CosmosDBStep: React.FC<CosmosDBStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
+const CosmosDBStep: React.FC<CosmosDBStepProps> = ({
+    currentStep,
+    formData,
+    handleChange,
+    onNext,
+    isLastStep,
+    onPrev,
+    goToFirst,
+    goToLast,
+    onComplete
+  }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
   return (
@@ -41,11 +53,13 @@ const CosmosDBStep: React.FC<CosmosDBStepProps> = ({ currentStep, formData, hand
         </div>
 
         <FormButton
-          isLastStep={isLastStep}
+          currentStep={currentStep}
           onNext={onNext}
           onPrev={onPrev}
+          goToFirst={goToFirst}
+          goToLast={goToLast}
           onComplete={onComplete}
-          currentStep={currentStep}
+          isLastStep={isLastStep}
         />
       </div>
     </div>

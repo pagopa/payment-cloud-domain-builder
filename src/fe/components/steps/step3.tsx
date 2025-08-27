@@ -2,6 +2,7 @@
 import React from 'react';
 import { CustomFormData } from '../../types/form';
 import { LOCATIONS } from '../../utils/constants';
+import { FormButton } from '../ui/FormButton';
 
 interface Step3Props {
   formData: CustomFormData
@@ -9,10 +10,21 @@ interface Step3Props {
   onPrev: () => void;
   onComplete: () => void;
   onNext: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
   isLastStep: boolean;
 }
 
-export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, onNext, onComplete, isLastStep }) => {
+export const Step3: React.FC<Step3Props> = ({
+    formData,
+    handleChange,
+    onPrev,
+    onNext,
+    goToFirst,
+    goToLast,
+    onComplete,
+    isLastStep
+  }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-2 text-pink-400">Step 3: Networking & Others</h2>
@@ -144,32 +156,15 @@ export const Step3: React.FC<Step3Props> = ({ formData, handleChange, onPrev, on
           </select>
         </div>
 
-        <div className="flex gap-4 mt-3">
-          <button
-            type="button"
-            onClick={onPrev}
-            className="bg-zinc-700 hover:bg-zinc-600 transition text-zinc-200 px-4 py-2 rounded w-1/2"
-          >
-            Back
-          </button>
-          {isLastStep ? (
-            <button
-              type="button"
-              onClick={onComplete}
-              className="bg-pink-600 hover:bg-pink-700 transition text-white px-4 py-2 rounded w-1/2"
-            >
-              Generate IDH Domain
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onNext}
-              className="bg-pink-600 hover:bg-pink-700 transition text-white px-4 py-2 rounded w-1/2"
-            >
-              Next
-            </button>
-          )}
-        </div>
+          <FormButton
+            currentStep="3"
+            onNext={onNext}
+            onPrev={onPrev}
+            goToFirst={goToFirst}
+            goToLast={goToLast}
+            onComplete={onComplete}
+            isLastStep={isLastStep}
+          />
       </div>
     </div>
   );

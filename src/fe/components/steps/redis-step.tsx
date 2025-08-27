@@ -9,12 +9,24 @@ interface RedisStepProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onNext: () => void;
   onPrev: () => void;
+  goToFirst: () => void;
+  goToLast: () => void;
   onComplete: () => void;
   isLastStep: boolean;
   currentStep: number;
 }
 
-const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChange, onNext, isLastStep, onPrev, onComplete }) => {
+const RedisStep: React.FC<RedisStepProps> = ({
+    currentStep,
+    formData,
+    handleChange,
+    onNext,
+    isLastStep,
+    onPrev,
+    goToFirst,
+    goToLast,
+    onComplete
+  }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
   return (
@@ -96,11 +108,13 @@ const RedisStep: React.FC<RedisStepProps> = ({ currentStep, formData, handleChan
         </div>
 
         <FormButton
-          isLastStep={isLastStep}
+          currentStep={currentStep}
           onNext={onNext}
           onPrev={onPrev}
+          goToFirst={goToFirst}
+          goToLast={goToLast}
           onComplete={onComplete}
-          currentStep={currentStep}
+          isLastStep={isLastStep}
         />
       </div>
     </div>
