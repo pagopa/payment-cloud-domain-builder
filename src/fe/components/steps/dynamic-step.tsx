@@ -49,6 +49,130 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const stepConfig = formConfig.steps[stepName.toLowerCase().replace(/\s+/g, "_")];
+  const inputClasses = {
+    text: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none",
+    number: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none",
+    checkbox: `
+      w-6 h-6 appearance-none border border-zinc-700 bg-zinc-900 rounded-md flex items-center justify-center
+      checked:bg-green-500 checked:border-green-500 focus:ring-2 focus:ring-green-500 hover:border-green-400 transition-all peer
+    `,
+    radio: `
+      w-4 h-4 appearance-none border border-zinc-700 bg-zinc-900 rounded-full
+      checked:bg-gradient-to-r checked:from-indigo-500 checked:to-purple-500 checked:border-none
+      focus:ring-2 focus:ring-indigo-400 hover:border-indigo-400 transition-all
+      flex-shrink-0
+    `,
+    select: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-blue-500",
+    textarea: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-yellow-500 focus:outline-none",
+    password: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-rose-500 focus:outline-none",
+    date: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-teal-500 focus:outline-none",
+    file: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-indigo-700 file:text-zinc-100 hover:file:bg-indigo-600",
+  };
+
+  const renderInputField = (field, value, handleChange) => {
+    switch (field.type) {
+      case "select":
+        return (
+          <select
+            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            value={value || ""}
+            onChange={handleChange}
+            className={inputClasses.select}
+          >
+            <option value="">Seleziona un'opzione</option>
+            {field.options.map((option, index) => (
+              <option key={index} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
+      case "textarea":
+        return (
+          <textarea
+            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            rows={4}
+            value={value || ""}
+            placeholder={field.placeholder}
+            onChange={handleChange}
+            className={inputClasses.textarea}
+          />
+        );
+      case "radio":
+        return (
+          <div className="flex items-center space-x-4">
+            {field.options.map((option, index) => (
+              <label
+                key={index}
+                className={`flex items-center mt-3 justify-center px-4 py-2 rounded-lg border
+                  ${
+                    value === option.value
+                      ? "bg-indigo-500 border-indigo-500 text-white shadow-lg"
+                      : "bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-indigo-500"
+                  }
+                  transition-all cursor-pointer hover:shadow-md`}
+              >
+                <input
+                  type="radio"
+                  name={field.name.toLowerCase().replace(/\s+/g, "_")}
+                  value={option.value}
+                  checked={value === option.value}
+                  onChange={handleChange}
+                  className="hidden"
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+        );
+      case "checkbox":
+        return (
+          <label
+            htmlFor={field.name.toLowerCase().replace(/\s+/g, "_")}
+            className="flex items-center gap-4 cursor-pointer mt-2"
+          >
+            <div className="relative">
+              <input
+                type="checkbox"
+                name={field.name.toLowerCase().replace(/\s+/g, "_")}
+                checked={value}
+                onChange={handleChange}
+                className={inputClasses.checkbox}
+                id={field.name.toLowerCase().replace(/\s+/g, "_")}
+              />
+              {/* Spunta */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="absolute w-4 h-4 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+              >
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span className="text-sm text-zinc-300 peer-checked:text-green-500">
+              {field.label}
+            </span>
+          </label>
+        );
+      default: // Gestisce text, number, password, file, ecc.
+        return (
+          <input
+            type={field.type}
+            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            value={value || ""}
+            placeholder={field.placeholder}
+            onChange={handleChange}
+            className={inputClasses[field.type] || inputClasses.text}
+          />
+        );
+    }
+  };
+
 
   if (!stepConfig) {
     return (
@@ -67,15 +191,12 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-sm font-semibold">{field.name}</label>
-            <input
-              type={field.type}
-              name={field.name.toLowerCase().replace(/\s+/g, "_")}
-              value={formData[field.name.toLowerCase().replace(/\s+/g, "_")] || ''}
-              placeholder={field.placeholder}
-              onChange={handleChange}
-              className="w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100"
-            />
+            <label className="block text-sm font-semibold mt-2">{field.name}</label>
+          {renderInputField(
+            field,
+            formData[field.name.toLowerCase().replace(/\s+/g, "_")],
+            handleChange
+          )}
           </div>
         ))}
 

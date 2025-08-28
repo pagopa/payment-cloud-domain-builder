@@ -56,7 +56,12 @@ export const formConfig = {
     cosmos_db: {
       default: false,
       formFields: [
-        { name: "CosmosDB Account Database Type", type: "text", placeholder: "e.g. mongo or sql" },
+        { name: "CosmosDB Account Database Type", type: "select",
+          options: [
+            { label: "Mongo", value: "mongo" },
+            { label: "Sql", value: "sql" }
+          ]
+        },
       ],
     },
     github_runner: {
@@ -81,7 +86,18 @@ export const formConfig = {
       default: false,
       formFields: [
         { name: "Storage Account Scope Name", type: "text", placeholder: "e.g. myscope" },
-        { name: "Storage Account Data Types", type: "checkbox", options: ["blob", "queue"] },
+        { name: "Storage Account Data Types", type: "select",
+          options: [
+            { label: "Blob", value: "blob" },
+            { label: "Queue", value: "queue" }
+          ]
+        },
+        { name: "Radio", type: "radio",
+          options: [
+            { label: "Blob", value: "blob" },
+            { label: "Queue", value: "queue" }
+          ]
+        },
       ],
     },
     event_hub: {

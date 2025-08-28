@@ -248,10 +248,6 @@ const lazyComponents = useMemo(() => {
 
         {/* Main content */}
         <div className={`p-4 lg:p-6 flex-1 w-full max-w-5xl bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
-          <h1 className={`text-2xl lg:text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
-            IDH Domain Wizard
-          </h1>
-
           {showSummary ? (
             <TerraformPreview
               formData={formData}
