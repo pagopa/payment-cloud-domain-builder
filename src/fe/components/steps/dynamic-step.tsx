@@ -44,7 +44,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     stepName
   }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
-  const [config, setConfig] = useState<Record<string, Record<string, any>> | null>(null);
+  const [config, setConfig] = useState<Record<string, Record<string, any>> | null>(null); /* eslint-disable-line  @typescript-eslint/no-explicit-any */
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             onChange={handleChange}
             className={inputClasses.select}
           >
-            <option value="">Seleziona un'opzione</option>
+            <option value="">Seleziona un&aposopzione</option>
             {field.options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}

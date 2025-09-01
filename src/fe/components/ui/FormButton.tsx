@@ -11,7 +11,6 @@ interface FormButtonProps {
   isLastStep: boolean;
   goToFirst: () => void; // Callback per andare al primo step
   goToLast: () => void;  // Callback per andare all'ultimo step
-  totalSteps: number;    // Numero totale di step
 }
 
 export const FormButton: React.FC<FormButtonProps> = ({
@@ -22,7 +21,6 @@ export const FormButton: React.FC<FormButtonProps> = ({
   currentStep,
   goToFirst,
   goToLast,
-  totalSteps
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 

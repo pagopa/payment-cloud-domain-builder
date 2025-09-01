@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
-import { componentsMap } from '../components/componentsMap';
+// import { componentsMap } from '../components/componentsMap';
 import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
 import { ExportImport } from '../components/ui/ExportImport';
@@ -15,7 +15,7 @@ import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
 import { Login } from "../components/ui/Login";
 import { Logout } from "../components/ui/Logout";
-import { formConfig } from '../utils/inputs'; // Importa formConfig
+import { formConfig } from '../utils/inputs';
 
 export default function Wizard() {
   const {
@@ -153,16 +153,16 @@ const handleGenerateWorkflow = async () => {
 
 
 // LAZY Components Selector
-const lazyComponents = useMemo(() => {
-  const components: {
-    [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  } = {};
-
-  selectedComponents.forEach((component) => {
-    if (componentsMap[component]) {
-      // Se il componente esiste nella mappa
-      components[component] = React.lazy(componentsMap[component]);
-    }
+// const lazyComponents = useMemo(() => {
+//   const components: {
+//     [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+//   } = {};
+//
+//   selectedComponents.forEach((component) => {
+//     if (componentsMap[component]) {
+//       // Se il componente esiste nella mappa
+//       components[component] = React.lazy(componentsMap[component]);
+//     }
 //     else {
 //       console.error(`Component "${component}" not found in componentsMap.`);
 //       components[component] = React.lazy(() =>
@@ -178,10 +178,10 @@ const lazyComponents = useMemo(() => {
 //         })
 //       );
 //     }
-  });
-
-  return components;
-}, [selectedComponents]);
+//   });
+//
+//   return components;
+// }, [selectedComponents]);
 
   // Renderizza contenuto diverso in base alla modalità
   const renderContent = () => {
@@ -230,7 +230,7 @@ const lazyComponents = useMemo(() => {
                   </div>
                 `;
                 document.body.appendChild(modal);
-                window.resetWizardConfirmed = () => resetWizard();
+                (window as any).resetWizardConfirmed = () => resetWizard(); /* eslint-disable-line  @typescript-eslint/no-explicit-any */
               }}
               className="w-full mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition-colors flex items-center justify-center gap-2"
             >
@@ -302,7 +302,7 @@ const lazyComponents = useMemo(() => {
                       stepName={formatStepName(defaultStep)}
                       isLastStep={isLastStep}
                       onComplete={
-                        isLastStep ? () => setShowSummary(true) : undefined
+                        isLastStep ? () => setShowSummary(true) : () => {}
                       }
                     />
                   </React.Suspense>
@@ -311,8 +311,8 @@ const lazyComponents = useMemo(() => {
 
               {/* Rendering degli step dinamici */}
               {selectedComponents.map((component, index) => {
-                const ComponentStep = lazyComponents[component];
-                const componentStepNumber = defaultSteps.length + 1 + index; // Gli step dinamici iniziano dopo gli step di default
+//                 const ComponentStep = lazyComponents[component];
+                const componentStepNumber = defaultSteps.length + 1 + index;
                 const isLastStep = index === selectedComponents.length - 1;
                 const shouldRender = step === componentStepNumber;
 
@@ -337,7 +337,7 @@ const lazyComponents = useMemo(() => {
                       stepName={component}
                       isLastStep={isLastStep}
                       onComplete={
-                        isLastStep ? () => setShowSummary(true) : undefined
+                        isLastStep ? () => setShowSummary(true) : () => {}
                       }
                     />
                   </React.Suspense>
@@ -380,19 +380,17 @@ const lazyComponents = useMemo(() => {
 
 
   if (isLoggedIn === null) {
-    return null; // Non mostra nulla fino a quando il controllo non è completato
+    return null;
   };
 
-  // Genera un array dinamico di step basati su quelli con `default: true`
   const defaultSteps = Object.keys(formConfig.steps).filter(
-    step => formConfig.steps[step].default
+    step => (formConfig.steps as Record<string, { default: boolean }>)[step].default
   );
 
-  // Usa una funzione di utilità per rendere i nomi leggibili
   const formatStepName = (name: string) =>
     name
-      .replace(/_/g, ' ') // Sostituisci `_` con spazi
-      .replace(/^\w/, c => c.toUpperCase()); // Prima lettera maiuscola
+      .replace(/_/g, ' ')
+      .replace(/^\w/, c => c.toUpperCase());
 
 
   return (

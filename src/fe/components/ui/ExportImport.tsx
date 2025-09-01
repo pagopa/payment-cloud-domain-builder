@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 interface ExportImportProps {
-  formData: any;
+  formData: any; /* eslint-disable-line  @typescript-eslint/no-explicit-any */
 }
 
 export const ExportImport: React.FC<ExportImportProps> = ({ formData }) => {
