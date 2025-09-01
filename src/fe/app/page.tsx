@@ -1,19 +1,21 @@
 "use client";
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
-import { componentsMap } from '../components/componentsMap';
-import { Step1 } from '../components/steps/step1';
-import { Step2 } from '../components/steps/step2';
-import { Step3 } from '../components/steps/step3';
+// import { componentsMap } from '../components/componentsMap';
+import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
+import { ExportImport } from '../components/ui/ExportImport';
 import { StepIndicator } from '../components/ui/StepIndicator';
 import { Helper } from '../components/ui/Helper';
 import { Modal } from '../components/ui/Modal';
 import { ErrorModal } from '../components/ui/ErrorModal';
 import { Navbar } from '../components/ui/Navbar';
-import { renderTerraformPreview } from '../utils/terraform';
+import { TerraformPreview } from "../components/ui/TerraformPreview";
 import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
+import { Login } from "../components/ui/Login";
+import { Logout } from "../components/ui/Logout";
+import { formConfig } from '../utils/inputs';
 
 export default function Wizard() {
   const {
@@ -26,8 +28,11 @@ export default function Wizard() {
     nextStep,
     prevStep,
     goToStep,
+    goToFirst,
+    goToLast,
     setShowSummary,
-    toggleComponent
+    toggleComponent,
+    resetWizard
   } = useWizard();
 
   // Modal states
@@ -36,16 +41,39 @@ export default function Wizard() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [errorDetails, setErrorDetails] = useState<string>('');
-  
+
   // Mode state per la navbar
   const [currentMode, setCurrentMode] = useState<'domain-builder' | 'idh-advisor'>('domain-builder');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // Stato inizialmente "null" per evitare rendering
 
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
 
   const handleModeChange = (mode: 'domain-builder' | 'idh-advisor') => {
     setCurrentMode(mode);
-    // Qui puoi aggiungere logica per cambiare il contenuto della pagina
     console.log('Mode changed to:', mode);
+  };
+
+  // Persistenza del login tramite localStorage
+  useEffect(() => {
+    const storedLoginStatus = localStorage.getItem("isLoggedIn");
+    if (storedLoginStatus === "true") {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  // Callback per gestire il login
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem("isLoggedIn", "true");
+  };
+
+  // Callback per gestire il logout
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem("isLoggedIn");
+    resetWizard();
   };
 
 const handleGenerateWorkflow = async () => {
@@ -90,69 +118,70 @@ const handleGenerateWorkflow = async () => {
   }
 };
 
-  const TerraformPreview = () => (
-    <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
-      <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
-        Terraform Module Preview (IDH)
-      </h2>
-      <div className="text-zinc-200 mb-2 text-sm">
-        Copy the code below and use it as your IDH module!
-      </div>
-      <pre className="mt-4 bg-zinc-950 text-green-400 rounded-lg p-4 overflow-auto text-xs border border-zinc-700 whitespace-pre-wrap">
-        {renderTerraformPreview(formData)}
-      </pre>
-
-      <div className="flex gap-4 mt-6">
-        <button
-          className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
-          onClick={() => setShowSummary(false)}
-        >
-          Back to wizard
-        </button>
-
-        <button
-          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 group transition-all hover:scale-[1.02] ml-auto"
-          onClick={handleGenerateWorkflow}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-          </svg>
-          Generate!
-        </button>
-      </div>
-    </div>
-  );
+//   const TerraformPreview = () => (
+//     <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
+//       <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
+//         Terraform Module Preview (IDH)
+//       </h2>
+//       <div className="text-zinc-200 mb-2 text-sm">
+//         Copy the code below and use it as your IDH module!
+//       </div>
+//       <pre className="mt-4 bg-zinc-950 text-green-400 rounded-lg p-4 overflow-auto text-xs border border-zinc-700 whitespace-pre-wrap">
+//         {generateCleanSummary(formData)}
+//       </pre>
+//
+//       <div className="flex gap-4 mt-6">
+//         <button
+//           className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
+//           onClick={() => setShowSummary(false)}
+//         >
+//           Back to wizard
+//         </button>
+//
+//         <button
+//           className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 group transition-all hover:scale-[1.02] ml-auto"
+//           onClick={handleGenerateWorkflow}
+//         >
+//           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
+//             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+//           </svg>
+//           Generate!
+//         </button>
+//       </div>
+//     </div>
+//   );
 
 
 // LAZY Components Selector
-const lazyComponents = useMemo(() => {
-  const components: {
-    [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  } = {};
-
-  selectedComponents.forEach((component) => {
-    if (componentsMap[component]) {
-      // Se il componente esiste nella mappa
-      components[component] = React.lazy(componentsMap[component]);
-    } else {
-      console.error(`Component "${component}" not found in componentsMap.`);
-      components[component] = React.lazy(() =>
-        Promise.resolve({
-          default: () => (
-            <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
-              <h3 className="text-lg font-bold">Component Not Found</h3>
-              <p className="text-sm">
-                The component {component} could not be loaded.
-              </p>
-            </div>
-          ),
-        })
-      );
-    }
-  });
-
-  return components;
-}, [selectedComponents]);
+// const lazyComponents = useMemo(() => {
+//   const components: {
+//     [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+//   } = {};
+//
+//   selectedComponents.forEach((component) => {
+//     if (componentsMap[component]) {
+//       // Se il componente esiste nella mappa
+//       components[component] = React.lazy(componentsMap[component]);
+//     }
+//     else {
+//       console.error(`Component "${component}" not found in componentsMap.`);
+//       components[component] = React.lazy(() =>
+//         Promise.resolve({
+//           default: () => (
+//             <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
+//               <h3 className="text-lg font-bold">Component Not Found</h3>
+//               <p className="text-sm">
+//                 The component {component} could not be loaded.
+//               </p>
+//             </div>
+//           ),
+//         })
+//       );
+//     }
+//   });
+//
+//   return components;
+// }, [selectedComponents]);
 
   // Renderizza contenuto diverso in base alla modalità
   const renderContent = () => {
@@ -180,89 +209,141 @@ const lazyComponents = useMemo(() => {
             onToggle={toggleComponent}
             currentStep={step}
           />
+          <div className="mt-3">
+            <ExportImport formData={formData} />
+          </div>
+
+          <div className="mt-3">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                  <div class="bg-zinc-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+                    <h3 class="text-xl font-semibold text-white mb-4">Reset Wizard</h3>
+                    <p class="text-zinc-300 mb-6">Are you sure you want to reset the wizard? All data will be lost.</p>
+                    <div class="flex justify-end gap-4">
+                      <button class="px-4 py-2 text-zinc-300 hover:text-white" onclick="this.closest('.fixed').remove()">Cancel</button>
+                      <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded" onclick="this.closest('.fixed').remove(); window.resetWizardConfirmed();">Reset</button>
+                    </div>
+                  </div>
+                `;
+                document.body.appendChild(modal);
+                (window as any).resetWizardConfirmed = () => resetWizard(); /* eslint-disable-line  @typescript-eslint/no-explicit-any */
+              }}
+              className="w-full mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition-colors flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+              </svg>
+              Reset Wizard
+            </button>
+          </div>
+
         </div>
+
+        <Logout onLogout={handleLogout} />
+
 
         {/* Main content */}
         <div className={`p-4 lg:p-6 flex-1 w-full max-w-5xl bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
-          <h1 className={`text-2xl lg:text-3xl font-bold mb-4 text-center ${stepColor.text} drop-shadow`}>
-            IDH Domain Wizard
-          </h1>
-
           {showSummary ? (
-            <TerraformPreview />
+            <TerraformPreview
+              formData={formData}
+              handleGenerateWorkflow={handleGenerateWorkflow}
+              setShowSummary={setShowSummary}
+            />
           ) : (
             <form onSubmit={(e) => { e.preventDefault(); setShowSummary(true); }}>
               <StepIndicator
                 currentStep={step}
-                totalSteps={3 + selectedComponents.length}
+                totalSteps={defaultSteps.length + selectedComponents.length}
                 onStepClick={goToStep}
-                stepNames={["Domain & State", "Configuration", "Networking", ...selectedComponents]} // I nomi dei tuoi step
+                stepNames={[
+                  ...defaultSteps.map((step) =>
+                    step
+                      .replace(/_/g, ' ')
+                      .replace(/^\w/, (c) => c.toUpperCase())
+                  ),
+                  ...selectedComponents.map((component) =>
+                    component
+                      .replace(/_/g, ' ')
+                      .replace(/^\w/, (c) => c.toUpperCase())
+                  ),
+                ]}
               />
 
-              {step === 1 && (
-                <Step1
-                  formData={formData}
-                  handleChange={handleChange}
-                  onNext={nextStep}
-                />
-              )}
-
-              {step === 2 && (
-                <Step2
-                  formData={formData}
-                  handleChange={handleChange}
-                  onNext={nextStep}
-                  onPrev={prevStep}
-                />
-              )}
-
-              {step === 3 && (
-                <Step3
-                  formData={formData}
-                  handleChange={handleChange}
-                  onComplete={() => setShowSummary(true)}
-                  onNext={nextStep}
-                  onPrev={prevStep}
-                  isLastStep={selectedComponents.length === 0}
-                />
-              )}
-              {selectedComponents.map((component, index) => {
-                const ComponentStep = lazyComponents[component];
-                const isLastStep = index === selectedComponents.length - 1;
-                const componentStepNumber = 4 + index;
-                const shouldRender = step === componentStepNumber;
-
-                console.log('=== Component Render Debug ===');
-                console.log('Component:', component);
-                console.log('Index:', index);
-                console.log('Component step number:', componentStepNumber);
-                console.log('Current step:', step);
-                console.log('Should render:', shouldRender);
-                console.log('Selected components:', selectedComponents);
-                console.log('===============================');
+            <React.Fragment>
+              {/* Rendering degli step di default */}
+              {defaultSteps.map((defaultStep, index) => {
+                const stepNumber = index + 1; // Gli step di default iniziano con 1
+                const isLastStep = index === defaultSteps.length - 1 && selectedComponents.length === 0;
+                const shouldRender = step === stepNumber;
 
                 if (!shouldRender) {
-                  console.log(`Skipping ${component} - step mismatch`);
+                  console.log(`Skipping default step ${defaultStep} - step mismatch`);
                   return null;
                 }
 
-                console.log(`Rendering ${component} at step ${componentStepNumber}`);
+                console.log(`Rendering Default Step: ${defaultStep} at step ${stepNumber}`);
 
                 return (
-                  <React.Suspense fallback={<div>Loading...</div>} key={component}>
-                    <ComponentStep
+                  <React.Suspense fallback={<div>Loading...</div>} key={defaultStep}>
+                    <DynamicStep
                       formData={formData}
                       handleChange={handleChange}
                       onNext={nextStep}
                       onPrev={prevStep}
+                      goToFirst={goToFirst}
+                      goToLast={goToLast}
                       updateFormData={updateFormData}
-                      currentStep={componentStepNumber}
+                      currentStep={stepNumber}
+                      stepName={formatStepName(defaultStep)}
                       isLastStep={isLastStep}
-                      onComplete={isLastStep ? () => setShowSummary(true) : undefined}
+                      onComplete={
+                        isLastStep ? () => setShowSummary(true) : () => {}
+                      }
                     />
                   </React.Suspense>
                 );
               })}
+
+              {/* Rendering degli step dinamici */}
+              {selectedComponents.map((component, index) => {
+//                 const ComponentStep = lazyComponents[component];
+                const componentStepNumber = defaultSteps.length + 1 + index;
+                const isLastStep = index === selectedComponents.length - 1;
+                const shouldRender = step === componentStepNumber;
+
+                if (!shouldRender) {
+                  console.log(`Skipping dynamic component ${component} - step mismatch`);
+                  return null;
+                }
+
+                console.log(`Rendering Dynamic Component: ${component} at step ${componentStepNumber}`);
+
+                return (
+                  <React.Suspense fallback={<div>Loading...</div>} key={component}>
+                    <DynamicStep
+                      formData={formData}
+                      handleChange={handleChange}
+                      onNext={nextStep}
+                      onPrev={prevStep}
+                      goToFirst={goToFirst}
+                      goToLast={goToLast}
+                      updateFormData={updateFormData}
+                      currentStep={componentStepNumber}
+                      stepName={component}
+                      isLastStep={isLastStep}
+                      onComplete={
+                        isLastStep ? () => setShowSummary(true) : () => {}
+                      }
+                    />
+                  </React.Suspense>
+                );
+              })}
+            </React.Fragment>
             </form>
           )}
         </div>
@@ -297,14 +378,36 @@ const lazyComponents = useMemo(() => {
     );
   };
 
+
+  if (isLoggedIn === null) {
+    return null;
+  };
+
+  const defaultSteps = Object.keys(formConfig.steps).filter(
+    step => (formConfig.steps as Record<string, { default: boolean }>)[step].default
+  );
+
+  const formatStepName = (name: string) =>
+    name
+      .replace(/_/g, ' ')
+      .replace(/^\w/, c => c.toUpperCase());
+
+
   return (
     <>
-      <Navbar 
-        mode={currentMode}
-        onModeChange={handleModeChange}
-      />
-    
-      {renderContent()}
+      <div>
+        {!isLoggedIn ? (
+          // Mostra la componente Login se l'utente non è loggato
+          <Login onLoginSuccess={handleLoginSuccess} />
+        ) : (
+          // Mostra il contenuto principale dell'applicazione
+          <>
+            <Navbar mode={currentMode} onModeChange={handleModeChange} />
+            {renderContent()}
+          </>
+        )}
+      </div>
+
 
       {/* Loading Modal */}
       <Modal
@@ -333,7 +436,7 @@ const lazyComponents = useMemo(() => {
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">Workflow Generated Successfully!</h3>
           <p className="text-zinc-400 mb-4">Your GitHub Actions workflow has been created.</p>
-          
+
           {apiResponse && (
             <div className="bg-zinc-800 rounded-lg p-4 text-left">
               <p className="text-sm text-zinc-300 mb-2">Response Details:</p>

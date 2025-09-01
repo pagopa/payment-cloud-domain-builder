@@ -35,11 +35,20 @@ export const useWizard = () => {
   };
 
   const goToStep = (targetStep: number) => {
-    const maxAllowedStep = 3 + selectedComponents.length;
+    const maxAllowedStep = 4 + selectedComponents.length;
 
     if (targetStep >= 1 && targetStep <= maxAllowedStep) {
       setStep(targetStep);
     }
+  };
+
+  const goToFirst = () => {
+    goToStep(1); // Naviga sempre al primo step
+  };
+
+  const goToLast = () => {
+    const maxAllowedStep = 4 + selectedComponents.length;
+    goToStep(maxAllowedStep); // Naviga all’ultimo step dinamicamente calcolato
   };
 
   const toggleComponent = (component: string) => {
@@ -68,6 +77,8 @@ export const useWizard = () => {
     nextStep,
     prevStep,
     goToStep,
+    goToFirst,
+    goToLast,
     setShowSummary,
     toggleComponent,
     resetWizard,
