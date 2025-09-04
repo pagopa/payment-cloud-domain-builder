@@ -2,61 +2,68 @@ export const formConfig = {
   steps: {
     domain: {
       default: true,
+      name: "Definizione dominio",
       formFields: [
-        { name: "Domain Name", type: "text", placeholder: "e.g. meme" },
-        { name: "Is Dev Public", type: "checkbox", placeholder: "Enable public access in dev?" },
-        { name: "Storage Account State Name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
-        { name: "Storage Account Container State Name", type: "text", placeholder: "e.g. terraform-state" },
-        { name: "Storage Account State RG Name", type: "text", placeholder: "e.g. terraform-state-rg" },
-        { name: "Subscription", type: "text", placeholder: "e.g. DEV-PagoPA" },
-        { name: "Product Name", type: "text", placeholder: "e.g. pagopa" },
-        { name: "Location", type: "text", placeholder: "e.g. westeurope" },
+        { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. meme" },
+        { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?" },
+        { name: "State Storage Account Name", key: "storage_account_state_name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
+        { name: "State Storage Account Container Name", key: "storage_account_container_state_name", type: "text", placeholder: "e.g. terraform-state" },
+        { name: "State Storage Account RG Name", key: "storage_account_state_rg_name", type: "text", placeholder: "e.g. terraform-state-rg" },
+        { name: "Subscription Name", key: "subscription", type: "text", placeholder: "e.g. DEV-PagoPA" },
+        { name: "Product Name", key: "product_name", type: "text", placeholder: "e.g. pagopa" },
+        { name: "Location", key: "location", type: "text", placeholder: "e.g. westeurope" },
+        { name: "Tag Source", key: "tag_source", type: "text", placeholder: "e.g. module.tag_config.tags" },
       ],
     },
     monitoring: {
       default: true,
+      name: "Monitoraggio",
       formFields: [
-        { name: "Application Insight Name", type: "text", placeholder: "e.g. appinsights name" },
-        { name: "Log Analytics Workspace Name", type: "text", placeholder: "e.g. law name" },
-        { name: "Log Analytics Workspace RG Name", type: "text", placeholder: "e.g. law resource group" },
-        { name: "Monitor RG Name", type: "text", placeholder: "e.g. monitor resource group" },
-        { name: "Slack Action Group Name", type: "text", placeholder: "e.g. SlackPagoPA" },
-        { name: "Email Action Group Name", type: "text", placeholder: "e.g. PagoPA" },
-        { name: "Opsgenie Action Group Name", type: "text", placeholder: "e.g. Opsgenie" },
+        { name: "Application Insight Name", key: "application_insight_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-appinsights" },
+        { name: "Log Analytics Workspace Name", key: "log_analytics_ws_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-law" },
+        { name: "Log Analytics Workspace RG Name", key: "log_analytics_ws_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-monitor-rg" },
+        { name: "Monitor RG Name", key: "monitor_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-monitor-rg" },
+        { name: "Slack Action Group Name", key: "monitor_action_group_slack_name", type: "text", placeholder: "e.g. SlackPagoPA" },
+        { name: "Email Action Group Name", key: "monitor_action_group_email_name", type: "text", placeholder: "e.g. PagoPA" },
+        { name: "Opsgenie Action Group Name", key: "monitor_action_group_opsgenie_name", type: "text", placeholder: "e.g. Opsgenie" },
       ],
     },
     networking: {
       default: true,
+      name: "Riferimenti Network",
       formFields: [
-        { name: "VNet Name", type: "text", placeholder: "e.g. vnet" },
-        { name: "VNet RG Name", type: "text", placeholder: "e.g. vnet-rg" },
-        { name: "Private Endpoint Subnet Name", type: "text", placeholder: "e.g. private-endpoint-snet" },
-        { name: "Private Endpoint Subnet RG Name", type: "text", placeholder: "e.g. vnet-rg" },
-        { name: "Private DNS Zone RG Name", type: "text", placeholder: "e.g. vnet-rg" },
-        { name: "External Domain", type: "text", placeholder: "e.g. pagopa.it" },
-        { name: "Internal DNS Zone Resource Group Name", type: "text", placeholder: "e.g. dns zone rg" },
-        { name: "DNS Zone Internal Prefix", type: "text", placeholder: "e.g. internal" },
+        { name: "VNet Name", key: "vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet" },
+        { name: "VNet RG Name", key: "vnet_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
+        { name: "Private Endpoint Subnet Name", key: "private_endpoint_subnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-common-private-endpoint-snet" },
+        { name: "Private Endpoint Subnet RG Name", key: "private_endpoint_subnet_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
+        { name: "Private Endpoint Subnet Vnet name", key: "private_endpoint_subnet_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet" },
+        { name: "Private DNS Zone RG Name", key: "private_dns_zone_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
+        { name: "External Domain", key: "external_domain", type: "text", placeholder: "e.g. pagopa.it" },
+        { name: "Internal DNS Zone Resource Group Name", key: "internal_dns_zone_resource_group_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
+        { name: "Internal DNS Prefix", key: "dns_zone_internal_prefix", type: "text", placeholder: "e.g. internal.dev.platform" },
       ],
     },
     devops: {
       default: false,
+      name: "Riferimenti Agent DevOps",
       formFields: [
-        { name: "Azure DevOps RG Name", type: "text", placeholder: "e.g. identity-rg" },
-        { name: "Azure DevOps IAC Prefix", type: "text", placeholder: "e.g. azdo-iac" },
+        { name: "Azure DevOps managed identity RG Name", key: "azdo_managed_identity_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-identity-rg" },
+        { name: "Azure DevOps managed identity IAC Prefix", key: "azdo_managed_identity_iac_prefix", type: "text", placeholder: "e.g. azdo-${var.env}-${local.prefix}-iac" },
       ],
     },
     apim: {
       default: false,
+      name: "Riferimenti API Management",
       formFields: [
-        { name: "APIM Name", type: "text", placeholder: "e.g. apim name" },
-        { name: "APIM RG Name", type: "text", placeholder: "e.g. apim-rg" },
-        { name: "APIM SKU", type: "text", placeholder: "e.g. apim-sku" },
+        { name: "APIM Name", key: "apim_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-apim" },
+        { name: "APIM RG Name", key: "apim_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-api-rg" },
       ],
     },
     cosmos_db: {
       default: false,
+      name: "CosmosDB",
       formFields: [
-        { name: "CosmosDB Account Database Type", type: "select",
+        { name: "CosmosDB Account Database Type", key: "cosmosdb_account_database_type", type: "select",
           options: [
             { label: "Mongo", value: "mongo" },
             { label: "Sql", value: "sql" }
@@ -66,33 +73,30 @@ export const formConfig = {
     },
     github_runner: {
       default: false,
+      name: "GitHub Runner self hosted",
       formFields: [
-        { name: "GitHub Runner CAE Name", type: "text", placeholder: "e.g. tools-cae" },
-        { name: "GitHub Runner RG", type: "text", placeholder: "e.g. tools-rg" },
-        { name: "GitHub Runner PAT Key", type: "text", placeholder: "e.g. gh-runner-job-pat" },
-        { name: "GitHub Runner PAT KV Name", type: "text", placeholder: "e.g. kv name" },
-        { name: "GitHub Runner PAT KV RG", type: "text", placeholder: "e.g. sec-rg" },
+        { name: "GitHub Runner CAE Name", key: "gh_runner_cae_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-cae" },
+        { name: "GitHub Runner RG", key: "gh_runner_cae_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-rg" },
+        { name: "GitHub Runner PAT Key", key: "gh_runner_pat_key", type: "text", placeholder: "e.g. gh-runner-job-pat" },
+        { name: "GitHub Runner PAT KV Name", key: "gh_runner_pat_kv_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-kv" },
+        { name: "GitHub Runner PAT KV RG", key: "gh_runner_pat_kv_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-sec-rg" },
       ],
     },
     kubernetes: {
       default: false,
+      name: "Riferimenti AKS",
       formFields: [
-        { name: "AKS Name", type: "text", placeholder: "e.g. aks name" },
-        { name: "AKS RG Name", type: "text", placeholder: "e.g. aks resource group" },
-        { name: "Ingress Load Balancer IP", type: "text", placeholder: "e.g. 10.1.100.250" },
+        { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
+        { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
+        { name: "Ingress Load Balancer IP", key: "ingress_load_balancer_ip", type: "text", placeholder: "e.g. 10.1.100.250" },
       ],
     },
     storage_account: {
       default: false,
+      name: "Storage Account",
       formFields: [
-        { name: "Storage Account Scope Name", type: "text", placeholder: "e.g. myscope" },
-        { name: "Storage Account Data Types", type: "select",
-          options: [
-            { label: "Blob", value: "blob" },
-            { label: "Queue", value: "queue" }
-          ]
-        },
-        { name: "Radio", type: "radio",
+        { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
+        { name: "Storage Account Data Types", key: "storage_account_data_types", type: "select",
           options: [
             { label: "Blob", value: "blob" },
             { label: "Queue", value: "queue" }
@@ -100,12 +104,15 @@ export const formConfig = {
         },
       ],
     },
-    event_hub: {
-      default: false,
-      formFields: [
-        { name: "Evh name", type: "text", placeholder: "e.g. myscope" },
-        { name: "Evh RG", type: "text", placeholder: "e.g. evh rg here"},
-      ],
+    redis: {
+        default: false,
+        name: "Redis cluster",
+        formFields: []
     },
+    postgresql: {
+        default: false,
+        name: "PostgreSQL database",
+        formFields: []
+    }
   },
 };

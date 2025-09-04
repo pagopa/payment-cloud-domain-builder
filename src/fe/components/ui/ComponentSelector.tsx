@@ -19,12 +19,10 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
   // Filtra i componenti escludendo quelli con "default: true"
   // Ordina e formatta i nomi. Prima lettera maiuscola e sostituisci "_" con spazi
   const components = Object.keys(formConfig.steps)
-    .filter(component => !formConfig.steps[component].default)
-    .map(component =>
-      component
-        .replace(/_/g, ' ') // Sostituisci i caratteri "_" con spazi
-        .replace(/^\w/, c => c.toUpperCase()) // Prima lettera maiuscola
-    );
+    .filter(component => !formConfig.steps[component].default);
+//     .map(component =>
+//       formConfig.steps[component].name
+//     );
 
   return (
     <div className="bg-zinc-900 rounded-2xl p-4 w-72 border border-zinc-700 h-fit">
@@ -46,7 +44,7 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
             <label htmlFor={component} className="ml-3 text-zinc-300 cursor-pointer select-none">
-              {component}
+              {formConfig.steps[component].name}
             </label>
           </div>
         ))}
