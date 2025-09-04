@@ -267,9 +267,7 @@ const handleGenerateWorkflow = async () => {
                       .replace(/^\w/, (c) => c.toUpperCase())
                   ),
                   ...selectedComponents.map((component) =>
-                    component
-                      .replace(/_/g, ' ')
-                      .replace(/^\w/, (c) => c.toUpperCase())
+                    formConfig.steps[component].name
                   ),
                 ]}
               />

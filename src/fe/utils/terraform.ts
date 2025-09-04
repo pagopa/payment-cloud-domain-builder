@@ -7,7 +7,7 @@ export function generateTableSummaryData(data: FormData) {
   Object.entries(formConfig.steps).forEach(([stepName, stepConfig]) => {
     const stepFields = stepConfig.formFields || [];
     const rows = stepFields.map((field) => {
-      const fieldKey = formatFieldKey(field.name);
+      const fieldKey = field.key;
       const value = data[fieldKey];
       return { field: field.name, value: formatValue(value) };
     });
@@ -20,10 +20,6 @@ export function generateTableSummaryData(data: FormData) {
   return summary;
 }
 
-// Funzione per normalizzare chiavi
-function formatFieldKey(name: string): string {
-  return name.toLowerCase().replace(/\s+/g, "_");
-}
 
 // Aiuto per formattare i valori
 function formatValue(value: any): string {

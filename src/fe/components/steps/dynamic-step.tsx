@@ -48,7 +48,8 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const stepConfig = formConfig.steps[stepName.toLowerCase().replace(/\s+/g, "_")];
+  const stepNameKey = stepName.toLowerCase().replace(/\s+/g, "_");
+  const stepConfig = formConfig.steps[stepNameKey];
   const inputClasses = {
     text: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none",
     number: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none",
@@ -74,12 +75,12 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       case "select":
         return (
           <select
-            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            name={field.key}
             value={value || ""}
             onChange={handleChange}
             className={inputClasses.select}
           >
-            <option value="">Seleziona un&aposopzione</option>
+            <option value="">Seleziona un&apos;opzione</option>
             {field.options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}
@@ -90,7 +91,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       case "textarea":
         return (
           <textarea
-            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            name={field.key}
             rows={4}
             value={value || ""}
             placeholder={field.placeholder}
@@ -114,7 +115,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               >
                 <input
                   type="radio"
-                  name={field.name.toLowerCase().replace(/\s+/g, "_")}
+                  name={field.key}
                   value={option.value}
                   checked={value === option.value}
                   onChange={handleChange}
@@ -125,20 +126,20 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             ))}
           </div>
         );
-      case "checkbox":
+      case "boolean":
         return (
           <label
-            htmlFor={field.name.toLowerCase().replace(/\s+/g, "_")}
+            htmlFor={field.key}
             className="flex items-center gap-4 cursor-pointer mt-2"
           >
             <div className="relative">
               <input
                 type="checkbox"
-                name={field.name.toLowerCase().replace(/\s+/g, "_")}
+                name={field.key}
                 checked={value}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
-                id={field.name.toLowerCase().replace(/\s+/g, "_")}
+                id={field.key}
               />
               {/* Spunta */}
               <svg
@@ -163,7 +164,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
         return (
           <input
             type={field.type}
-            name={field.name.toLowerCase().replace(/\s+/g, "_")}
+            name={field.key}
             value={value || ""}
             placeholder={field.placeholder}
             onChange={handleChange}
@@ -187,14 +188,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
 
   return (
     <div>
-      <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>{stepName.toUpperCase()} Configuration</h2>
+      <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>Configurazione {formConfig.steps[stepName.toLowerCase()].name}</h2>
       <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
             <label className="block text-sm font-semibold mt-2">{field.name}</label>
           {renderInputField(
             field,
-            formData[field.name.toLowerCase().replace(/\s+/g, "_")],
+            formData[field.key],
             handleChange
           )}
           </div>
