@@ -46,14 +46,14 @@ export async function POST(request: NextRequest) {
     console.log(`🐙  [${requestId}] Sending request to GitHub API...`);
     const githubStartTime = Date.now();
 
-    const response = await fetch('https://api.github.com/repos/ffppa/test-runners/dispatches', {
+    const response = await fetch('https://api.github.com/repos/pagopa/payment-cloud-domain-builder/dispatches', {
       method: 'POST',
       headers: {
         'Accept': 'application/vnd.github.v3+json',
         'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
       },
       body: JSON.stringify({
-        event_type: 'test-wk',
+        event_type: 'domain-builder-wk',
         client_payload: {
           data: body.data,
           metadata: {

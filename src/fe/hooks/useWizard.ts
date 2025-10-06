@@ -47,7 +47,7 @@ export const useWizard = () => {
   };
 
   const goToLast = () => {
-    const maxAllowedStep = 4 + selectedComponents.length;
+    const maxAllowedStep = 3 + selectedComponents.length;
     goToStep(maxAllowedStep); // Naviga all’ultimo step dinamicamente calcolato
   };
 

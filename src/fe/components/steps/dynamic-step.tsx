@@ -4,17 +4,6 @@ import { formConfig } from "../../utils/inputs";
 
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
-// import { parseYamlWithComments } from "../../utils/parsing";
-
-const config = {
-  include_postgresql: true,
-  form_fields: [
-    { name: "Postgres Host", type: "text", placeholder: "e.g. localhost" },
-    { name: "Postgres Port", type: "number", placeholder: "e.g. 5432" },
-    { name: "Variabile Dinamica", type: "text", placeholder: "e.g. Sono dynamo" },
-    { name: "Trallallero Trallalla", type: "text", placeholder: "e.g. Trulilolli" },
-  ],
-};
 
 interface DynamicStepProps {
   formData: CustomFormData
@@ -44,7 +33,6 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     stepName
   }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
-  const [config, setConfig] = useState<Record<string, Record<string, any>> | null>(null); /* eslint-disable-line  @typescript-eslint/no-explicit-any */
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

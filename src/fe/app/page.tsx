@@ -53,7 +53,7 @@ export default function Wizard() {
     console.log('Mode changed to:', mode);
   };
 
-  // Persistenza del login tramite localStorage
+  // Login localStorage persistence
   useEffect(() => {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
     if (storedLoginStatus === "true") {
@@ -63,16 +63,20 @@ export default function Wizard() {
     }
   }, []);
 
-  // Callback per gestire il login
+  // Callback login
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "true");
+    // Imposta scadenza: es. 2 ore da ora
+    const twoHoursMs = 2 * 60 * 60 * 1000;
+    localStorage.setItem("isLoggedInExpiry", String(Date.now() + twoHoursMs));
   };
 
-  // Callback per gestire il logout
+  // Callback logout
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isLoggedInExpiry");
     resetWizard();
   };
 
@@ -444,7 +448,7 @@ const handleGenerateWorkflow = async () => {
                 {apiResponse.requestId && <p>Request ID: <span className="text-yellow-400">{apiResponse.requestId}</span></p>}
                 {apiResponse.requestId && <p>Branch Name: <span className="text-purple-400">domain-builder-{apiResponse.requestId}-{formData?.domain_name}</span></p>}
                 <a
-                  href="https://github.com/ffppa/test-runners/actions/workflows/test-wk.yml"
+                  href="https://github.com/pagopa/payment-cloud-domain-builder/actions/workflows/domain-builder.yml"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block mt-2 text-pink-400 hover:text-pink-300 transition-colors"

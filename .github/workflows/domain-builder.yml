@@ -2,6 +2,8 @@ name: Domain Builder
 
 # Manual execution only
 on:
+  repository_dispatch:
+    types: [ domain-builder-wk ]
   workflow_dispatch:
     inputs:
       config:
