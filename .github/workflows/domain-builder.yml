@@ -68,8 +68,8 @@ jobs:
         echo "Switching to ansible folder"
         cd ansible
         
-        echo "Building domain $DOMAIN_NAME for product: $PRODUCT_NAME"
-        echo "Extra vars: $EXTRA_VARS"
+        echo "Building domain ${{ env.DOMAIN_NAME }} for product: ${{ env.PRODUCT_NAME }}"
+        echo "Extra vars: ${{ env.EXTRA_VARS }}"
         
         # Execute Ansible with all variables
         ansible-playbook -i src/inventory/hosts src/domain-builder.yml \
