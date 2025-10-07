@@ -41,7 +41,7 @@ jobs:
         import os
         
         config = json.loads('''${{ toJson(github.event.client_payload) }}''')        
-        
+        print(config)
         # Build extra vars string
         extra_vars = []
         for key, value in config.items():
@@ -56,7 +56,7 @@ jobs:
                 extra_vars.append(f"{key}={value}")
         
         extra_vars_str = " ".join(extra_vars)
-        
+        print(extra_vars_str)
         # Write to environment file
         with open(os.environ['GITHUB_ENV'], 'a') as f:
             f.write(f"EXTRA_VARS={extra_vars_str}\n")
