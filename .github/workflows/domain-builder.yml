@@ -35,44 +35,35 @@ jobs:
         python3 -m pip install ansible
 
         python3 << 'EOF'
-        import json, os, sys
+        import json, os
 
-        # Try reading from client_payload.data, then fallback to client_payload
-        raw_payload = '''${{ toJson(github.event.client_payload) }}'''
-        try:
-            payload = json.loads(raw_payload) if raw_payload else {}
-        except Exception as e:
-            print("Failed to parse client_payload:", e, file=sys.stderr)
-            payload = {}
-
+        payload = json.loads('''${{ toJson(github.event.client_payload) }}''') if '''${{ toJson(github.event.client_payload) }}''' else {}
         data = payload.get('data', payload)
 
-        print("Debug payload keys:", list(payload.keys()))
-        print("Debug data keys:", list(data.keys()))
+        def q(val: str) -> str:
+            # escape single quotes for Ansible extra-vars
+            return "'" + str(val).replace("'", "'\"'\"'") + "'"
 
-        # Build extra vars string
         extra_vars = []
         for key, value in data.items():
             if isinstance(value, bool):
                 extra_vars.append(f"{key}={str(value).lower()}")
-            elif isinstance(value, str) and value != "":
-                if key == "tag_source":
-                    extra_vars.append(f"{key}='{value}'")
-                else:
-                    extra_vars.append(f"{key}={value}")
-            elif value is not None:
+            elif value is None:
+                continue
+            elif isinstance(value, (int, float)):
                 extra_vars.append(f"{key}={value}")
+            else:
+                extra_vars.append(f"{key}={q(value)}")
 
         extra_vars_str = " ".join(extra_vars)
 
-        # Write to GITHUB_ENV using a heredoc to safely handle spaces/special chars
         github_env = os.environ['GITHUB_ENV']
         with open(github_env, 'a') as f:
             f.write("EXTRA_VARS<<__EV__\n")
             f.write(extra_vars_str + "\n")
             f.write("__EV__\n")
-            f.write(f"DOMAIN_NAME={data.get('domain_name', '')}\n")
-            f.write(f"PRODUCT_NAME={data.get('product_name', '')}\n")
+            f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
+            f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
         EOF
 
         echo "Switching to ansible folder"
@@ -81,10 +72,9 @@ jobs:
         echo "Building domain: ${DOMAIN_NAME}"
         echo "Product: ${PRODUCT_NAME}"
         echo "Extra vars (length): $(printf "%s" "$EXTRA_VARS" | wc -c)"
-        echo "Extra vars (preview): ${EXTRA_VARS:0:200}..."
+        echo "Extra vars (preview): ${EXTRA_VARS:0:300}..."
 
-        ansible-playbook -i src/inventory/hosts src/domain-builder.yml \
-          --extra-vars "$EXTRA_VARS"
+        ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "$EXTRA_VARS"
 
     - name: Show result
       run: tree -R -a ansible/src/output
