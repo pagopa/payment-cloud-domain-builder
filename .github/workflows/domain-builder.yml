@@ -39,9 +39,8 @@ jobs:
         
         import json
         import os
-        
-        config = json.loads('''${{ toJson(github.event.client_payload.data) }}''')        
-        print(config)
+
+        config = json.loads('''${{ toJson(github.event.client_payload.data) }}''')
         # Build extra vars string
         extra_vars = []
         for key, value in config.items():
@@ -54,47 +53,33 @@ jobs:
                     extra_vars.append(f"{key}={value}")
             elif not isinstance(value, str):
                 extra_vars.append(f"{key}={value}")
-        
+
         extra_vars_str = " ".join(extra_vars)
-        print(extra_vars_str)
-        # Write to environment file
-        with open(os.environ['GITHUB_ENV'], 'a') as f:
-            f.write(f"EXTRA_VARS={extra_vars_str}\n")
+
+        # Write to GITHUB_ENV using a heredoc to safely handle spaces/special chars
+        github_env = os.environ['GITHUB_ENV']
+        with open(github_env, 'a') as f:
+            f.write("EXTRA_VARS<<__EV__\n")
+            f.write(extra_vars_str + "\n")
+            f.write("__EV__\n")
             f.write(f"DOMAIN_NAME={config.get('domain_name', '')}\n")
             f.write(f"PRODUCT_NAME={config.get('product_name', '')}\n")
-            print("Env var exportate(?)")
         EOF
-        
+
         echo "Switching to ansible folder"
         cd ansible
-        
-        echo "Building domain ${{ env.DOMAIN_NAME }} for product: ${{ env.PRODUCT_NAME }}"
-        echo "Extra vars: ${{ env.EXTRA_VARS }}"
-        
-        # Execute Ansible with all variables
+
+        # Debug: ensure environment variables are available and not truncated
+        echo "Building domain: ${DOMAIN_NAME}"
+        echo "Product: ${PRODUCT_NAME}"
+        echo "Extra vars (length): $(printf "%s" "$EXTRA_VARS" | wc -c)"
+        echo "Extra vars (preview): ${EXTRA_VARS:0:200}..."
+
+        # Always quote EXTRA_VARS to preserve spacing
         ansible-playbook -i src/inventory/hosts src/domain-builder.yml \
           --extra-vars "$EXTRA_VARS"
         
-        # Get output files from ansible
         cd ../main-repo
-        
-        # Configure git
-        #git config user.name "github-actions[bot]"
-        #git config user.email "github-actions[bot]@users.noreply.github.com"
-        
-        # Create new branch
-        #git checkout -b "domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
-        
-        echo "Copying output files to the current repository"
-        #cp -r ../ansible/output/* .
-        
-        # Add and commit changes
-        #git add .
-        #git commit -m "Domain $DOMAIN_NAME built for product: $PRODUCT_NAME"
-        
-        # Push the branch
-        #git push --set-upstream origin "domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
-        
         echo "Domain $DOMAIN_NAME build completed and pushed to branch domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
 
     - name: Show result
