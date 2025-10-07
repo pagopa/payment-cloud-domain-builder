@@ -40,7 +40,7 @@ jobs:
         import json
         import os
         
-        config = json.loads('''${{ toJson(github.event.client_payload) }}''')        
+        config = json.loads('''${{ toJson(github.event.client_payload.data) }}''')        
         print(config)
         # Build extra vars string
         extra_vars = []
