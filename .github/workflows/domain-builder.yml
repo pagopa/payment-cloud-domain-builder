@@ -33,17 +33,26 @@ jobs:
       run: |
         echo "Installing Ansible"
         python3 -m pip install ansible
-                
-        # Parse JSON using Python
-        python3 << 'EOF'
-        
-        import json
-        import os
 
-        config = json.loads('''${{ toJson(github.event.client_payload.data) }}''')
+        python3 << 'EOF'
+        import json, os, sys
+
+        # Try reading from client_payload.data, then fallback to client_payload
+        raw_payload = '''${{ toJson(github.event.client_payload) }}'''
+        try:
+            payload = json.loads(raw_payload) if raw_payload else {}
+        except Exception as e:
+            print("Failed to parse client_payload:", e, file=sys.stderr)
+            payload = {}
+
+        data = payload.get('data', payload)
+
+        print("Debug payload keys:", list(payload.keys()))
+        print("Debug data keys:", list(data.keys()))
+
         # Build extra vars string
         extra_vars = []
-        for key, value in config.items():
+        for key, value in data.items():
             if isinstance(value, bool):
                 extra_vars.append(f"{key}={str(value).lower()}")
             elif isinstance(value, str) and value != "":
@@ -51,7 +60,7 @@ jobs:
                     extra_vars.append(f"{key}='{value}'")
                 else:
                     extra_vars.append(f"{key}={value}")
-            elif not isinstance(value, str):
+            elif value is not None:
                 extra_vars.append(f"{key}={value}")
 
         extra_vars_str = " ".join(extra_vars)
@@ -62,25 +71,20 @@ jobs:
             f.write("EXTRA_VARS<<__EV__\n")
             f.write(extra_vars_str + "\n")
             f.write("__EV__\n")
-            f.write(f"DOMAIN_NAME={config.get('domain_name', '')}\n")
-            f.write(f"PRODUCT_NAME={config.get('product_name', '')}\n")
+            f.write(f"DOMAIN_NAME={data.get('domain_name', '')}\n")
+            f.write(f"PRODUCT_NAME={data.get('product_name', '')}\n")
         EOF
 
         echo "Switching to ansible folder"
         cd ansible
 
-        # Debug: ensure environment variables are available and not truncated
         echo "Building domain: ${DOMAIN_NAME}"
         echo "Product: ${PRODUCT_NAME}"
         echo "Extra vars (length): $(printf "%s" "$EXTRA_VARS" | wc -c)"
         echo "Extra vars (preview): ${EXTRA_VARS:0:200}..."
 
-        # Always quote EXTRA_VARS to preserve spacing
         ansible-playbook -i src/inventory/hosts src/domain-builder.yml \
           --extra-vars "$EXTRA_VARS"
-        
-        cd ../main-repo
-        echo "Domain $DOMAIN_NAME build completed and pushed to branch domain-builder-$DOMAIN_NAME-${{ github.run_id }}"
 
     - name: Show result
       run: tree -R -a ansible/src/output
