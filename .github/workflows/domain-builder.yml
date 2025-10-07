@@ -30,6 +30,8 @@ jobs:
         python-version: '3.x'
     
     - name: Parse and Build Domain
+      env:
+        CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
       run: |
         echo "Installing Ansible"
         python3 -m pip install ansible
@@ -37,11 +39,11 @@ jobs:
         python3 << 'EOF'
         import json, os
 
-        payload = json.loads('''${{ toJson(github.event.client_payload) }}''') if '''${{ toJson(github.event.client_payload) }}''' else {}
+        raw = os.environ.get('CLIENT_PAYLOAD', '')
+        payload = json.loads(raw) if raw else {}
         data = payload.get('data', payload)
 
         def q(val: str) -> str:
-            # escape single quotes for Ansible extra-vars
             return "'" + str(val).replace("'", "'\"'\"'") + "'"
 
         extra_vars = []
@@ -57,8 +59,7 @@ jobs:
 
         extra_vars_str = " ".join(extra_vars)
 
-        github_env = os.environ['GITHUB_ENV']
-        with open(github_env, 'a') as f:
+        with open(os.environ['GITHUB_ENV'], 'a') as f:
             f.write("EXTRA_VARS<<__EV__\n")
             f.write(extra_vars_str + "\n")
             f.write("__EV__\n")
