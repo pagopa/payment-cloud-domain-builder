@@ -62,6 +62,7 @@ jobs:
             f.write(f"EXTRA_VARS={extra_vars_str}\n")
             f.write(f"DOMAIN_NAME={config.get('domain_name', '')}\n")
             f.write(f"PRODUCT_NAME={config.get('product_name', '')}\n")
+            print("Env var exportate(?)")
         EOF
         
         echo "Switching to ansible folder"
