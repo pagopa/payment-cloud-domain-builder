@@ -1,6 +1,5 @@
 name: Domain Builder
 
-# Manual execution only
 on:
   repository_dispatch:
     types: [ domain-builder-wk ]
@@ -11,131 +10,151 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout main repository
-        uses: actions/checkout@v4
-        with:
-          path: main-repo
-
-      - name: Checkout ansible repository
-        uses: actions/checkout@v4
-        with:
-          repository: pagopa/payment-cloud-domain-builder
-          ref: main
-          path: ansible
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
+    - name: Checkout main repository
+      uses: actions/checkout@v4
+      with:
+        path: main-repo
     
-      - name: Parse Payload
-        id: parse
-        env:
-          CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
-        run: |
-          echo "=== DEBUG: Full payload ==="
-          echo "$CLIENT_PAYLOAD" | python3 -m json.tool
-                  
-          python3 << 'EOF'
-          import json, os, sys
-  
-          # Parse payload
-          raw = os.environ.get('CLIENT_PAYLOAD', '{}')
-          print(f"Raw payload length: {len(raw)}")
-          
-          try:
-              payload = json.loads(raw)
-              print(f"Parsed payload keys: {list(payload.keys())}")
-          except json.JSONDecodeError as e:
-              print(f"JSON decode error: {e}")
-              sys.exit(1)
-  
-          # Extract data
-          data = payload.get('data', {})
-          metadata = payload.get('metadata', {})
-          
-          print(f"Data keys: {list(data.keys())}")
-          print(f"Data content: {json.dumps(data, indent=2)}")
-          print(f"Metadata: {json.dumps(metadata, indent=2)}")
-  
-          def q(val: str) -> str:
-              """Quote and escape values for shell"""
-              return "'" + str(val).replace("'", "'\"'\"'") + "'"
-  
-          extra_vars = []
-          for key, value in data.items():
-              if value is None:
-                  continue
-              elif isinstance(value, bool):
-                  extra_vars.append(f"{key}={str(value).lower()}")
-              elif isinstance(value, (int, float)):
-                  extra_vars.append(f"{key}={value}")
-              elif isinstance(value, str):
-                  if value.strip():
-                      extra_vars.append(f"{key}={q(value)}")
-              elif isinstance(value, (dict, list)):
-                  extra_vars.append(f"{key}={q(json.dumps(value))}")
-  
-          extra_vars_str = " ".join(extra_vars)
-          
-          print(f"\n=== Generated extra vars ===")
-          print(f"Count: {len(extra_vars)}")
-          print(f"Content: {extra_vars_str}")
-  
-          # Write to GITHUB_ENV - usa un solo delimiter senza multiline
-          with open(os.environ['GITHUB_ENV'], 'a') as f:
-              f.write(f"EXTRA_VARS={extra_vars_str}\n")
-              f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
-              f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
-          
-          # Write anche a GITHUB_OUTPUT per debug
-          if 'GITHUB_OUTPUT' in os.environ:
-              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                  f.write(f"extra_vars={extra_vars_str}\n")
-                  f.write(f"domain_name={data.get('domain_name','')}\n")
-                  f.write(f"vars_count={len(extra_vars)}\n")
-          
-          print("\n=== Environment variables written ===")
-          EOF
+    - name: Checkout ansible repository
+      uses: actions/checkout@v4
+      with:
+        repository: pagopa/payment-cloud-domain-builder
+        ref: main
+        path: ansible
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+    
+    - name: Parse Payload and Generate Vars File
+      env:
+        CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+      run: |
+        echo "=== DEBUG: Full payload ==="
+        echo "$CLIENT_PAYLOAD" | python3 -m json.tool
+                
+        python3 << 'EOF'
+        import json, os, sys
 
-      - name: Verify Environment Variables
-        run: |
-          echo "=== Verifying Environment Variables ==="
-          echo "DOMAIN_NAME: ${DOMAIN_NAME}"
-          echo "PRODUCT_NAME: ${PRODUCT_NAME}"
-          echo "EXTRA_VARS length: ${#EXTRA_VARS}"
-          echo "EXTRA_VARS content:"
-          echo "${EXTRA_VARS}"
-          echo ""
-          echo "From output:"
-          echo "Domain: ${{ steps.parse.outputs.domain_name }}"
-          echo "Vars count: ${{ steps.parse.outputs.vars_count }}"
+        # Parse payload
+        raw = os.environ.get('CLIENT_PAYLOAD', '{}')
+        print(f"Raw payload length: {len(raw)}")
+        
+        try:
+            payload = json.loads(raw)
+            print(f"Parsed payload keys: {list(payload.keys())}")
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+            sys.exit(1)
 
-      - name: Install Ansible
-        run: |
-          echo "Installing Ansible"
-          python3 -m pip install ansible
+        # Extract data
+        data = payload.get('data', {})
+        metadata = payload.get('metadata', {})
+        
+        print(f"Data keys: {list(data.keys())}")
+        print(f"Data content: {json.dumps(data, indent=2)}")
+        print(f"Metadata: {json.dumps(metadata, indent=2)}")
 
-      - name: Run Ansible Playbook
-        working-directory: ansible
-        run: |
-          echo "=== Ansible Execution Info ==="
-          echo "Building domain: ${DOMAIN_NAME}"
-          echo "Product: ${PRODUCT_NAME}"
-          echo "Extra vars: ${EXTRA_VARS}"
-          echo ""
-          
-          if [ -z "${EXTRA_VARS}" ]; then
-            echo "ERROR: EXTRA_VARS is empty!"
-            exit 1
-          fi
-          
-          echo "Running ansible-playbook..."
-          ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "${EXTRA_VARS}" -vv
+        def q(val: str) -> str:
+            """Quote and escape values for shell"""
+            return "'" + str(val).replace("'", "'\"'\"'") + "'"
 
-      - name: Show result
-        if: always()
-        run: |
-          echo "=== Output Directory Structure ==="
-          tree -R -a ansible/src/output || ls -laR ansible/src/output
+        extra_vars = []
+        for key, value in data.items():
+            if value is None:
+                continue
+            elif isinstance(value, bool):
+                extra_vars.append(f"{key}={str(value).lower()}")
+            elif isinstance(value, (int, float)):
+                extra_vars.append(f"{key}={value}")
+            elif isinstance(value, str):
+                if value.strip():
+                    extra_vars.append(f"{key}={q(value)}")
+            elif isinstance(value, (dict, list)):
+                extra_vars.append(f"{key}={q(json.dumps(value))}")
+
+        extra_vars_str = " ".join(extra_vars)
+        
+        print(f"\n=== Generated extra vars ===")
+        print(f"Count: {len(extra_vars)}")
+        print(f"Length: {len(extra_vars_str)} characters")
+
+        # Scrivi in un file invece che in GITHUB_ENV
+        vars_file = 'ansible_extra_vars.txt'
+        with open(vars_file, 'w') as f:
+            f.write(extra_vars_str)
+        
+        print(f"Extra vars written to {vars_file}")
+        
+        # Scrivi solo le variabili piccole in GITHUB_ENV
+        with open(os.environ['GITHUB_ENV'], 'a') as f:
+            f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
+            f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
+            f.write(f"VARS_FILE={vars_file}\n")
+        
+        print("\n=== Environment variables written ===")
+        EOF
+    
+    - name: Verify Variables File
+      run: |
+        echo "=== Verifying Variables File ==="
+        echo "DOMAIN_NAME: ${DOMAIN_NAME}"
+        echo "PRODUCT_NAME: ${PRODUCT_NAME}"
+        echo "VARS_FILE: ${VARS_FILE}"
+        echo ""
+        echo "File size: $(wc -c < ${VARS_FILE}) bytes"
+        echo "Variables count: $(wc -w < ${VARS_FILE}) words"
+        echo ""
+        echo "First 500 chars:"
+        head -c 500 ${VARS_FILE}
+        echo ""
+        echo "..."
+        echo ""
+        echo "Last 500 chars:"
+        tail -c 500 ${VARS_FILE}
+    
+    - name: Install Ansible
+      run: |
+        echo "Installing Ansible"
+        python3 -m pip install ansible
+    
+    - name: Run Ansible Playbook
+      working-directory: ansible
+      run: |
+        echo "=== Ansible Execution Info ==="
+        echo "Building domain: ${DOMAIN_NAME}"
+        echo "Product: ${PRODUCT_NAME}"
+        echo ""
+        
+        # Leggi le variabili dal file
+        EXTRA_VARS=$(cat ../${VARS_FILE})
+        
+        if [ -z "${EXTRA_VARS}" ]; then
+          echo "ERROR: EXTRA_VARS is empty!"
+          exit 1
+        fi
+        
+        echo "Extra vars loaded from file (length: ${#EXTRA_VARS})"
+        echo "Running ansible-playbook..."
+        
+        ansible-playbook \
+          -i src/inventory/hosts \
+          src/domain-builder.yml \
+          --extra-vars "${EXTRA_VARS}" \
+          -vv
+
+    - name: Show result
+      if: always()
+      run: |
+        echo "=== Output Directory Structure ==="
+        tree -R -a ansible/src/output || ls -laR ansible/src/output
+    
+    - name: Upload generated files
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: domain-${{ env.DOMAIN_NAME }}-output
+        path: ansible/src/output/
+        retention-days: 3
