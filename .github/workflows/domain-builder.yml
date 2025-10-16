@@ -35,7 +35,9 @@ jobs:
       run: |
         echo "Installing Ansible"
         python3 -m pip install ansible
-
+        
+        echo "payload: ${CLIENT_PAYLOAD}"
+        
         python3 << 'EOF'
         import json, os
 
