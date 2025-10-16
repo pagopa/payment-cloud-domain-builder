@@ -1,6 +1,7 @@
 // hooks/useWizard.ts
 import { useState } from 'react';
 import { CustomFormData, defaultForm } from '../types/form';
+import { formConfig } from '../utils/inputs';
 
 export const useWizard = () => {
   const [step, setStep] = useState(1);
@@ -12,6 +13,7 @@ export const useWizard = () => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
+    // @ts-ignore
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -19,6 +21,7 @@ export const useWizard = () => {
   };
 
   const updateFormData = (updates: Partial<CustomFormData>) => {
+    // @ts-ignore
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
@@ -48,15 +51,34 @@ export const useWizard = () => {
 
   const goToLast = () => {
     const maxAllowedStep = 3 + selectedComponents.length;
-    goToStep(maxAllowedStep); // Naviga all’ultimo step dinamicamente calcolato
+    goToStep(maxAllowedStep); // Naviga all'ultimo step dinamicamente calcolato
   };
 
   const toggleComponent = (component: string) => {
     setSelectedComponents(prev => {
-      if (prev.includes(component)) {
-        return prev.filter(c => c !== component);
-      } else {
+      const isAdding = !prev.includes(component);
+      
+      const stepConfig = formConfig.steps[component];
+      if (stepConfig && stepConfig.formFields) {
+        const hiddenFields = stepConfig.formFields.filter(field => field.type === 'hidden');
+        
+        const updates: Partial<CustomFormData> = {};
+        hiddenFields.forEach(field => {
+          // @ts-ignore
+          updates[field.key as keyof CustomFormData] = isAdding;
+        });
+        
+        // @ts-ignore
+        setFormData(prevData => ({
+          ...prevData,
+          ...updates
+        }));
+      }
+      
+      if (isAdding) {
         return [...prev, component];
+      } else {
+        return prev.filter(c => c !== component);
       }
     });
   };

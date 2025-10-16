@@ -1,3 +1,36 @@
+/**
+ * Form Configuration Guide
+ *
+ * To add a new step:
+ * 1. Add a new object in the step object with a unique key
+ * 2. Set 'default' to true if the step should be shown by default, false otherwise
+ * 3. Set 'name' for the display name of the step
+ * 4. Add 'formFields' array containing field configurations
+ *
+ * Field configuration options:
+ * - name: Display name of the field
+ * - key: Unique identifier for the field
+ * - type: Input type ('text', 'boolean', 'select', 'radio', 'hidden')
+ * - placeholder: Helper text shown in the input (optional)
+ * - value: Default value (optional)
+ * - options: Array of {label, value} for select inputs (required for type='select')
+ *
+ * Example:
+ * {
+ *   newStep: {
+ *     default: false,
+ *     name: "Step Name",
+ *     formFields: [
+ *       {
+ *         name: "Field Label",
+ *         key: "field_key",
+ *         type: "text",
+ *         placeholder: "Enter value"
+ *       }
+ *     ]
+ *   }
+ * }
+ */
 export const formConfig = {
   steps: {
     domain: {
@@ -47,6 +80,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti Agent DevOps",
       formFields: [
+        { name: "include_devops", key: "include_devops", type: "hidden", value: "true" },
         { name: "Azure DevOps managed identity RG Name", key: "azdo_managed_identity_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-identity-rg" },
         { name: "Azure DevOps managed identity IAC Prefix", key: "azdo_managed_identity_iac_prefix", type: "text", placeholder: "e.g. azdo-${var.env}-${local.prefix}-iac" },
       ],
@@ -55,6 +89,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti API Management",
       formFields: [
+        { name: "include_apim", key: "include_apim", type: "hidden", value: "true" },
         { name: "APIM Name", key: "apim_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-apim" },
         { name: "APIM RG Name", key: "apim_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-api-rg" },
       ],
@@ -63,6 +98,7 @@ export const formConfig = {
       default: false,
       name: "CosmosDB",
       formFields: [
+        { name: "include_cosmos", key: "include_cosmos", type: "hidden", value: "true" },
         { name: "CosmosDB Account Database Type", key: "cosmosdb_account_database_type", type: "select",
           options: [
             { label: "Mongo", value: "mongo" },
@@ -75,6 +111,7 @@ export const formConfig = {
       default: false,
       name: "GitHub Runner self hosted",
       formFields: [
+        { name: "include_github_runner", key: "include_github_runner", type: "hidden", value: "true" },
         { name: "GitHub Runner CAE Name", key: "gh_runner_cae_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-cae" },
         { name: "GitHub Runner RG", key: "gh_runner_cae_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-rg" },
         { name: "GitHub Runner PAT Key", key: "gh_runner_pat_key", type: "text", placeholder: "e.g. gh-runner-job-pat" },
@@ -86,6 +123,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti AKS",
       formFields: [
+        { name: "include_aks", key: "include_aks", type: "hidden", value: "true" },
         { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
         { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
         { name: "Ingress Load Balancer IP", key: "ingress_load_balancer_ip", type: "text", placeholder: "e.g. 10.1.100.250" },
@@ -95,6 +133,7 @@ export const formConfig = {
       default: false,
       name: "Storage Account",
       formFields: [
+        { name: "include_storage_account", key: "include_storage_account", type: "hidden", value: "true" },
         { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
         { name: "Storage Account Data Types", key: "storage_account_data_types", type: "select",
           options: [
@@ -107,12 +146,16 @@ export const formConfig = {
     redis: {
         default: false,
         name: "Redis cluster",
-        formFields: []
+        formFields: [
+          { name: "include_redis", key: "include_redis", type: "hidden", value: "true" },
+        ]
     },
     postgresql: {
         default: false,
         name: "PostgreSQL database",
-        formFields: []
+        formFields: [
+          { name: "include_postgresql", key: "include_postgresql", type: "hidden", value: "true" },
+        ]
     }
   },
 };

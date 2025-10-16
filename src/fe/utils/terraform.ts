@@ -1,4 +1,4 @@
-import { formConfig } from "./inputs"; // Assicurati che il path sia corretto
+import { formConfig } from "./inputs";
 
 
 export function generateTableSummaryData(data: FormData) {
@@ -21,10 +21,15 @@ export function generateTableSummaryData(data: FormData) {
 }
 
 
-// Aiuto per formattare i valori
 function formatValue(value: any): string {
   if (typeof value === "boolean") {
     return value ? "✅ Abilitato" : "❌ Disabilitato";
+  }
+  if (value === "true" || value === true) {
+    return "✅ Abilitato";
+  }
+  if (value === "false" || value === false) {
+    return "❌ Disabilitato";
   }
   if (value === null || value === undefined || value === "") {
     return "⚠️ Non configurato";
@@ -32,7 +37,7 @@ function formatValue(value: any): string {
   return value.toString();
 }
 
-// Capitalizza stringhe
+
 function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }

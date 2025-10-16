@@ -11,71 +11,109 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout main repository
-      uses: actions/checkout@v4
-      with:
-        path: main-repo
-    
-    - name: Checkout ansible repository
-      uses: actions/checkout@v4
-      with:
-        repository: pagopa/payment-cloud-domain-builder
-        ref: main
-        path: ansible
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-    
-    - name: Parse and Build Domain
-      env:
-        CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
-      run: |
-        echo "Installing Ansible"
-        python3 -m pip install ansible
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          path: main-repo
 
-        python3 << 'EOF'
-        import json, os
+      - name: Checkout ansible repository
+        uses: actions/checkout@v4
+        with:
+          repository: pagopa/payment-cloud-domain-builder
+          ref: main
+          path: ansible
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-        raw = os.environ.get('CLIENT_PAYLOAD', '')
-        payload = json.loads(raw) if raw else {}
-        data = payload.get('data', payload)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-        def q(val: str) -> str:
-            return "'" + str(val).replace("'", "'\"'\"'") + "'"
+      - name: Parse and Build Domain
+        env:
+          CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          echo "Installing Ansible"
+          python3 -m pip install ansible
+          
+          echo "=== DEBUG: Full payload ==="
+          echo "$CLIENT_PAYLOAD" | python3 -m json.tool
+          
+          python3 << 'EOF'
+          import json, os, sys
+          
+          # Parse payload
+          raw = os.environ.get('CLIENT_PAYLOAD', '{}')
+          print(f"Raw payload length: {len(raw)}")
+          
+          try:
+              payload = json.loads(raw)
+              print(f"Parsed payload keys: {list(payload.keys())}")
+          except json.JSONDecodeError as e:
+              print(f"JSON decode error: {e}")
+              sys.exit(1)
+          
+          # Extract data from the correct location
+          data = payload.get('data', {})
+          metadata = payload.get('metadata', {})
+          
+          print(f"Data keys: {list(data.keys())}")
+          print(f"Data content: {json.dumps(data, indent=2)}")
+          print(f"Metadata: {json.dumps(metadata, indent=2)}")
+          
+          def q(val: str) -> str:
+              """Quote and escape values for shell"""
+              return "'" + str(val).replace("'", "'\"'\"'") + "'"
+          
+          extra_vars = []
+          for key, value in data.items():
+              if value is None:
+                  continue
+              elif isinstance(value, bool):
+                  # Convert Python bool to Ansible bool (lowercase)
+                  extra_vars.append(f"{key}={str(value).lower()}")
+              elif isinstance(value, (int, float)):
+                  extra_vars.append(f"{key}={value}")
+              elif isinstance(value, str):
+                  # Only add non-empty strings
+                  if value.strip():
+                      extra_vars.append(f"{key}={q(value)}")
+              elif isinstance(value, (dict, list)):
+                  # JSON encode complex types
+                  extra_vars.append(f"{key}={q(json.dumps(value))}")
+          
+          extra_vars_str = " ".join(extra_vars)
+          
+          print(f"\n=== Generated extra vars ===")
+          print(f"Count: {len(extra_vars)}")
+          print(f"Content: {extra_vars_str[:500]}...")
+          
+          # Write to GITHUB_ENV
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write("EXTRA_VARS<<__EV__\n")
+              f.write(extra_vars_str + "\n")
+              f.write("__EV__\n")
+              f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
+              f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
+          
+          print("\n=== Environment variables written ===")
+          EOF
+          
+          echo ""
+          echo "=== Ansible Execution Info ==="
+          echo "Switching to ansible folder"
+          cd ansible
+          
+          echo "Building domain: ${DOMAIN_NAME}"
+          echo "Product: ${PRODUCT_NAME}"
+          echo "Extra vars length: $(printf "%s" "$EXTRA_VARS" | wc -c)"
+          echo "Extra vars count: $(echo "$EXTRA_VARS" | wc -w)"
+          echo ""
+          echo "Extra vars preview:"
+          echo "$EXTRA_VARS" | fold -w 100 | head -20
+          echo ""
+          
+          ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "$EXTRA_VARS" -v
 
-        extra_vars = []
-        for key, value in data.items():
-            if isinstance(value, bool):
-                extra_vars.append(f"{key}={str(value).lower()}")
-            elif value is None:
-                continue
-            elif isinstance(value, (int, float)):
-                extra_vars.append(f"{key}={value}")
-            else:
-                extra_vars.append(f"{key}={q(value)}")
-
-        extra_vars_str = " ".join(extra_vars)
-
-        with open(os.environ['GITHUB_ENV'], 'a') as f:
-            f.write("EXTRA_VARS<<__EV__\n")
-            f.write(extra_vars_str + "\n")
-            f.write("__EV__\n")
-            f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
-            f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
-        EOF
-
-        echo "Switching to ansible folder"
-        cd ansible
-
-        echo "Building domain: ${DOMAIN_NAME}"
-        echo "Product: ${PRODUCT_NAME}"
-        echo "Extra vars (length): $(printf "%s" "$EXTRA_VARS" | wc -c)"
-        echo "Extra vars (preview): ${EXTRA_VARS:0:300}..."
-
-        ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "$EXTRA_VARS"
-
-    - name: Show result
-      run: tree -R -a ansible/src/output
+      - name: Show result
+        run: tree -R -a ansible/src/output

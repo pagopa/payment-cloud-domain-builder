@@ -122,71 +122,6 @@ const handleGenerateWorkflow = async () => {
   }
 };
 
-//   const TerraformPreview = () => (
-//     <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
-//       <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
-//         Terraform Module Preview (IDH)
-//       </h2>
-//       <div className="text-zinc-200 mb-2 text-sm">
-//         Copy the code below and use it as your IDH module!
-//       </div>
-//       <pre className="mt-4 bg-zinc-950 text-green-400 rounded-lg p-4 overflow-auto text-xs border border-zinc-700 whitespace-pre-wrap">
-//         {generateCleanSummary(formData)}
-//       </pre>
-//
-//       <div className="flex gap-4 mt-6">
-//         <button
-//           className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
-//           onClick={() => setShowSummary(false)}
-//         >
-//           Back to wizard
-//         </button>
-//
-//         <button
-//           className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded shadow flex items-center gap-2 group transition-all hover:scale-[1.02] ml-auto"
-//           onClick={handleGenerateWorkflow}
-//         >
-//           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:animate-spin" viewBox="0 0 20 20" fill="currentColor">
-//             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-//           </svg>
-//           Generate!
-//         </button>
-//       </div>
-//     </div>
-//   );
-
-
-// LAZY Components Selector
-// const lazyComponents = useMemo(() => {
-//   const components: {
-//     [key: string]: React.LazyExoticComponent<React.FC<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
-//   } = {};
-//
-//   selectedComponents.forEach((component) => {
-//     if (componentsMap[component]) {
-//       // Se il componente esiste nella mappa
-//       components[component] = React.lazy(componentsMap[component]);
-//     }
-//     else {
-//       console.error(`Component "${component}" not found in componentsMap.`);
-//       components[component] = React.lazy(() =>
-//         Promise.resolve({
-//           default: () => (
-//             <div className="p-4 rounded-lg bg-red-600 text-white text-center shadow-md">
-//               <h3 className="text-lg font-bold">Component Not Found</h3>
-//               <p className="text-sm">
-//                 The component {component} could not be loaded.
-//               </p>
-//             </div>
-//           ),
-//         })
-//       );
-//     }
-//   });
-//
-//   return components;
-// }, [selectedComponents]);
-
   // Renderizza contenuto diverso in base alla modalità
   const renderContent = () => {
     if (currentMode === 'idh-advisor') {
@@ -313,7 +248,6 @@ const handleGenerateWorkflow = async () => {
 
               {/* Rendering degli step dinamici */}
               {selectedComponents.map((component, index) => {
-//                 const ComponentStep = lazyComponents[component];
                 const componentStepNumber = defaultSteps.length + 1 + index;
                 const isLastStep = index === selectedComponents.length - 1;
                 const shouldRender = step === componentStepNumber;
@@ -383,7 +317,7 @@ const handleGenerateWorkflow = async () => {
 
   if (isLoggedIn === null) {
     return null;
-  };
+  }
 
   const defaultSteps = Object.keys(formConfig.steps).filter(
     step => (formConfig.steps as Record<string, { default: boolean }>)[step].default
