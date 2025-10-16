@@ -16,8 +16,6 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
 }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
-  // Filtra i componenti escludendo quelli con "default: true"
-  // Ordina e formatta i nomi. Prima lettera maiuscola e sostituisci "_" con spazi
   const components = Object.keys(formConfig.steps)
     .filter(component => !formConfig.steps[component].default);
 //     .map(component =>

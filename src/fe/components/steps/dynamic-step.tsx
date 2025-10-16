@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { CustomFormData } from '../../types/form';
 import { formConfig } from "../../utils/inputs";
 
@@ -23,7 +22,6 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     currentStep,
     formData,
     handleChange,
-    updateFormData,
     isLastStep,
     onNext,
     onPrev,
@@ -33,8 +31,6 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     stepName
   }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const stepNameKey = stepName.toLowerCase().replace(/\s+/g, "_");
   const stepConfig = formConfig.steps[stepNameKey];
@@ -85,6 +81,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             placeholder={field.placeholder}
             onChange={handleChange}
             className={inputClasses.textarea}
+          />
+        );
+      case "hidden":
+        return (
+          <input
+            type="hidden"
+            name={field.key}
+            value={value !== undefined ? String(value) : (field.value || "true")}
           />
         );
       case "radio":
@@ -180,7 +184,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-sm font-semibold mt-2">{field.name}</label>
+            <label className="block text-sm font-semibold mt-2">{field.type !== 'hidden' && field.name}</label>
           {renderInputField(
             field,
             formData[field.key],

@@ -1,119 +1,61 @@
+import { formConfig } from '../utils/inputs';
 
-// types/form.ts
-export type CustomFormData = {
-  // Common template vars
-  include_postgresql: boolean;
-  include_tag_config: boolean;
-  include_kubernetes: boolean;
-  include_apim: boolean;
-  include_cosmosdb: boolean;
-  include_redis: boolean;
-  tag_source: string;
+type InferFieldType<T> =
+    T extends { type: 'boolean' } ? boolean :
+        T extends { type: 'select' | 'text' | 'textarea' | 'hidden' } ? string :
+            T extends { type: 'number' } ? number :
+                string;
 
-  domain_name: string;
-  is_dev_public: boolean;
-  storage_account_state_name: string;
-  storage_account_container_state_name: string;
-  storage_account_state_rg_name: string;
-  subscription: string;
-  external_domain: string;
-  dns_zone_internal_prefix: string;
+type GenerateFormDataType = {
+  [K in keyof typeof formConfig.steps]: typeof formConfig.steps[K] extends { formFields: infer F }
+      ? F extends Array<infer Field>
+          ? Field extends { key: infer Key; type: infer Type }
+              ? Key extends string
+                  ? { [P in Key]: InferFieldType<Field> }
+                  : never
+              : never
+          : never
+      : never;
+}[keyof typeof formConfig.steps];
 
-  log_analytics_ws_name: string;
-  log_analytics_ws_rg_name: string;
-  monitor_rg_name: string;
-  monitor_action_group_slack_name: string;
-  monitor_action_group_email_name: string;
-  monitor_action_group_opsgenie_name: string;
-
-  // secrets
-  azdo_managed_identity_rg_name: string;
-  azdo_managed_identity_iac_prefix: string;
-
-  // aks
-  aks_name: string;
-  aks_rg_name: string;
-  ingress_load_balancer_ip: string;
-
-  internal_dns_zone_resource_group_name: string;
-  application_insight_name: string;
-
-  apim_name: string;
-  apim_rg_name: string;
-
-  vnet_name: string;
-  vnet_rg_name: string;
-
-  // cae
-  gh_runner_cae_name: string;
-  gh_runner_cae_rg: string;
-  gh_runner_pat_key: string;
-  gh_runner_pat_kv_name: string;
-  gh_runner_pat_kv_rg: string;
-
-  product_name: string;
-  location: string;
+export type CustomFormData = UnionToIntersection<GenerateFormDataType> & {
+  // extra fields for formFields
   location_mapping: Record<string, string>;
   location_string_mapping: Record<string, string>;
-
-  cosmosdb_account_database_type: string;
 };
 
-export const defaultForm: CustomFormData = {
-  // Common template vars
-  include_postgresql: false,
-  include_tag_config: false,
-  include_kubernetes: false,
-  include_apim: false,
-  include_cosmosdb: false,
-  include_redis: false,
-  tag_source: "",
+type UnionToIntersection<U> =
+    (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-  domain_name: "",
-  is_dev_public: false,
-  storage_account_state_name: "",
-  storage_account_container_state_name: "",
-  storage_account_state_rg_name: "",
-  subscription: "",
-  external_domain: "",
-  dns_zone_internal_prefix: "",
+export const defaultForm: CustomFormData = (() => {
+  const form: any = {
+    location_mapping: {},
+    location_string_mapping: {},
+  };
 
-  log_analytics_ws_name: "",
-  log_analytics_ws_rg_name: "",
-  monitor_rg_name: "",
-  monitor_action_group_slack_name: "",
-  monitor_action_group_email_name: "",
-  monitor_action_group_opsgenie_name: "",
+  Object.values(formConfig.steps).forEach((step) => {
+    step.formFields.forEach((field) => {
+      switch (field.type) {
+        case 'boolean':
+          form[field.key] = false;
+          break;
+        case 'hidden':
+          form[field.key] = false;
+          break;
+        case 'number':
+          form[field.key] = 0;
+          break;
+        case 'select':
+        case 'text':
+        case 'textarea':
+        case 'password':
+        case 'date':
+        default:
+          form[field.key] = '';
+          break;
+      }
+    });
+  });
 
-  // secrets
-  azdo_managed_identity_rg_name: "",
-  azdo_managed_identity_iac_prefix: "",
-
-  // aks
-  aks_name: "",
-  aks_rg_name: "",
-  ingress_load_balancer_ip: "",
-
-  internal_dns_zone_resource_group_name: "",
-  application_insight_name: "",
-
-  apim_name: "",
-  apim_rg_name: "",
-
-  vnet_name: "",
-  vnet_rg_name: "",
-
-  // cae
-  gh_runner_cae_name: "",
-  gh_runner_cae_rg: "",
-  gh_runner_pat_key: "",
-  gh_runner_pat_kv_name: "",
-  gh_runner_pat_kv_rg: "",
-
-  product_name: "",
-  location: "",
-  location_mapping: {},
-  location_string_mapping: {},
-
-  cosmosdb_account_database_type: "",
-};
+  return form as CustomFormData;
+})();
