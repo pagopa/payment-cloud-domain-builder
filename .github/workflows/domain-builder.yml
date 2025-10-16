@@ -28,20 +28,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-
-      - name: Parse and Build Domain
+    
+      - name: Parse Payload
+        id: parse
         env:
           CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
         run: |
-          echo "Installing Ansible"
-          python3 -m pip install ansible
-          
           echo "=== DEBUG: Full payload ==="
           echo "$CLIENT_PAYLOAD" | python3 -m json.tool
-          
+                  
           python3 << 'EOF'
           import json, os, sys
-          
+  
           # Parse payload
           raw = os.environ.get('CLIENT_PAYLOAD', '{}')
           print(f"Raw payload length: {len(raw)}")
@@ -52,68 +50,92 @@ jobs:
           except json.JSONDecodeError as e:
               print(f"JSON decode error: {e}")
               sys.exit(1)
-          
-          # Extract data from the correct location
+  
+          # Extract data
           data = payload.get('data', {})
           metadata = payload.get('metadata', {})
           
           print(f"Data keys: {list(data.keys())}")
           print(f"Data content: {json.dumps(data, indent=2)}")
           print(f"Metadata: {json.dumps(metadata, indent=2)}")
-          
+  
           def q(val: str) -> str:
               """Quote and escape values for shell"""
               return "'" + str(val).replace("'", "'\"'\"'") + "'"
-          
+  
           extra_vars = []
           for key, value in data.items():
               if value is None:
                   continue
               elif isinstance(value, bool):
-                  # Convert Python bool to Ansible bool (lowercase)
                   extra_vars.append(f"{key}={str(value).lower()}")
               elif isinstance(value, (int, float)):
                   extra_vars.append(f"{key}={value}")
               elif isinstance(value, str):
-                  # Only add non-empty strings
                   if value.strip():
                       extra_vars.append(f"{key}={q(value)}")
               elif isinstance(value, (dict, list)):
-                  # JSON encode complex types
                   extra_vars.append(f"{key}={q(json.dumps(value))}")
-          
+  
           extra_vars_str = " ".join(extra_vars)
           
           print(f"\n=== Generated extra vars ===")
           print(f"Count: {len(extra_vars)}")
-          print(f"Content: {extra_vars_str[:500]}...")
-          
-          # Write to GITHUB_ENV
+          print(f"Content: {extra_vars_str}")
+  
+          # Write to GITHUB_ENV - usa un solo delimiter senza multiline
           with open(os.environ['GITHUB_ENV'], 'a') as f:
-              f.write("EXTRA_VARS<<__EV__\n")
-              f.write(extra_vars_str + "\n")
-              f.write("__EV__\n")
+              f.write(f"EXTRA_VARS={extra_vars_str}\n")
               f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
               f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
           
+          # Write anche a GITHUB_OUTPUT per debug
+          if 'GITHUB_OUTPUT' in os.environ:
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f"extra_vars={extra_vars_str}\n")
+                  f.write(f"domain_name={data.get('domain_name','')}\n")
+                  f.write(f"vars_count={len(extra_vars)}\n")
+          
           print("\n=== Environment variables written ===")
           EOF
-          
+
+      - name: Verify Environment Variables
+        run: |
+          echo "=== Verifying Environment Variables ==="
+          echo "DOMAIN_NAME: ${DOMAIN_NAME}"
+          echo "PRODUCT_NAME: ${PRODUCT_NAME}"
+          echo "EXTRA_VARS length: ${#EXTRA_VARS}"
+          echo "EXTRA_VARS content:"
+          echo "${EXTRA_VARS}"
           echo ""
+          echo "From output:"
+          echo "Domain: ${{ steps.parse.outputs.domain_name }}"
+          echo "Vars count: ${{ steps.parse.outputs.vars_count }}"
+
+      - name: Install Ansible
+        run: |
+          echo "Installing Ansible"
+          python3 -m pip install ansible
+
+      - name: Run Ansible Playbook
+        working-directory: ansible
+        run: |
           echo "=== Ansible Execution Info ==="
-          echo "Switching to ansible folder"
-          cd ansible
-          
           echo "Building domain: ${DOMAIN_NAME}"
           echo "Product: ${PRODUCT_NAME}"
-          echo "Extra vars length: $(printf "%s" "$EXTRA_VARS" | wc -c)"
-          echo "Extra vars count: $(echo "$EXTRA_VARS" | wc -w)"
-          echo ""
-          echo "Extra vars preview:"
-          echo "$EXTRA_VARS" | fold -w 100 | head -20
+          echo "Extra vars: ${EXTRA_VARS}"
           echo ""
           
-          ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "$EXTRA_VARS" -v
+          if [ -z "${EXTRA_VARS}" ]; then
+            echo "ERROR: EXTRA_VARS is empty!"
+            exit 1
+          fi
+          
+          echo "Running ansible-playbook..."
+          ansible-playbook -i src/inventory/hosts src/domain-builder.yml --extra-vars "${EXTRA_VARS}" -vv
 
       - name: Show result
-        run: tree -R -a ansible/src/output
+        if: always()
+        run: |
+          echo "=== Output Directory Structure ==="
+          tree -R -a ansible/src/output || ls -laR ansible/src/output
