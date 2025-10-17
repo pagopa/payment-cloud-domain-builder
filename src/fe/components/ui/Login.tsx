@@ -3,32 +3,74 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { FiUser } from "react-icons/fi"; // Icona utente
 import { MdLockOutline } from "react-icons/md"; // Icona di blocco per password
 
-const clientId = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"; // Sostituisci con il tuo Client ID
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
 
-export const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
+// Interfaccia per il profilo utente
+interface UserProfile {
+  name: string;
+  email: string;
+  imageUrl: string;
+}
+
+export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }> = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Funzione per decodificare il JWT token di Google
+  const decodeJWT = (token: string): UserProfile | null => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+          atob(base64)
+              .split('')
+              .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+              .join('')
+      );
+      const payload = JSON.parse(jsonPayload);
+
+      return {
+        name: payload.name || '',
+        email: payload.email || '',
+        imageUrl: payload.picture || ''
+      };
+    } catch (error) {
+      console.error('Errore nella decodifica del token:', error);
+      return null;
+    }
+  };
+
   // Funzione per gestire il login "fake" tramite credenziali admin
   const handleFakeLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Previene il comportamento predefinito del form (refresh della pagina)
+    e.preventDefault();
     if (username === "admin" && password === "admin") {
       setError("");
-      onLoginSuccess(); // Chiamata alla funzione di successo del login
+      // ✅ Passa un profilo "fake" con l'username inserito
+      onLoginSuccess({
+        name: username,
+        email: `${username}@local.dev`,
+        imageUrl: ''
+      });
     } else {
       setError("Credenziali non valide. Riprova.");
     }
   };
 
-  const handleGoogleLoginSuccess = () => {
-    onLoginSuccess(); // Gestisci il successo di login tramite Google
+
+  const handleGoogleLoginSuccess = (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      const profile = decodeJWT(credentialResponse.credential);
+      onLoginSuccess(profile || undefined);
+    } else {
+      onLoginSuccess();
+    }
   };
 
   const handleGoogleLoginFailure = () => {
     console.error("Google Login Failed");
+    setError("Login con Google fallito. Riprova.");
   };
-
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div className="flex items-center justify-center min-h-screen from-gray-900 via-black to-zinc-900">

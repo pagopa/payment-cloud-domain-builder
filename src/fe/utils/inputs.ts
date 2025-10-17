@@ -148,6 +148,13 @@ export const formConfig = {
         name: "Redis cluster",
         formFields: [
           { name: "include_redis", key: "include_redis", type: "hidden", value: "true" },
+          { name: "test", key: "test_redis", type: "checkboxgroup",
+            options: [
+              { label: "Feature A", value: "feature_a" },
+              { label: "Feature B", value: "feature_b" },
+              { label: "Feature C", value: "feature_c" }
+            ]
+          },
         ]
     },
     postgresql: {

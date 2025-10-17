@@ -152,7 +152,71 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             </span>
           </label>
         );
-      default: // Gestisce text, number, password, file, ecc.
+      case "checkboxgroup":
+        return (
+            <div className="flex flex-wrap gap-4">
+              {field.options.map((option, index) => {
+                const isChecked = Array.isArray(value) && value.includes(option.value);
+                
+                return (
+                  <label
+                      key={index}
+                      className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <div className="relative">
+                      <input
+                          type="checkbox"
+                          name={field.key}
+                          value={option.value}
+                          checked={isChecked}
+                          onChange={(e) => {
+                            const currentValues = Array.isArray(value) ? value : [];
+                            let newValues;
+                            
+                            if (e.target.checked) {
+                              newValues = [...currentValues, option.value];
+                            } else {
+                              newValues = currentValues.filter(v => v !== option.value);
+                            }
+                            
+                            const syntheticEvent = {
+                              target: {
+                                name: field.key,
+                                value: newValues,
+                                type: 'checkboxgroup'
+                              }
+                            } as React.ChangeEvent<HTMLInputElement>;
+                            
+                            handleChange(syntheticEvent);
+                          }}
+                          className={inputClasses.checkbox}
+                      />
+                      <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className={`absolute w-4 h-4 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ${
+                            isChecked ? 'opacity-100' : 'opacity-0'
+                          }`}
+                      >
+                        <path d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span className={`text-sm transition-colors ${
+                      isChecked ? 'text-green-500' : 'text-zinc-300'
+                    }`}>
+                      {option.label}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+        );
+        default: // Gestisce text, number, password, file, ecc.
         return (
           <input
             type={field.type}

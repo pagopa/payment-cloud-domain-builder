@@ -1,5 +1,6 @@
 // components/ui/Navbar.tsx
 import React from 'react';
+import { TypewriterText } from './TypewriterText';
 
 interface NavbarProps {
   title?: string;
@@ -47,7 +48,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
         </svg>
         <span className="text-xl font-bold tracking-tight text-indigo-200 font-mono drop-shadow">
-          {title}: <span className="text-zinc-100 font-normal">{subtitle}</span>
+          {title}: <TypewriterText
+                      text={subtitle}
+                      typingSpeed={80}
+                      deletingSpeed={40}
+                      pauseDuration={3500}
+                      className="text-zinc-100 font-normal"
+                  />
         </span>
       </div>
 
