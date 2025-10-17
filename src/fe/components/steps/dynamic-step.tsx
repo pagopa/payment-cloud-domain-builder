@@ -128,7 +128,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               <input
                 type="checkbox"
                 name={field.key}
-                checked={value}
+                defaultChecked={field.value}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
                 id={field.key}
