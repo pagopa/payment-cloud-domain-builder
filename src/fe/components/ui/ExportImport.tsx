@@ -29,21 +29,17 @@ export const ExportImport: React.FC<ExportImportProps> = ({
           if (importedData.formData) {
             console.log('📦 Imported data:', importedData);
             
-            // ✅ Aggiorna i formData
             updateFormData(importedData.formData);
             
-            // ✅ Rileva i componenti attivi in modo più intelligente
             const activeComponents: string[] = [];
             
             Object.keys(formConfig.steps).forEach(stepKey => {
               const step = formConfig.steps[stepKey];
               
-              // Salta gli step di default
               if (step.default) return;
               
               console.log(`🔍 Checking step: ${stepKey}`);
               
-              // Strategia 1: Cerca campi "include_*"
               const includeField = step.formFields.find(
                 field => field.key.startsWith('include_') && field.type === 'hidden'
               );
@@ -59,10 +55,7 @@ export const ExportImport: React.FC<ExportImportProps> = ({
                 }
               }
               
-              // Strategia 2: Controlla se ci sono campi valorizzati per questo step
-              // (se almeno un campo non-hidden del componente ha un valore, attivalo)
               const hasValues = step.formFields.some(field => {
-                // Ignora campi hidden e include_*
                 if (field.type === 'hidden' || field.key.startsWith('include_')) {
                   return false;
                 }
@@ -85,7 +78,6 @@ export const ExportImport: React.FC<ExportImportProps> = ({
             
             console.log('🎯 Active components detected:', activeComponents);
             
-            // ✅ Notifica i componenti da attivare
             if (onComponentsImport) {
               if (activeComponents.length > 0) {
                 onComponentsImport(activeComponents);
@@ -94,7 +86,6 @@ export const ExportImport: React.FC<ExportImportProps> = ({
               }
             }
             
-            // ✅ Mostra notifica di successo
             const notification = document.createElement('div');
             notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-up';
             notification.innerHTML = `
@@ -115,7 +106,6 @@ export const ExportImport: React.FC<ExportImportProps> = ({
         } catch (error) {
           console.error('❌ Error parsing JSON file:', error);
           
-          // ✅ Mostra notifica di errore
           const errorNotification = document.createElement('div');
           errorNotification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
           errorNotification.innerHTML = `

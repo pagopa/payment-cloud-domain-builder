@@ -5,7 +5,6 @@ import { MdLockOutline } from "react-icons/md"; // Icona di blocco per password
 
 const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
 
-// Interfaccia per il profilo utente
 interface UserProfile {
   name: string;
   email: string;
@@ -17,7 +16,6 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Funzione per decodificare il JWT token di Google
   const decodeJWT = (token: string): UserProfile | null => {
     try {
       const base64Url = token.split('.')[1];
@@ -41,12 +39,10 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
     }
   };
 
-  // Funzione per gestire il login "fake" tramite credenziali admin
   const handleFakeLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (username === "admin" && password === "admin") {
       setError("");
-      // ✅ Passa un profilo "fake" con l'username inserito
       onLoginSuccess({
         name: username,
         email: `${username}@local.dev`,

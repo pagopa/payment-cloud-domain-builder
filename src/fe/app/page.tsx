@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
-// import { componentsMap } from '../components/componentsMap';
 import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
 import { ExportImport } from '../components/ui/ExportImport';
@@ -42,7 +41,6 @@ export default function Wizard() {
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [errorDetails, setErrorDetails] = useState<string>('');
 
-  // ✅ Aggiungi uno stato di loading iniziale
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<{
@@ -62,7 +60,6 @@ export default function Wizard() {
 
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
 
-  // ✅ Funzione per generare un avatar pixelato stile GitHub Identicon
   const generatePixelAvatar = (username: string = 'admin') => {
     // Hash per generare pattern consistente
     const hashCode = (str: string) => {
@@ -102,7 +99,6 @@ export default function Wizard() {
     console.log('Mode changed to:', mode);
   };
 
-  // ✅ Login localStorage persistence - aggiorna con setIsLoadingAuth
   useEffect(() => {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
     const savedProfile = localStorage.getItem('userProfile');
@@ -118,11 +114,9 @@ export default function Wizard() {
       }
     }
     
-    // ✅ Termina il caricamento
     setIsLoadingAuth(false);
   }, []);
 
-  // ✅ Funzione login aggiornata
   const handleLoginSuccess = (profile?: { name: string; email: string; imageUrl: string }) => {
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "true");
@@ -133,7 +127,6 @@ export default function Wizard() {
     }
   };
 
-  // ✅ Funzione logout aggiornata
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserProfile(null);
@@ -252,7 +245,6 @@ const handleGenerateWorkflow = async () => {
             </button>
           </div>
 
-          {/* ✅ Profilo utente con avatar pixelato */}
           <div className="flex items-center gap-3 mt-4 p-3 bg-zinc-800 rounded-lg border border-zinc-700">
             {userProfile?.imageUrl ? (
               // Avatar per utenti Google
@@ -433,7 +425,6 @@ const handleGenerateWorkflow = async () => {
     );
   };
 
-  // ✅ Mostra uno spinner durante il caricamento iniziale
   if (isLoadingAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-zinc-900">
