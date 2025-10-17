@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useWizard } from '../hooks/useWizard';
-// import { componentsMap } from '../components/componentsMap';
 import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
 import { ExportImport } from '../components/ui/ExportImport';
@@ -42,42 +41,97 @@ export default function Wizard() {
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [errorDetails, setErrorDetails] = useState<string>('');
 
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userProfile, setUserProfile] = useState<{
+    name: string;
+    email: string;
+    imageUrl: string;
+  } | null>(null);
+
   // Mode state per la navbar
   const [currentMode, setCurrentMode] = useState<'domain-builder' | 'idh-advisor'>('domain-builder');
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // Stato inizialmente "null" per evitare rendering
+
+  interface UserProfile {
+    name?: string;
+    email?: string;
+    imageUrl?: string;
+  }
 
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
+
+  const generatePixelAvatar = (username: string = 'admin') => {
+    // Hash per generare pattern consistente
+    const hashCode = (str: string) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return Math.abs(hash);
+    };
+
+    const hash = hashCode(username);
+    
+    // Genera colore HSL deterministico
+    const hue = hash % 360;
+    const saturation = 65 + (hash % 20);
+    const lightness = 50 + ((hash >> 8) % 15);
+    const bgColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    
+    // Genera pattern 5x5 (simmetrico)
+    const grid: boolean[][] = [];
+    for (let i = 0; i < 5; i++) {
+      const row: boolean[] = [];
+      for (let j = 0; j < 3; j++) {
+        // Usa bit dell'hash per determinare se il pixel è attivo
+        const bitIndex = i * 3 + j;
+        row.push(((hash >> bitIndex) & 1) === 1);
+      }
+      // Specchia per simmetria (colonne 3 e 4 sono specchiate da 1 e 0)
+      grid.push([...row, row[1], row[0]]);
+    }
+
+    return { bgColor, grid };
+  };
 
   const handleModeChange = (mode: 'domain-builder' | 'idh-advisor') => {
     setCurrentMode(mode);
     console.log('Mode changed to:', mode);
   };
 
-  // Login localStorage persistence
   useEffect(() => {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
+    const savedProfile = localStorage.getItem('userProfile');
+    
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+      if (savedProfile) {
+        try {
+          setUserProfile(JSON.parse(savedProfile));
+        } catch (e) {
+          console.error('Errore nel recupero del profilo:', e);
+        }
+      }
     }
+    
+    setIsLoadingAuth(false);
   }, []);
 
-  // Callback login
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (profile?: { name: string; email: string; imageUrl: string }) => {
     setIsLoggedIn(true);
     localStorage.setItem("isLoggedIn", "true");
-    // Imposta scadenza: es. 2 ore da ora
-    const twoHoursMs = 2 * 60 * 60 * 1000;
-    localStorage.setItem("isLoggedInExpiry", String(Date.now() + twoHoursMs));
+
+    if (profile) {
+      setUserProfile(profile);
+      localStorage.setItem('userProfile', JSON.stringify(profile));
+    }
   };
 
-  // Callback logout
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserProfile(null);
     localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("isLoggedInExpiry");
-    resetWizard();
+    localStorage.removeItem('userProfile');
   };
 
 const handleGenerateWorkflow = async () => {
@@ -140,7 +194,7 @@ const handleGenerateWorkflow = async () => {
 
     // Domain Builder mode (contenuto originale)
     return (
-      <div className="flex flex-col lg:flex-row gap-6 p-3 lg:p-6 mx-auto max-w-10xl mt-8 lg:mt-16">
+      <div className="flex flex-col lg:flex-row gap-6 p-3 lg:p-6 mx-auto max-w-10xl mt-8 lg:mt-16 justify-center">
         {/* Components sidebar */}
         <div className="w-full lg:w-auto">
           <ComponentSelector
@@ -149,7 +203,18 @@ const handleGenerateWorkflow = async () => {
             currentStep={step}
           />
           <div className="mt-3">
-            <ExportImport formData={formData} />
+            <ExportImport
+                formData={formData}
+                updateFormData={updateFormData}
+                onComponentsImport={(components) => {
+                  // ✅ Attiva automaticamente i componenti importati
+                  components.forEach(component => {
+                    if (!selectedComponents.includes(component)) {
+                      toggleComponent(component);
+                    }
+                  });
+                }}
+            />
           </div>
 
           <div className="mt-3">
@@ -180,13 +245,59 @@ const handleGenerateWorkflow = async () => {
             </button>
           </div>
 
+          <div className="flex items-center gap-3 mt-4 p-3 bg-zinc-800 rounded-lg border border-zinc-700">
+            {userProfile?.imageUrl ? (
+              // Avatar per utenti Google
+              <img
+                src={userProfile.imageUrl}
+                alt="Profile"
+                className="w-10 h-10 rounded-full border-2 border-zinc-600"
+              />
+            ) : (
+              // Avatar pixelato stile GitHub Identicon
+              (() => {
+                const username = userProfile?.name || 'admin';
+                const { bgColor, grid } = generatePixelAvatar(username);
+                return (
+                  <div 
+                    className="w-10 h-10 rounded-full border-2 border-zinc-600 shadow-lg overflow-hidden"
+                    style={{ backgroundColor: '#1a1a1a' }}
+                  >
+                    <div className="w-full h-full p-1 grid grid-cols-5 gap-[1px]">
+                      {grid.flat().map((isActive, index) => (
+                        <div
+                          key={index}
+                          className="rounded-[1px]"
+                          style={{
+                            backgroundColor: isActive ? bgColor : 'transparent'
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()
+            )}
+            <div className="flex flex-col flex-1">
+              {userProfile?.name ? (
+                <>
+                  <span className="text-zinc-200 font-medium text-sm">{userProfile.name}</span>
+                  <span className="text-zinc-400 text-xs">{userProfile.email}</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-zinc-200 font-medium text-sm">Admin User</span>
+                  <span className="text-zinc-400 text-xs">Local Account</span>
+                </>
+              )}
+            </div>
+          </div>
+          <Logout onLogout={handleLogout}/>
         </div>
-
-        <Logout onLogout={handleLogout} />
 
 
         {/* Main content */}
-        <div className={`p-4 lg:p-6 flex-1 w-full max-w-5xl bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
+        <div className={`p-4 lg:p-6 flex-1 min-w-0 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
           {showSummary ? (
             <TerraformPreview
               formData={formData}
@@ -314,9 +425,15 @@ const handleGenerateWorkflow = async () => {
     );
   };
 
-
-  if (isLoggedIn === null) {
-    return null;
+  if (isLoadingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-zinc-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500 mx-auto mb-4"></div>
+          <p className="text-zinc-400">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   const defaultSteps = Object.keys(formConfig.steps).filter(
@@ -333,10 +450,8 @@ const handleGenerateWorkflow = async () => {
     <>
       <div>
         {!isLoggedIn ? (
-          // Mostra la componente Login se l'utente non è loggato
           <Login onLoginSuccess={handleLoginSuccess} />
         ) : (
-          // Mostra il contenuto principale dell'applicazione
           <>
             <Navbar mode={currentMode} onModeChange={handleModeChange} />
             {renderContent()}

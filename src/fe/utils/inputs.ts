@@ -12,7 +12,7 @@
  * - key: Unique identifier for the field
  * - type: Input type ('text', 'boolean', 'select', 'radio', 'hidden')
  * - placeholder: Helper text shown in the input (optional)
- * - value: Default value (optional)
+ * - value: Default value (optional, true or false not string if type='boolean')
  * - options: Array of {label, value} for select inputs (required for type='select')
  *
  * Example:
@@ -44,8 +44,14 @@ export const formConfig = {
         { name: "State Storage Account RG Name", key: "storage_account_state_rg_name", type: "text", placeholder: "e.g. terraform-state-rg" },
         { name: "Subscription Name", key: "subscription", type: "text", placeholder: "e.g. DEV-PagoPA" },
         { name: "Product Name", key: "product_name", type: "text", placeholder: "e.g. pagopa" },
-        { name: "Location", key: "location", type: "text", placeholder: "e.g. westeurope" },
-        { name: "Tag Source", key: "tag_source", type: "text", placeholder: "e.g. module.tag_config.tags" },
+        { name: "Location", key: "location", type: "select",
+          options: [
+            { label: "West Europe", value: "westeurope" },
+            { label: "Italy North", value: "italynorth" }
+          ]
+        },
+
+        { name: "Use Tag config?", key: "tag_source", type: "boolean", value: true, placeholder: "e.g. module.tag_config.tags" },
       ],
     },
     monitoring: {
@@ -148,6 +154,13 @@ export const formConfig = {
         name: "Redis cluster",
         formFields: [
           { name: "include_redis", key: "include_redis", type: "hidden", value: "true" },
+          { name: "test", key: "test_redis", type: "checkboxgroup",
+            options: [
+              { label: "Feature A", value: "feature_a", checked: true },
+              { label: "Feature B", value: "feature_b" },
+              { label: "Feature C", value: "feature_c" }
+            ]
+          },
         ]
     },
     postgresql: {

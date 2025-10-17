@@ -1,4 +1,3 @@
-import { CustomFormData } from '../types/form';
 
 export const filterEmptyFields = <T extends Record<string, any>>(data: T): Partial<T> => {
   const filtered: Record<string, any> = {};

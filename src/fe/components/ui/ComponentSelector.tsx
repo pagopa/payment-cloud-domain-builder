@@ -18,9 +18,6 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
 
   const components = Object.keys(formConfig.steps)
     .filter(component => !formConfig.steps[component].default);
-//     .map(component =>
-//       formConfig.steps[component].name
-//     );
 
   return (
     <div className="bg-zinc-900 rounded-2xl p-4 w-72 border border-zinc-700 h-fit">
