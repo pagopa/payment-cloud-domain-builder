@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useWizard } from '../hooks/useWizard';
 import { DynamicStep } from '../components/steps/dynamic-step';
 import { ComponentSelector } from '../components/ui/ComponentSelector';
@@ -15,6 +16,7 @@ import { STEP_COLORS } from '../utils/constants';
 import { Login } from "../components/ui/Login";
 import { Logout } from "../components/ui/Logout";
 import { formConfig } from '../utils/inputs';
+import { IDHBuilderTemplates } from '../components/ui/IDHBuilderTemplates';
 
 export default function Wizard() {
   const {
@@ -52,12 +54,6 @@ export default function Wizard() {
   // Mode state per la navbar
   const [currentMode, setCurrentMode] = useState<'domain-builder' | 'idh-advisor'>('domain-builder');
 
-  interface UserProfile {
-    name?: string;
-    email?: string;
-    imageUrl?: string;
-  }
-
   const stepColor = STEP_COLORS[step as keyof typeof STEP_COLORS];
 
   const generatePixelAvatar = (username: string = 'admin') => {
@@ -71,13 +67,13 @@ export default function Wizard() {
     };
 
     const hash = hashCode(username);
-    
+
     // Genera colore HSL deterministico
     const hue = hash % 360;
     const saturation = 65 + (hash % 20);
     const lightness = 50 + ((hash >> 8) % 15);
     const bgColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    
+
     // Genera pattern 5x5 (simmetrico)
     const grid: boolean[][] = [];
     for (let i = 0; i < 5; i++) {
@@ -102,7 +98,7 @@ export default function Wizard() {
   useEffect(() => {
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
     const savedProfile = localStorage.getItem('userProfile');
-    
+
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
       if (savedProfile) {
@@ -113,7 +109,6 @@ export default function Wizard() {
         }
       }
     }
-    
     setIsLoadingAuth(false);
   }, []);
 
@@ -138,6 +133,30 @@ const handleGenerateWorkflow = async () => {
 
   if (!formData.domain_name || formData.domain_name.trim() === '') {
     setErrorDetails('Domain name is required before generating the workflow.');
+    setShowErrorModal(true);
+    return;
+  }
+
+  if (!formData.storage_account_state_name || formData.storage_account_state_name.trim() === '') {
+    setErrorDetails('State Storage Account Name is required before generating the workflow.');
+    setShowErrorModal(true);
+    return;
+  }
+
+  if (!formData.storage_account_container_state_name || formData.storage_account_container_state_name.trim() === '') {
+    setErrorDetails('State Storage Account Container Name is required before generating the workflow.');
+    setShowErrorModal(true);
+    return;
+  }
+
+  if (!formData.storage_account_state_rg_name || formData.storage_account_state_rg_name.trim() === '') {
+    setErrorDetails('State Storage Account RG Name is required before generating the workflow.');
+    setShowErrorModal(true);
+    return;
+  }
+
+  if (!formData.subscription || formData.subscription.trim() === '') {
+    setErrorDetails('Subscription is required before generating the workflow.');
     setShowErrorModal(true);
     return;
   }
@@ -176,14 +195,13 @@ const handleGenerateWorkflow = async () => {
   }
 };
 
-  // Renderizza contenuto diverso in base alla modalità
   const renderContent = () => {
     if (currentMode === 'idh-advisor') {
       return (
         <div className="flex justify-center items-center min-h-[60vh]">
-          <div className="text-center p-8 bg-zinc-800 rounded-2xl border border-zinc-700">
+          <div className="text-center p-8 bg-zinc-100 dark:bg-zinc-800 rounded-2xl border border-zinc-300 dark:border-zinc-700">
             <h2 className="text-2xl font-bold text-indigo-400 mb-4">IDH Module Advisor</h2>
-            <p className="text-zinc-300 mb-6">Coming soon! This feature will help you choose the best IDH modules for your infrastructure.</p>
+            <p className="text-zinc-600 dark:text-zinc-300 mb-6">Coming soon! This feature will help you choose the best IDH modules for your infrastructure.</p>
             <div className="text-zinc-500">
               🚧 Under development 🚧
             </div>
@@ -197,6 +215,19 @@ const handleGenerateWorkflow = async () => {
       <div className="flex flex-col lg:flex-row gap-6 p-3 lg:p-6 mx-auto max-w-10xl mt-8 lg:mt-16 justify-center">
         {/* Components sidebar */}
         <div className="w-full lg:w-auto">
+          <div className="flex flex-col flex-1 gap-6 mt-3">
+            <IDHBuilderTemplates
+                updateFormData={updateFormData}
+                onComponentsImport={(components) => {
+                  components.forEach(component => {
+                    if (!selectedComponents.includes(component)) {
+                      toggleComponent(component);
+                    }
+                  });
+                }}
+                currentStep={step}
+            />
+          </div>
           <ComponentSelector
             selectedComponents={selectedComponents}
             onToggle={toggleComponent}
@@ -204,16 +235,15 @@ const handleGenerateWorkflow = async () => {
           />
           <div className="mt-3">
             <ExportImport
-                formData={formData}
-                updateFormData={updateFormData}
-                onComponentsImport={(components) => {
-                  // ✅ Attiva automaticamente i componenti importati
-                  components.forEach(component => {
-                    if (!selectedComponents.includes(component)) {
-                      toggleComponent(component);
-                    }
-                  });
-                }}
+              formData={formData}
+              updateFormData={updateFormData}
+              onComponentsImport={(components) => {
+                components.forEach(component => {
+                  if (!selectedComponents.includes(component)) {
+                    toggleComponent(component);
+                  }
+                });
+              }}
             />
           </div>
 
@@ -222,13 +252,13 @@ const handleGenerateWorkflow = async () => {
               onClick={(e) => {
                 e.preventDefault();
                 const modal = document.createElement('div');
-                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.className = 'fixed inset-0 bg-white/80 dark:bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm';
                 modal.innerHTML = `
-                  <div class="bg-zinc-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-                    <h3 class="text-xl font-semibold text-white mb-4">Reset Wizard</h3>
-                    <p class="text-zinc-300 mb-6">Are you sure you want to reset the wizard? All data will be lost.</p>
+                  <div class="bg-zinc-100 dark:bg-zinc-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+                    <h3 class="text-xl font-semibold text-zinc-800 dark:text-zinc-400 mb-4">Reset Wizard</h3>
+                    <p class="text-zinc-600 dark:text-zinc-300 mb-6">Are you sure you want to reset the wizard? All data will be lost.</p>
                     <div class="flex justify-end gap-4">
-                      <button class="px-4 py-2 text-zinc-300 hover:text-white" onclick="this.closest('.fixed').remove()">Cancel</button>
+                      <button class="px-4 py-2 text-zinc-600 dark:text-zinc-300 hover:text-white" onclick="this.closest('.fixed').remove()">Cancel</button>
                       <button class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded" onclick="this.closest('.fixed').remove(); window.resetWizardConfirmed();">Reset</button>
                     </div>
                   </div>
@@ -245,21 +275,21 @@ const handleGenerateWorkflow = async () => {
             </button>
           </div>
 
-          <div className="flex items-center gap-3 mt-4 p-3 bg-zinc-800 rounded-lg border border-zinc-700">
+          <div className="flex items-center gap-3 mt-3 p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
             {userProfile?.imageUrl ? (
-              // Avatar per utenti Google
-              <img
-                src={userProfile.imageUrl}
-                alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-zinc-600"
+              <Image
+                  src={userProfile.imageUrl}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="rounded-full border-2 border-zinc-600"
               />
             ) : (
-              // Avatar pixelato stile GitHub Identicon
               (() => {
                 const username = userProfile?.name || 'admin';
                 const { bgColor, grid } = generatePixelAvatar(username);
                 return (
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-full border-2 border-zinc-600 shadow-lg overflow-hidden"
                     style={{ backgroundColor: '#1a1a1a' }}
                   >
@@ -281,24 +311,24 @@ const handleGenerateWorkflow = async () => {
             <div className="flex flex-col flex-1">
               {userProfile?.name ? (
                 <>
-                  <span className="text-zinc-200 font-medium text-sm">{userProfile.name}</span>
-                  <span className="text-zinc-400 text-xs">{userProfile.email}</span>
+                  <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">{userProfile.name}</span>
+                  <span className="text-zinc-800 dark:text-zinc-400 text-xs">{userProfile.email}</span>
                 </>
               ) : (
                 <>
-                  <span className="text-zinc-200 font-medium text-sm">Admin User</span>
-                  <span className="text-zinc-400 text-xs">Local Account</span>
+                  <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">Admin User</span>
+                  <span className="text-zinc-800 dark:text-zinc-400 text-xs">Local Account</span>
                 </>
               )}
             </div>
           </div>
+
           <Logout onLogout={handleLogout}/>
         </div>
 
 
         {/* Main content */}
-        <div className={`p-4 lg:p-6 flex-1 min-w-0 bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 ${stepColor.shadow} transition-shadow`}>
-          {showSummary ? (
+        <div className={`p-4 lg:p-6 flex-1 min-w-0 bg-white dark:bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-300 dark:border-zinc-300 dark:border-zinc-700 ${stepColor.shadow} transition-shadow`}>          {showSummary ? (
             <TerraformPreview
               formData={formData}
               handleGenerateWorkflow={handleGenerateWorkflow}
@@ -430,7 +460,7 @@ const handleGenerateWorkflow = async () => {
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-zinc-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500 mx-auto mb-4"></div>
-          <p className="text-zinc-400">Loading...</p>
+          <p className="text-zinc-800 dark:text-zinc-400">Loading...</p>
         </div>
       </div>
     );
@@ -469,7 +499,7 @@ const handleGenerateWorkflow = async () => {
         <div className="text-center p-8">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-600 mx-auto mb-4"></div>
           <h3 className="text-xl font-semibold text-white mb-2">Generating Workflow...</h3>
-          <p className="text-zinc-400">Please wait while we create your GitHub Actions workflow.</p>
+          <p className="text-zinc-800 dark:text-zinc-400">Please wait while we create your GitHub Actions workflow.</p>
         </div>
       </Modal>
 
@@ -486,12 +516,12 @@ const handleGenerateWorkflow = async () => {
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">Workflow Generated Successfully!</h3>
-          <p className="text-zinc-400 mb-4">Your GitHub Actions workflow has been created.</p>
+          <p className="text-zinc-800 dark:text-zinc-400 mb-4">Your GitHub Actions workflow has been created.</p>
 
           {apiResponse && (
-            <div className="bg-zinc-800 rounded-lg p-4 text-left">
-              <p className="text-sm text-zinc-300 mb-2">Response Details:</p>
-              <div className="text-xs text-zinc-400 space-y-1">
+            <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-4 text-left">
+              <p className="text-sm text-zinc-600 dark:text-zinc-300 mb-2">Response Details:</p>
+              <div className="text-xs text-zinc-800 dark:text-zinc-400 space-y-1">
                 <p>Status: <span className="text-green-400">{apiResponse.status}</span></p>
                 <p>Duration: <span className="text-blue-400">{apiResponse.duration}ms</span></p>
                 {apiResponse.requestId && <p>Request ID: <span className="text-yellow-400">{apiResponse.requestId}</span></p>}
