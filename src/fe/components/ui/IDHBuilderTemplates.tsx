@@ -43,7 +43,7 @@ const AVAILABLE_TEMPLATES: Template[] = [
     name: '[PAGOPA] Meme Domain - Base WEU',
     description: 'Configurazione completa con APIM, AKS, Redis, Storage Account e GitHub Runner',
     icon: <FaMicrosoft className="text-4xl" />,
-    filename: 'base_meme_weu.json',
+    filename: 'pagopa_basic_itn_domain.json',
     components: [
       { name: 'APIM', icon: <FaNetworkWired />, color: 'text-blue-400' },
       { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
