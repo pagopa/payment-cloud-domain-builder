@@ -14,6 +14,7 @@ import { triggerGithubWorkflow, ApiResponse } from '../services/api';
 import { STEP_COLORS } from '../utils/constants';
 import { Login } from "../components/ui/Login";
 import { Logout } from "../components/ui/Logout";
+import { IdhAdvisor } from "../components/ui/IDHAdvisor";
 import { formConfig } from '../utils/inputs';
 
 export default function Wizard() {
@@ -180,15 +181,19 @@ const handleGenerateWorkflow = async () => {
   const renderContent = () => {
     if (currentMode === 'idh-advisor') {
       return (
-        <div className="flex justify-center items-center min-h-[60vh]">
-          <div className="text-center p-8 bg-zinc-800 rounded-2xl border border-zinc-700">
-            <h2 className="text-2xl font-bold text-indigo-400 mb-4">IDH Module Advisor</h2>
-            <p className="text-zinc-300 mb-6">Coming soon! This feature will help you choose the best IDH modules for your infrastructure.</p>
-            <div className="text-zinc-500">
-              🚧 Under development 🚧
-            </div>
-          </div>
-        </div>
+          <>
+            <IdhAdvisor/>
+            {/*<div className="flex justify-center items-center min-h-[60vh]">*/}
+            {/*  <div className="text-center p-8 bg-zinc-800 rounded-2xl border border-zinc-700">*/}
+            {/*    <h2 className="text-2xl font-bold text-indigo-400 mb-4">IDH Module Advisor</h2>*/}
+            {/*    <p className="text-zinc-300 mb-6">Coming soon! This feature will help you choose the best IDH modules*/}
+            {/*      for your infrastructure.</p>*/}
+            {/*    <div className="text-zinc-500">*/}
+            {/*      🚧 Under development 🚧*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
+          </>
       );
     }
 
