@@ -41,7 +41,7 @@
         "gh_runner_pat_key": "pagopa-platform-domain-github-bot-cd-pat",
         "gh_runner_pat_kv_name": "${local.project}-kv",
         "gh_runner_pat_kv_rg": "${local.project}-sec-rg",
-        "include_aks": true,
+        "include_kubernetes": true,
         "aks_name": "${local.product}-${var.location_short}-${var.env}-aks",
         "aks_rg_name": "${local.product}-${var.location_short}-${var.env}-aks-rg",
         "ingress_load_balancer_ip": "10.3.2.250",
