@@ -141,9 +141,13 @@ export const formConfig = {
       formFields: [
         { name: "include_storage_account", key: "include_storage_account", type: "hidden", value: "true" },
         { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
-        { name: "Storage Account Data Types", key: "storage_account_data_types", type: "select",
+        { name: "Storage Account Data Types", key: "storage_account_data_types", type: "checkboxgroup",
           options: [
             { label: "Blob", value: "blob" },
+            { label: "DFS", value: "dfs" },
+            { label: "File", value: "file" },
+            { label: "Web", value: "web" },
+            { label: "Table", value: "table" },
             { label: "Queue", value: "queue" }
           ]
         },
@@ -154,13 +158,6 @@ export const formConfig = {
         name: "Redis cluster",
         formFields: [
           { name: "include_redis", key: "include_redis", type: "hidden", value: "true" },
-          { name: "test", key: "test_redis", type: "checkboxgroup",
-            options: [
-              { label: "Feature A", value: "feature_a", checked: true },
-              { label: "Feature B", value: "feature_b" },
-              { label: "Feature C", value: "feature_c" }
-            ]
-          },
         ]
     },
     postgresql: {
