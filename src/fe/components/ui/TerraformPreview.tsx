@@ -40,7 +40,7 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
                 .map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className="hover:bg-white dark:bg-zinc-900 transition-colors duration-150"
+                    className="dark:hover:bg-zinc-700 dark:bg-zinc-900 transition-colors duration-150"
                   >
                     <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800">{row.field}</td>
                     <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800 font-semibold text-zinc-900 dark:text-zinc-100">
