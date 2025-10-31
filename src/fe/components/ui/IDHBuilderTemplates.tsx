@@ -62,17 +62,6 @@ const AVAILABLE_TEMPLATES: Template[] = [
       { name: 'Network', icon: <FaNetworkWired />, color: 'text-purple-400' },
       { name: 'Database', icon: <FaDatabase />, color: 'text-yellow-400' }
     ]
-  },
-  {
-    name: 'Altro dominio Y',
-    description: 'Configurazione ottimizzata altro dominio Y',
-    icon: <FaCloud className="text-4xl" />,
-    filename: 'y-setup.json',
-    components: [
-      { name: 'Cloud', icon: <FaCloud />, color: 'text-blue-300' },
-      { name: 'Docker', icon: <FaDocker />, color: 'text-blue-500' },
-      { name: 'Security', icon: <FaLock />, color: 'text-orange-400' }
-    ]
   }
 ];
 
