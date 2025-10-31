@@ -129,7 +129,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti AKS",
       formFields: [
-        { name: "include_aks", key: "include_aks", type: "hidden", value: "true" },
+        { name: "include_kubernetes", key: "include_kubernetes", type: "hidden", value: "true" },
         { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
         { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
         { name: "Ingress Load Balancer IP", key: "ingress_load_balancer_ip", type: "text", placeholder: "e.g. 10.1.100.250" },
