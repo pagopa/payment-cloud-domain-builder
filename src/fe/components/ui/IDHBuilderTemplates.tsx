@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { formConfig } from '../../utils/inputs';
 import { STEP_COLORS } from '../../utils/constants';
+import {templatesConfig} from '../../utils/templates';
 import {
   FaCloud,
   FaDatabase,
@@ -23,9 +24,8 @@ import { VscAzureDevops } from "react-icons/vsc";
 interface Template {
   name: string;
   description: string;
-  icon: React.ReactNode;
-  filename: string;
-  components: ComponentIcon[];
+  icon: string;
+  template: object;
 }
 
 interface ComponentIcon {
@@ -40,42 +40,6 @@ interface IDHBuilderTemplatesProps {
   currentStep: number;
 }
 
-const AVAILABLE_TEMPLATES: Template[] = [
-  {
-    name: '[PAGOPA] Meme Domain - Base WEU',
-    description: 'Configurazione completa con APIM, AKS, Redis, Storage Account e GitHub Runner',
-    icon: <FaMicrosoft className="text-4xl" />,
-    filename: 'base_meme_weu.json',
-    components: [
-      { name: 'APIM', icon: <FaNetworkWired />, color: 'text-blue-400' },
-      { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
-      { name: 'GitHub', icon: <FaGithub />, color: 'text-gray-400' }
-    ]
-  },
-  {
-    name: '[PAGOPA] Base Domain - WEU',
-    description: 'Configurazione completa con APIM, AKS, Redis, Storage Account e GitHub Runner',
-    icon: <AiOutlineDatabase className="text-4xl" />,
-    filename: 'pagopa_basic_itn_domain.json',
-    components: [
-      { name: 'APIM', icon: <FaNetworkWired />, color: 'text-blue-400' },
-      { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
-      { name: 'GitHub', icon: <FaGithub />, color: 'text-gray-400' },
-      { name: 'DevOps', icon: <VscAzureDevops />, color: 'text-gray-400' }
-    ]
-  },
-  {
-    name: 'Altro dominio X',
-    description: 'Setup base con monitoring, network e componenti essenziali di altro dominio X',
-    icon: <SiKubernetes className="text-4xl" />,
-    filename: 'x-infrastructure.json',
-    components: [
-      { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
-      { name: 'Network', icon: <FaNetworkWired />, color: 'text-purple-400' },
-      { name: 'Database', icon: <FaDatabase />, color: 'text-yellow-400' }
-    ]
-  }
-];
 
 export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
   updateFormData,
@@ -88,8 +52,9 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
 
   const buttonColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
 
+
   useEffect(() => {
-    setTemplates(AVAILABLE_TEMPLATES);
+    setTemplates(templatesConfig);
   }, []);
 
   const detectActiveComponents = (formData: any) => { /* eslint-disable-line  @typescript-eslint/no-explicit-any */
@@ -148,20 +113,9 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
     try {
       console.log('📋 Loading template:', template.name);
 
-      const response = await fetch(`/templates/${template.filename}`);
+        updateFormData(template.template);
 
-      if (!response.ok) {
-        throw new Error(`Failed to load template: ${response.statusText}`);
-      }
-
-      const templateData = await response.json();
-
-      if (templateData.formData) {
-        console.log('📦 Template data loaded:', templateData);
-
-        updateFormData(templateData.formData);
-
-        const activeComponents = detectActiveComponents(templateData.formData);
+        const activeComponents = detectActiveComponents(template.template);
 
         console.log('🎯 Active components detected:', activeComponents);
 
@@ -194,7 +148,7 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
         }, 3000);
 
         setIsOpen(false);
-      }
+
     } catch (error) {
       console.error('❌ Error loading template:', error);
 
@@ -264,7 +218,8 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
                     >
                       <div className="flex items-start gap-4">
                         <div className="text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all">
-                          {template.icon}
+                                <template.icon className="text-4xl" />
+                            {/*FIXME icon rendering*/}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className={`text-lg font-semibold text-zinc-800 dark:text-zinc-400 group-hover:${buttonColor.text} transition-colors`}>
@@ -275,25 +230,57 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
                           </p>
 
                           <div className="mt-3 flex flex-wrap gap-2">
-                            {template.components.map((comp, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
-                                    title={comp.name}
-                                >
-                              <span className={`${comp.color} text-sm`}>
-                                {comp.icon}
-                              </span>
-                                  <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
-                                {comp.name}
-                              </span>
-                                </div>
-                            ))}
+                              {Object.keys(template.template).filter(k => k.startsWith('include')).filter(k => template.template[k] === true).map((comp, idx) => {
+                                        switch(comp.substring(8)) {
+                                            case  'apim':
+                                                return (
+                                                    <div key={idx}
+                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
+                                                         title='apim'
+                                                    >
+                                                        <span className={`text-blue-400 text-sm`}>
+                                                          <FaNetworkWired />
+                                                        </span>
+                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+                                                          APIM
+                                                        </span>
+                                                    </div>
+                                                )
+                                            case 'kubernetes':
+                                                return(
+                                                    <div key={idx}
+                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
+                                                         title='kubernetes'
+                                                    >
+                                                        <span className={`text-blue-400 text-sm`}>
+                                                          <SiKubernetes />
+                                                        </span>
+                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+                                                          AKS
+                                                        </span>
+                                                    </div>
+                                                )
+                                            case 'devops':
+                                                return(
+                                                    <div key={idx}
+                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
+                                                         title='DevOps'
+                                                    >
+                                                        <span className={`text-blue-400 text-sm`}>
+                                                          <VscAzureDevops />
+                                                        </span>
+                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+                                                          DevOps
+                                                        </span>
+                                                    </div>
+                                                )
+                                        }
+
+                                    }
+                              )}
                           </div>
 
-                          <p className="text-xs text-zinc-500 mt-3 font-mono">
-                            📄 {template.filename}
-                          </p>
+
                         </div>
                         <div className="flex items-center">
                           {loading ? (
