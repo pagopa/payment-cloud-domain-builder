@@ -13,7 +13,7 @@ import {
 } from 'react-icons/si';
 import { MdStorage } from 'react-icons/md';
 import { AiOutlineDatabase } from "react-icons/ai";
-import { VscAzureDevops } from "react-icons/vsc";
+import { VscAzureDevops, VscAzure } from "react-icons/vsc";
 
 
 export const COMPONENT_CONFIG = {
@@ -79,7 +79,7 @@ export const templatesConfig = [
     {
         name: 'pagoPA basic ITN domain',
         description: 'Setup per dominio pagoPA basato in Italy North con risorse base. Include riferimenti APIM, AKS e CI/CD',
-        icon: FaMicrosoft,
+        icon: VscAzure,
         template: {
             "location_mapping": {},
             "location_string_mapping": {},
@@ -136,7 +136,7 @@ export const templatesConfig = [
     {
         name: 'test template',
         description: 'prova',
-        icon: FaGithub,
+        icon: VscAzure,
         template: {
             "location_mapping": {},
             "location_string_mapping": {},
