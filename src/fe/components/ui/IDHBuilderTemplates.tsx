@@ -2,29 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { formConfig } from '../../utils/inputs';
 import { STEP_COLORS } from '../../utils/constants';
-import {templatesConfig} from '../../utils/templates';
-import {
-  FaCloud,
-  FaDatabase,
-  FaMicrosoft,
-  FaNetworkWired,
-  FaLock,
-  FaGithub,
-  FaDocker
-} from 'react-icons/fa';
-import {
-  SiKubernetes,
-  SiRedis,
-} from 'react-icons/si';
-import { MdStorage } from 'react-icons/md';
-import { AiOutlineDatabase } from "react-icons/ai";
-import { VscAzureDevops } from "react-icons/vsc";
+import {templatesConfig, COMPONENT_CONFIG} from '../../utils/templates';
 
 
 interface Template {
   name: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   template: object;
 }
 
@@ -108,6 +92,38 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
     return activeComponents;
   };
 
+  const ComponentBadge = ({
+                            icon: Icon,
+                            label,
+                            title
+                          }: {
+    icon: React.ComponentType;
+    label: string;
+    title: string;
+  }) => (
+      <div
+          className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
+          title={title}
+      >
+    <span className="text-blue-400 text-sm">
+      <Icon />
+    </span>
+        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+      {label}
+    </span>
+      </div>
+  );
+
+  const getIncludedComponents = (template: Template) => {
+    return Object.keys(template.template)
+        .filter(key => key.startsWith('include') && template.template[key] === true)
+        .map(key => key.substring(8))
+        .filter((componentType): componentType is keyof typeof COMPONENT_CONFIG =>
+            componentType in COMPONENT_CONFIG
+        );
+  };
+
+
   const handleTemplateSelect = async (template: Template) => {
     setLoading(true);
     try {
@@ -132,7 +148,7 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg">
               <div className="flex items-center gap-3">
               <span className="text-2xl">
-                {template.icon}
+                <template.icon className="text-4xl" />
               </span>
                 <div>
                   <div className="font-semibold">{template.name}</div>
@@ -218,8 +234,7 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
                     >
                       <div className="flex items-start gap-4">
                         <div className="text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all">
-                                <template.icon className="text-4xl" />
-                            {/*FIXME icon rendering*/}
+                          <template.icon className="text-4xl" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className={`text-lg font-semibold text-zinc-800 dark:text-zinc-400 group-hover:${buttonColor.text} transition-colors`}>
@@ -230,57 +245,18 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
                           </p>
 
                           <div className="mt-3 flex flex-wrap gap-2">
-                              {Object.keys(template.template).filter(k => k.startsWith('include')).filter(k => template.template[k] === true).map((comp, idx) => {
-                                        switch(comp.substring(8)) {
-                                            case  'apim':
-                                                return (
-                                                    <div key={idx}
-                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
-                                                         title='apim'
-                                                    >
-                                                        <span className={`text-blue-400 text-sm`}>
-                                                          <FaNetworkWired />
-                                                        </span>
-                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
-                                                          APIM
-                                                        </span>
-                                                    </div>
-                                                )
-                                            case 'kubernetes':
-                                                return(
-                                                    <div key={idx}
-                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
-                                                         title='kubernetes'
-                                                    >
-                                                        <span className={`text-blue-400 text-sm`}>
-                                                          <SiKubernetes />
-                                                        </span>
-                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
-                                                          AKS
-                                                        </span>
-                                                    </div>
-                                                )
-                                            case 'devops':
-                                                return(
-                                                    <div key={idx}
-                                                         className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
-                                                         title='DevOps'
-                                                    >
-                                                        <span className={`text-blue-400 text-sm`}>
-                                                          <VscAzureDevops />
-                                                        </span>
-                                                        <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
-                                                          DevOps
-                                                        </span>
-                                                    </div>
-                                                )
-                                        }
-
-                                    }
-                              )}
+                            {getIncludedComponents(template).map((componentType, idx) => {
+                              const config = COMPONENT_CONFIG[componentType];
+                              return (
+                                  <ComponentBadge
+                                      key={idx}
+                                      icon={config.icon}
+                                      label={config.label}
+                                      title={config.title}
+                                  />
+                              );
+                            })}
                           </div>
-
-
                         </div>
                         <div className="flex items-center">
                           {loading ? (

@@ -1,8 +1,85 @@
+import {
+  FaCloud,
+  FaDatabase,
+  FaMicrosoft,
+  FaNetworkWired,
+  FaLock,
+  FaGithub,
+  FaDocker
+} from 'react-icons/fa';
+import {
+  SiKubernetes,
+  SiRedis,
+} from 'react-icons/si';
+import { MdStorage } from 'react-icons/md';
+import { AiOutlineDatabase } from "react-icons/ai";
+import { VscAzureDevops } from "react-icons/vsc";
+
+
+export const COMPONENT_CONFIG = {
+  apim: {
+    icon: FaNetworkWired,
+    label: 'APIM',
+    title: 'apim'
+  },
+  kubernetes: {
+    icon: SiKubernetes,
+    label: 'AKS',
+    title: 'kubernetes'
+  },
+  devops: {
+    icon: VscAzureDevops,
+    label: 'DevOps',
+    title: 'DevOps'
+  },
+  github_runner: {
+    icon: FaGithub,
+    label: 'GitHub Runner',
+    title: 'GitHub'
+  },
+  cosmos: {
+    icon: AiOutlineDatabase,
+    label: 'Cosmos DB',
+    title: 'Cosmos DB'
+  },
+  cosmosdb: {
+    icon: AiOutlineDatabase,
+    label: 'Cosmos DB',
+    title: 'Cosmos DB'
+  },
+  storage_account: {
+    icon: MdStorage,
+    label: 'Storage Account',
+    title: 'Storage Account'
+  },
+  redis: {
+    icon: SiRedis,
+    label: 'Redis',
+    title: 'Redis'
+  },
+  postgresql: {
+    icon: FaDatabase,
+    label: 'PostgreSQL',
+    title: 'PostgreSQL'
+  },
+  aks: {
+    icon: SiKubernetes,
+    label: 'AKS',
+    title: 'AKS'
+  },
+  tag_config: {
+    icon: FaCloud,
+    label: 'Tag Config',
+    title: 'Tag Configuration'
+  }
+} as const;
+
+
 export const templatesConfig = [
     {
         name: 'pagoPA basic ITN domain',
         description: 'Setup per dominio pagoPA basato in Italy North con risorse base. Include riferimenti APIM, AKS e CI/CD',
-        icon: 'FaMicrosoft',
+        icon: FaMicrosoft,
         template: {
             "location_mapping": {},
             "location_string_mapping": {},
@@ -13,7 +90,7 @@ export const templatesConfig = [
             "storage_account_state_rg_name": "terraform-state-rg",
             "subscription": "DEV-pagoPA",
             "product_name": "pagopa",
-            "location": "westeurope",
+            "location": "italynorth",
             "tag_source": false,
             "application_insight_name": "${local.product}-${local.location_short}-core-appinsights",
             "log_analytics_ws_name": "${local.product}-${local.location_short}-core-law",
@@ -55,12 +132,11 @@ export const templatesConfig = [
             "include_redis": false,
             "include_postgresql": false
         }
-
     },
     {
         name: 'test template',
         description: 'prova',
-        icon: 'AiOutlineDatabase',
+        icon: FaGithub,
         template: {
             "location_mapping": {},
             "location_string_mapping": {},
