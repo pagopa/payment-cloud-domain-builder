@@ -328,7 +328,8 @@ const handleGenerateWorkflow = async () => {
 
 
         {/* Main content */}
-        <div className={`p-4 lg:p-6 flex-1 min-w-0 bg-white dark:bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-300 dark:border-zinc-300 dark:border-zinc-700 ${stepColor.shadow} transition-shadow`}>          {showSummary ? (
+        <div
+            className={`p-4 lg:p-6 flex-1 min-w-0 bg-white dark:bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-300 dark:border-zinc-300 dark:border-zinc-700 ${stepColor.shadow} transition-shadow`}>          {showSummary ? (
             <TerraformPreview
               formData={formData}
               handleGenerateWorkflow={handleGenerateWorkflow}

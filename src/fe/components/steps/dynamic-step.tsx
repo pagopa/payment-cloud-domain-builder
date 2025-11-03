@@ -128,7 +128,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               <input
                 type="checkbox"
                 name={field.key}
-                defaultChecked={field.value}
+                checked={field.value}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
                 id={field.key}
@@ -258,7 +258,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
         ))}
 
         {stepConfig.formFields.length <= 1 ?
-            <div className="p-4 rounded-lg bg-green-600 text-white text-center shadow-md">
+            <div className={`p-4 rounded-lg bg-zinc-500 text-white text-center shadow-md`}>
                 <p className="text-sm">
                   Nulla da definire in questo step :)
                 </p>

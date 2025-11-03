@@ -47,14 +47,11 @@
     "ingress_load_balancer_ip": "10.1.100.250",
     "include_storage_account": true,
     "storage_account_scope_name": "myscope",
-    "storage_account_data_types": "blob",
-    "include_redis": true,
-    "test_redis": [
-      "feature_b",
-      "feature_c"
+    "storage_account_data_types": [
+      "blob"
     ],
+    "include_redis": true,
     "include_postgresql": false,
-    "include_02_postgresql": true,
     "include_tag_config": false,
     "include_kubernetes": true,
     "include_cosmosdb": false,

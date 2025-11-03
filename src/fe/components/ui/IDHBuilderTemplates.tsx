@@ -16,6 +16,8 @@ import {
   SiRedis,
 } from 'react-icons/si';
 import { MdStorage } from 'react-icons/md';
+import { AiOutlineDatabase } from "react-icons/ai";
+import { VscAzureDevops } from "react-icons/vsc";
 
 
 interface Template {
@@ -43,13 +45,23 @@ const AVAILABLE_TEMPLATES: Template[] = [
     name: '[PAGOPA] Meme Domain - Base WEU',
     description: 'Configurazione completa con APIM, AKS, Redis, Storage Account e GitHub Runner',
     icon: <FaMicrosoft className="text-4xl" />,
+    filename: 'base_meme_weu.json',
+    components: [
+      { name: 'APIM', icon: <FaNetworkWired />, color: 'text-blue-400' },
+      { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
+      { name: 'GitHub', icon: <FaGithub />, color: 'text-gray-400' }
+    ]
+  },
+  {
+    name: '[PAGOPA] Base Domain - WEU',
+    description: 'Configurazione completa con APIM, AKS, Redis, Storage Account e GitHub Runner',
+    icon: <AiOutlineDatabase className="text-4xl" />,
     filename: 'pagopa_basic_itn_domain.json',
     components: [
       { name: 'APIM', icon: <FaNetworkWired />, color: 'text-blue-400' },
       { name: 'AKS', icon: <SiKubernetes />, color: 'text-cyan-400' },
-      { name: 'Redis', icon: <SiRedis />, color: 'text-red-400' },
-      { name: 'Storage', icon: <MdStorage />, color: 'text-green-400' },
-      { name: 'GitHub', icon: <FaGithub />, color: 'text-gray-400' }
+      { name: 'GitHub', icon: <FaGithub />, color: 'text-gray-400' },
+      { name: 'DevOps', icon: <VscAzureDevops />, color: 'text-gray-400' }
     ]
   },
   {
