@@ -116,11 +116,11 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
 
   const getIncludedComponents = (template: Template) => {
     return Object.keys(template.template)
-        .filter(key => key.startsWith('include') && template.template[key] === true)
-        .map(key => key.substring(8))
-        .filter((componentType): componentType is keyof typeof COMPONENT_CONFIG =>
-            componentType in COMPONENT_CONFIG
-        );
+      .filter(key => key.startsWith('include') && template.template[key] === true)
+      .map(key => key.substring(8))
+      .filter((componentType): componentType is keyof typeof COMPONENT_CONFIG =>
+          componentType in COMPONENT_CONFIG
+      );
   };
 
 
