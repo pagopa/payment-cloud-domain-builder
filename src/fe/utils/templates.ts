@@ -20,57 +20,68 @@ export const COMPONENT_CONFIG = {
   apim: {
     icon: FaNetworkWired,
     label: 'APIM',
-    title: 'apim'
+    title: 'apim',
+    color: "text-blue-300"
   },
   kubernetes: {
     icon: SiKubernetes,
     label: 'AKS',
-    title: 'kubernetes'
+    title: 'kubernetes',
+    color: "text-blue-600"
   },
   devops: {
     icon: VscAzureDevops,
     label: 'DevOps',
-    title: 'DevOps'
+    title: 'DevOps',
+    color: "text-blue-400"
   },
   github_runner: {
     icon: FaGithub,
     label: 'GitHub Runner',
-    title: 'GitHub'
+    title: 'GitHub',
+    color: "text-black-400"
   },
   cosmos: {
     icon: AiOutlineDatabase,
     label: 'Cosmos DB',
-    title: 'Cosmos DB'
+    title: 'Cosmos DB',
+    color: "text-green-400"
   },
   cosmosdb: {
     icon: AiOutlineDatabase,
     label: 'Cosmos DB',
-    title: 'Cosmos DB'
+    title: 'Cosmos DB',
+    color: "text-green-400"
   },
   storage_account: {
     icon: MdStorage,
     label: 'Storage Account',
-    title: 'Storage Account'
+    title: 'Storage Account',
+    color: "text-zinc-400"
   },
   redis: {
     icon: SiRedis,
     label: 'Redis',
-    title: 'Redis'
+    title: 'Redis',
+    color: "text-red-400"
   },
   postgresql: {
     icon: FaDatabase,
     label: 'PostgreSQL',
-    title: 'PostgreSQL'
+    title: 'PostgreSQL',
+    color: "text-blue-800"
   },
   aks: {
     icon: SiKubernetes,
     label: 'AKS',
-    title: 'AKS'
+    title: 'AKS',
+    color: "text-blue-600"
   },
   tag_config: {
     icon: FaCloud,
     label: 'Tag Config',
-    title: 'Tag Configuration'
+    title: 'Tag Configuration',
+    color: "text-red-200"
   }
 } as const;
 

@@ -95,17 +95,19 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
   const ComponentBadge = ({
                             icon: Icon,
                             label,
-                            title
+                            title,
+                            color
                           }: {
     icon: React.ComponentType;
     label: string;
     title: string;
+    color: string;
   }) => (
       <div
           className={`flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900/50 rounded-md border border-zinc-300 dark:border-zinc-700 group-hover:border-${buttonColor.primary}-500/30 transition-colors`}
           title={title}
       >
-    <span className="text-blue-400 text-sm">
+    <span className={`${color} text-sm`}>
       <Icon />
     </span>
         <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
@@ -253,6 +255,7 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
                                       icon={config.icon}
                                       label={config.label}
                                       title={config.title}
+                                      color={config.color}
                                   />
                               );
                             })}
