@@ -225,4 +225,4 @@ jobs:
           git config user.email "action@github.com"
           git add .
           git commit -m "Add domain artifacts for ${{ needs.domain-builder.outputs.domain_name }} (Request ID: ${{ needs.domain-builder.outputs.request_id }})"
-          git push origin feature/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
+          git push origin domain_builder/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
