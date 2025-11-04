@@ -9,17 +9,17 @@ jobs:
     name: Domain Builder Job
     runs-on: ubuntu-latest
     outputs:
-      domain_name: ${{ steps.set_var.outputs.DOMAIN_NAME }}
-      product_name: ${{ steps.set_var.outputs.PRODUCT_NAME }}
-      vars_file: ${{ steps.set_var.outputs.VARS_FILE }}
-      request_id: ${{ steps.set_var.outputs.REQUEST_ID }}
-      repo_name: ${{ steps.set_var.outputs.event.repository.name }}
-      repo_owner: ${{ steps.set_var.outputs.event.repository.owner.login }}
-      repo_url: ${{ steps.set_var.outputs.event.repository.html_url }}
-      repo_ref: ${{ steps.set_var.outputs.ref }}
-      repo_sha: ${{ steps.set_var.outputs.sha }}
-      repo_actor: ${{ steps.set_var.outputs.actor }}
-    
+      domain_name: ${{ steps.set_vars.outputs.DOMAIN_NAME }}
+      product_name: ${{ steps.set_vars.outputs.PRODUCT_NAME }}
+      vars_file: ${{ steps.set_vars.outputs.VARS_FILE }}
+      request_id: ${{ steps.set_vars.outputs.REQUEST_ID }}
+      repo_name: ${{ steps.set_vars.outputs.REPO_NAME }}
+      repo_owner: ${{ steps.set_vars.outputs.REPO_OWNER }}
+      repo_url: ${{ steps.set_vars.outputs.REPO_URL }}
+      repo_ref: ${{ steps.set_vars.outputs.REPO_REF }}
+      repo_sha: ${{ steps.set_vars.outputs.REPO_SHA }}
+      repo_actor: ${{ steps.set_vars.outputs.REPO_ACTOR }}
+
     steps:
     - name: Checkout main repository
       uses: actions/checkout@v4
