@@ -211,11 +211,10 @@ jobs:
           # Create branch
           git checkout -b domain_builder/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
           
-          tree -R -a downloaded-artifacts
-          
           ### Copy artifacts
+          tree -R -a downloaded-artifacts
           cd downloaded-artifacts
-          find . -name "*.zip" -exec unzip -o {} -d ../src/domains/ \;
+          cp -r * ../src/domains/ \;
           cd ..
           
           # Remove downloaded-artifacts directory
