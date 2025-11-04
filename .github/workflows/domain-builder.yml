@@ -9,16 +9,16 @@ jobs:
     name: Domain Builder Job
     runs-on: ubuntu-latest
     outputs:
-      DOMAIN_NAME: ${{ steps.set_var.outputs.DOMAIN_NAME }}
-      PRODUCT_NAME: ${{ steps.set_var.outputs.PRODUCT_NAME }}
-      VARS_FILE: ${{ steps.set_var.outputs.VARS_FILE }}
-      REQUEST_ID: ${{ steps.set_var.outputs.REQUEST_ID }}
-      REPO_NAME: ${{ steps.set_var.outputs.event.repository.name }}
-      REPO_OWNER: ${{ steps.set_var.outputs.event.repository.owner.login }}
-      REPO_URL: ${{ steps.set_var.outputs.event.repository.html_url }}
-      REPO_REF: ${{ steps.set_var.outputs.ref }}
-      REPO_SHA: ${{ steps.set_var.outputs.sha }}
-      REPO_ACTOR: ${{ steps.set_var.outputs.actor }}
+      domain_name: ${{ steps.set_var.outputs.DOMAIN_NAME }}
+      product_name: ${{ steps.set_var.outputs.PRODUCT_NAME }}
+      vars_file: ${{ steps.set_var.outputs.VARS_FILE }}
+      request_id: ${{ steps.set_var.outputs.REQUEST_ID }}
+      repo_name: ${{ steps.set_var.outputs.event.repository.name }}
+      repo_owner: ${{ steps.set_var.outputs.event.repository.owner.login }}
+      repo_url: ${{ steps.set_var.outputs.event.repository.html_url }}
+      repo_ref: ${{ steps.set_var.outputs.ref }}
+      repo_sha: ${{ steps.set_var.outputs.sha }}
+      repo_actor: ${{ steps.set_var.outputs.actor }}
     
     steps:
     - name: Checkout main repository
@@ -201,20 +201,26 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-output
+          name: domain-${{ needs.domain-builder.outputs.domain_name }}-output
           path: downloaded-artifacts
 
       - name: Copy and commit artifacts
         run: |
           # Create branch
-          git checkout -b feature/domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-${{ needs.domain-builder.outputs.REQUEST_ID }}
+          git checkout -b feature/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
           
-          # Copy artifacts
-          cp -r downloaded-artifacts/* .
+          ### Copy artifacts
+          # Create domains directory if it doesn't exist
+          mkdir -p src/domains/${{ needs.domain-builder.outputs.domain_name }}
+          
+          # Unzip and copy artifacts
+          cd downloaded-artifacts && \
+          find . -name "*.zip" -exec unzip {} -d ../src/domains/${{ needs.domain-builder.outputs.domain_name }} \; && \
+          find . -type f ! -name "*.zip" -exec cp {} ../src/domains/${{ needs.domain-builder.outputs.domain_name }} \;
           
           # Commit and push
           git config user.name "GitHub Action Bot"
           git config user.email "action@github.com"
           git add .
-          git commit -m "Add domain artifacts for ${{ needs.domain-builder.outputs.DOMAIN_NAME }} (Request ID: ${{ needs.domain-builder.outputs.REQUEST_ID }})"
-          git push origin feature/domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-${{ needs.domain-builder.outputs.REQUEST_ID }}
+          git commit -m "Add domain artifacts for ${{ needs.domain-builder.outputs.domain_name }} (Request ID: ${{ needs.domain-builder.outputs.request_id }})"
+          git push origin feature/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
