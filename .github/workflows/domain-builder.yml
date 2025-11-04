@@ -8,6 +8,17 @@ jobs:
   domain-builder:
     name: Domain Builder Job
     runs-on: ubuntu-latest
+    outputs:
+      DOMAIN_NAME: ${{ steps.set_var.outputs.DOMAIN_NAME }}
+      PRODUCT_NAME: ${{ steps.set_var.outputs.PRODUCT_NAME }}
+      VARS_FILE: ${{ steps.set_var.outputs.VARS_FILE }}
+      REQUEST_ID: ${{ steps.set_var.outputs.REQUEST_ID }}
+      REPO_NAME: ${{ steps.set_var.outputs.event.repository.name }}
+      REPO_OWNER: ${{ steps.set_var.outputs.event.repository.owner.login }}
+      REPO_URL: ${{ steps.set_var.outputs.event.repository.html_url }}
+      REPO_REF: ${{ steps.set_var.outputs.ref }}
+      REPO_SHA: ${{ steps.set_var.outputs.sha }}
+      REPO_ACTOR: ${{ steps.set_var.outputs.actor }}
     
     steps:
     - name: Checkout main repository
@@ -161,6 +172,7 @@ jobs:
         retention-days: 3
 
     - name: Set Vars
+      id: set_vars
       run: |
         echo "DOMAIN_NAME=${{ env.DOMAIN_NAME }}" >> $GITHUB_OUTPUT
         echo "PRODUCT_NAME=${{ env.PRODUCT_NAME }}" >> $GITHUB_OUTPUT
