@@ -195,7 +195,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: pagopa/pagopa-infra
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_GITHUB }}
           ref: main
 
       - name: Download artifacts
@@ -205,6 +205,8 @@ jobs:
           path: downloaded-artifacts
 
       - name: Copy and commit artifacts
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           # Create branch
           git checkout -b feature/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
