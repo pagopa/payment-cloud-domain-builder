@@ -209,16 +209,15 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
           # Create branch
-          git checkout -b feature/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
+          git checkout -b domain_builder/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
           
           ### Copy artifacts
-          # Create domains directory if it doesn't exist
-          mkdir -p src/domains/${{ needs.domain-builder.outputs.domain_name }}
+          cd downloaded-artifacts
+          find . -name "*.zip" -exec unzip -o {} -d ../src/domains/ \;
+          cd ..
           
-          # Unzip and copy artifacts
-          cd downloaded-artifacts && \
-          find . -name "*.zip" -exec unzip {} -d ../src/domains/${{ needs.domain-builder.outputs.domain_name }} \; && \
-          find . -type f ! -name "*.zip" -exec cp {} ../src/domains/${{ needs.domain-builder.outputs.domain_name }} \;
+          # Remove downloaded-artifacts directory
+          rm -rf downloaded-artifacts
           
           # Commit and push
           git config user.name "GitHub Action Bot"
