@@ -113,16 +113,16 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
 
   return (
     <>
-      <div className="bg-zinc-800 rounded-lg p-4 mb-4">
+      <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-4 mb-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className={`text-lg font-semibold ${stepColor?.text || 'text-zinc-200'}`}>
+          <h3 className={`text-lg font-semibold ${stepColor?.text || 'text-zinc-600 dark:text-zinc-200'}`}>
             {title}
           </h3>
         </div>
         <div className="flex items-center justify-between mb-3">
           <button
             onClick={() => setShowHelpModal(true)}
-            className="flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-blue-400 transition-colors group"
+            className="flex items-center gap-2 cursor-pointer text-zinc-800 dark:text-zinc-400 hover:text-blue-400 transition-colors group"
             title="Apri Guida"
           >
             <svg
@@ -146,27 +146,27 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
           {variables.map((variable, index) => (
             <div
               key={index}
-              className="border-b cursor-pointer border-zinc-700 pb-2 last:border-0"
+              className="border-b cursor-pointer border-zinc-300 dark:border-zinc-700 pb-2 last:border-0"
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.setData('text/plain', "${"+variable.source+"."+variable.name+"}");
               }}
             >
               <span className={`${stepColor.text} font-mono`}>{variable.name}</span>
-              <p className="text-sm text-zinc-400">{variable.description}</p>
+              <p className="text-sm text-zinc-800 dark:text-zinc-400">{variable.description}</p>
             </div>
           ))}
         </div>
         
         {/* Input posizionato sotto le variabili */}
-        <div className="mt-4 pt-3 border-t border-zinc-700">
+        <div className="mt-4 pt-3 border-t border-zinc-300 dark:border-zinc-700">
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragEnter={handleDragEnter}
-            className="w-full border border-zinc-600 bg-zinc-700 text-zinc-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical min-h-[80px]"
+            className="w-full border border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-600 dark:text-zinc-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical min-h-[80px]"
             placeholder="Trascina qui le variabili per comporre..."
             rows={3}
           />
@@ -204,7 +204,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
             </div>
             <button
               onClick={() => setShowHelpModal(false)}
-              className="text-zinc-400 hover:text-white transition-colors"
+              className="text-zinc-800 dark:text-zinc-400 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -216,7 +216,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
           <div className="space-y-6">
             {/* Description */}
             <div>
-              <p className="text-zinc-300 leading-relaxed">
+              <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
                 {helpContent.description}
               </p>
             </div>
@@ -234,7 +234,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                   {helpContent.tips.map((tip, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-zinc-300 text-sm">{tip}</span>
+                      <span className="text-zinc-600 dark:text-zinc-300 text-sm">{tip}</span>
                     </li>
                   ))}
                 </ul>
@@ -249,12 +249,12 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                 </svg>
                 Variabili Disponibili
               </h3>
-              <div className="bg-zinc-800 rounded-lg overflow-hidden">
+              <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
                 <div className="max-h-60 overflow-y-auto">
                   {variables.map((variable, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 border-b border-zinc-700 last:border-0 hover:bg-zinc-750"
+                      className="flex items-center justify-between p-3 border-b border-zinc-300 dark:border-zinc-700 last:border-0 hover:bg-zinc-750"
                     >
                       <div className="flex-1">
                         <code className={`${stepColor.text} font-mono text-sm`}>
@@ -262,7 +262,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                         </code>
                       </div>
                       <div className="flex-2 ml-4">
-                        <span className="text-zinc-300 text-sm">
+                        <span className="text-zinc-600 dark:text-zinc-300 text-sm">
                           {variable.description}
                         </span>
                       </div>
@@ -283,7 +283,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                 </h3>
                 <div className="space-y-3">
                   {helpContent.examples.map((example, index) => (
-                    <div key={index} className="bg-zinc-800 rounded-lg p-3">
+                    <div key={index} className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-3">
                       <div className="flex items-center gap-2 mb-2">
                         <code className="text-purple-400 font-mono text-sm">
                           {example.variable}
@@ -293,7 +293,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
                           &quot;{example.value}
                         </code>
                       </div>
-                      <p className="text-zinc-400 text-xs">
+                      <p className="text-zinc-800 dark:text-zinc-400 text-xs">
                         {example.explanation}
                       </p>
                     </div>
@@ -304,7 +304,7 @@ const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end pt-6 border-t border-zinc-700 mt-6">
+          <div className="flex justify-end pt-6 border-t border-zinc-300 dark:border-zinc-700 mt-6">
             <button
               onClick={() => setShowHelpModal(false)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors flex items-center gap-2"

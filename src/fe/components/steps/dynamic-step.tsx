@@ -35,23 +35,23 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
   const stepNameKey = stepName.toLowerCase().replace(/\s+/g, "_");
   const stepConfig = formConfig.steps[stepNameKey];
   const inputClasses = {
-    text: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none",
-    number: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none",
+    text: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none",
+    number: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none",
     checkbox: `
-      w-6 h-6 appearance-none border border-zinc-700 bg-zinc-900 rounded-md flex items-center justify-center
-      checked:bg-green-500 checked:border-green-500 focus:ring-2 focus:ring-green-500 hover:border-green-400 transition-all peer
+      w-6 h-6 appearance-none border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-md flex items-center justify-center
+      checked:bg-${stepColor.bg}-500 checked:border-${stepColor.border}-500 focus:ring-2 focus:ring-${stepColor.primary}-500 hover:border-${stepColor.border}-400 transition-all peer
     `,
     radio: `
-      w-4 h-4 appearance-none border border-zinc-700 bg-zinc-900 rounded-full
+      w-4 h-4 appearance-none border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-full
       checked:bg-gradient-to-r checked:from-indigo-500 checked:to-purple-500 checked:border-none
       focus:ring-2 focus:ring-indigo-400 hover:border-indigo-400 transition-all
       flex-shrink-0
     `,
-    select: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-blue-500",
-    textarea: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-yellow-500 focus:outline-none",
-    password: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-rose-500 focus:outline-none",
-    date: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 focus:ring-2 focus:ring-teal-500 focus:outline-none",
-    file: "w-full p-2 border bg-zinc-900 border-zinc-700 rounded text-zinc-100 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-indigo-700 file:text-zinc-100 hover:file:bg-indigo-600",
+    select: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500",
+    textarea: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-yellow-500 focus:outline-none",
+    password: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-rose-500 focus:outline-none",
+    date: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-teal-500 focus:outline-none",
+    file: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-indigo-700 file:text-zinc-900 dark:text-zinc-100 hover:file:bg-indigo-600",
   };
 
   const renderInputField = (field, value, handleChange) => {
@@ -101,7 +101,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                   ${
                     value === option.value
                       ? "bg-indigo-500 border-indigo-500 text-white shadow-lg"
-                      : "bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-indigo-500"
+                      : "bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:border-indigo-500"
                   }
                   transition-all cursor-pointer hover:shadow-md`}
               >
@@ -128,7 +128,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               <input
                 type="checkbox"
                 name={field.key}
-                defaultChecked={field.value}
+                checked={field.value}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
                 id={field.key}
@@ -142,12 +142,12 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                 strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="absolute w-4 h-4 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                className="absolute w-4 h-4 text-zinc-600 dark:text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
               >
                 <path d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <span className="text-sm text-zinc-300 peer-checked:text-green-500">
+            <span className={`text-sm text-zinc-600 dark:text-zinc-300 peer-checked:text-${stepColor.text}-500`}>
               {field.label}
             </span>
           </label>
@@ -207,7 +207,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                       </svg>
                     </div>
                     <span className={`text-sm transition-colors ${
-                      isChecked ? 'text-green-500' : 'text-zinc-300'
+                      isChecked ? 'text-'+stepColor.text+'-500' : 'text-zinc-600 dark:text-zinc-300'
                     }`}>
                       {option.label}
                     </span>
@@ -216,7 +216,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               })}
             </div>
         );
-        default: // Gestisce text, number, password, file, ecc.
+        default:
         return (
           <input
             type={field.type}
@@ -248,7 +248,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-sm font-semibold mt-2">{field.type !== 'hidden' && field.name}</label>
+            <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{field.type !== 'hidden' && field.name}</label>
           {renderInputField(
             field,
             formData[field.key],
@@ -256,6 +256,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
           )}
           </div>
         ))}
+
+        {stepConfig.formFields.length <= 1 ?
+            <div className={`p-4 rounded-lg bg-zinc-500 text-white text-center shadow-md`}>
+                <p className="text-sm">
+                  Nulla da definire in questo step :)
+                </p>
+            </div> : ""
+        }
 
         <FormButton
           currentStep={currentStep}

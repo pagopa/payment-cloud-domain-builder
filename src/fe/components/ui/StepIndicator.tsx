@@ -29,7 +29,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
               ${
                 currentStep === stepNumber
                   ? `${stepColor.bg} text-white border-transparent scale-105`
-                  : `border-${stepColor.primary}-500 bg-zinc-800 text-zinc-300 hover:${stepColor.hover}`
+                  : `border-${stepColor.primary}-500 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:${stepColor.hover}`
               }
             `}
             title={`Step ${stepNumber}: ${stepNames[stepNumber - 1] || ""}`}
