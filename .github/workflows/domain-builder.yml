@@ -160,6 +160,19 @@ jobs:
         path: ansible/src/output/
         retention-days: 3
 
+    - name: Set Vars
+      run: |
+        echo "DOMAIN_NAME=${{ env.DOMAIN_NAME }}" >> $GITHUB_OUTPUT
+        echo "PRODUCT_NAME=${{ env.PRODUCT_NAME }}" >> $GITHUB_OUTPUT
+        echo "VARS_FILE=${{ env.VARS_FILE }}" >> $GITHUB_OUTPUT
+        echo "REQUEST_ID=${{ env.REQUEST_ID }}" >> $GITHUB_OUTPUT
+        echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+        echo "REPO_OWNER=${{ github.event.repository.owner.login }}" >> $GITHUB_OUTPUT
+        echo "REPO_URL=${{ github.event.repository.html_url }}" >> $GITHUB_OUTPUT
+        echo "REPO_REF=${{ github.ref }}" >> $GITHUB_OUTPUT
+        echo "REPO_SHA=${{ github.sha }}" >> $GITHUB_OUTPUT
+        echo "REPO_ACTOR=${{ github.actor }}" >> $GITHUB_OUTPUT
+
   push-artifacts:
     needs: domain-builder
     name: Push Artifacts
@@ -176,13 +189,13 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: domain-${{ env.DOMAIN_NAME }}-output
+          name: domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-output
           path: downloaded-artifacts
 
       - name: Copy and commit artifacts
         run: |
           # Create branch
-          git checkout -b feature/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
+          git checkout -b feature/domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-${{ needs.domain-builder.outputs.REQUEST_ID }}
           
           # Copy artifacts
           cp -r downloaded-artifacts/* .
@@ -191,5 +204,5 @@ jobs:
           git config user.name "GitHub Action Bot"
           git config user.email "action@github.com"
           git add .
-          git commit -m "Add domain artifacts for ${{ env.DOMAIN_NAME }} (Request ID: ${{ env.REQUEST_ID }})"
-          git push origin feature/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
+          git commit -m "Add domain artifacts for ${{ needs.domain-builder.outputs.DOMAIN_NAME }} (Request ID: ${{ needs.domain-builder.outputs.REQUEST_ID }})"
+          git push origin feature/domain-${{ needs.domain-builder.outputs.DOMAIN_NAME }}-${{ needs.domain-builder.outputs.REQUEST_ID }}
