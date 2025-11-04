@@ -93,6 +93,7 @@ jobs:
             f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
             f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
             f.write(f"VARS_FILE={vars_file}\n")
+            f.write(f"REQUEST_ID={metadata.get('requestId','')}\n")
         
         print("\n=== Environment variables written ===")
         EOF
@@ -158,3 +159,37 @@ jobs:
         name: domain-${{ env.DOMAIN_NAME }}-output
         path: ansible/src/output/
         retention-days: 3
+
+  push-artifacts:
+    needs: domain-builder
+    name: Push Artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout pagopa-infra repository
+        uses: actions/checkout@v4
+        with:
+          repository: pagopa/pagopa-infra
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: domain-${{ env.DOMAIN_NAME }}-output
+          path: downloaded-artifacts
+
+      - name: Copy and commit artifacts
+        run: |
+          # Create branch
+          git checkout -b feature/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
+          
+          # Copy artifacts
+          cp -r downloaded-artifacts/* .
+          
+          # Commit and push
+          git config user.name "GitHub Action Bot"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Add domain artifacts for ${{ env.DOMAIN_NAME }} (Request ID: ${{ env.REQUEST_ID }})"
+          git push origin feature/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
