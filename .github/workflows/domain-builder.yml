@@ -214,7 +214,7 @@ jobs:
           ### Copy artifacts
           tree -R -a downloaded-artifacts
           cd downloaded-artifacts
-          cp -r * ../src/domains/ \;
+          cp -r * ../src/domains/
           cd ..
           
           # Remove downloaded-artifacts directory
