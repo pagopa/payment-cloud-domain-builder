@@ -3,6 +3,7 @@ resource "azurerm_resource_group" "storage_account_rg" {
   location = var.location
 
   tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
+
 }
 
 
