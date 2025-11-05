@@ -12,12 +12,6 @@ interface Template {
   template: object;
 }
 
-interface ComponentIcon {
-  name: string;
-  icon: React.ReactNode;
-  color: string;
-}
-
 interface IDHBuilderTemplatesProps {
   updateFormData: (data: any) => void; /* eslint-disable-line  @typescript-eslint/no-explicit-any */
   onComponentsImport?: (components: string[]) => void;
