@@ -91,6 +91,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             value={value !== undefined ? String(value) : (field.value || "true")}
           />
         );
+      case "static":
+        return (
+            <input
+                type="hidden"
+                name={field.key}
+                value={field.value || true}
+            />
+        );
       case "radio":
         return (
           <div className="flex items-center space-x-4">
@@ -142,7 +150,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                 strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="absolute w-4 h-4 text-zinc-600 dark:text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                className="absolute w-4 h-4 text-zinc-600 dark:text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity"
               >
                 <path d="M5 13l4 4L19 7" />
               </svg>
@@ -248,7 +256,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       <div className="space-y-4">
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{field.type !== 'hidden' && field.name}</label>
+            <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{(field.type !== 'hidden' && field.type !== 'static') && field.name}</label>
           {renderInputField(
             field,
             formData[field.key],

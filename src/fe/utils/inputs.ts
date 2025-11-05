@@ -50,8 +50,7 @@ export const formConfig = {
             { label: "Italy North", value: "italynorth" }
           ]
         },
-
-        { name: "Use Tag config?", key: "tag_source", type: "boolean", value: true, placeholder: "e.g. module.tag_config.tags" },
+        { name: "Tag Config", key: "include_tag_config", type: "static", value: "true" },
       ],
     },
     monitoring: {
@@ -86,7 +85,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti Agent DevOps",
       formFields: [
-        { name: "include_devops", key: "include_devops", type: "hidden", value: "true" },
+        { name: "include_devops", key: "include_devops", type: "hidden", value: "false" },
         { name: "Azure DevOps managed identity RG Name", key: "azdo_managed_identity_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-identity-rg" },
         { name: "Azure DevOps managed identity IAC Prefix", key: "azdo_managed_identity_iac_prefix", type: "text", placeholder: "e.g. azdo-${var.env}-${local.prefix}-iac" },
       ],
@@ -95,7 +94,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti API Management",
       formFields: [
-        { name: "include_apim", key: "include_apim", type: "hidden", value: "true" },
+        { name: "include_apim", key: "include_apim", type: "hidden", value: "false" },
         { name: "APIM Name", key: "apim_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-apim" },
         { name: "APIM RG Name", key: "apim_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-api-rg" },
       ],
@@ -104,7 +103,7 @@ export const formConfig = {
       default: false,
       name: "CosmosDB",
       formFields: [
-        { name: "include_cosmos", key: "include_cosmos", type: "hidden", value: "true" },
+        { name: "include_cosmos", key: "include_cosmos", type: "hidden", value: "false" },
         { name: "CosmosDB Account Database Type", key: "cosmosdb_account_database_type", type: "select",
           options: [
             { label: "Mongo", value: "mongo" },
@@ -117,7 +116,7 @@ export const formConfig = {
       default: false,
       name: "GitHub Runner self hosted",
       formFields: [
-        { name: "include_github_runner", key: "include_github_runner", type: "hidden", value: "true" },
+        { name: "include_github_runner", key: "include_github_runner", type: "hidden", value: "false" },
         { name: "GitHub Runner CAE Name", key: "gh_runner_cae_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-cae" },
         { name: "GitHub Runner RG", key: "gh_runner_cae_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-rg" },
         { name: "GitHub Runner PAT Key", key: "gh_runner_pat_key", type: "text", placeholder: "e.g. gh-runner-job-pat" },
@@ -129,7 +128,7 @@ export const formConfig = {
       default: false,
       name: "Riferimenti AKS",
       formFields: [
-        { name: "include_kubernetes", key: "include_kubernetes", type: "hidden", value: "true" },
+        { name: "include_kubernetes", key: "include_kubernetes", type: "hidden", value: "false" },
         { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
         { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
         { name: "Ingress Load Balancer IP", key: "ingress_load_balancer_ip", type: "text", placeholder: "e.g. 10.1.100.250" },
@@ -139,7 +138,7 @@ export const formConfig = {
       default: false,
       name: "Storage Account",
       formFields: [
-        { name: "include_storage_account", key: "include_storage_account", type: "hidden", value: "true" },
+        { name: "include_storage_account", key: "include_storage_account", type: "hidden", value: "false" },
         { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
         { name: "Storage Account Data Types", key: "storage_account_data_types", type: "checkboxgroup",
           options: [
@@ -157,14 +156,14 @@ export const formConfig = {
         default: false,
         name: "Redis cluster",
         formFields: [
-          { name: "include_redis", key: "include_redis", type: "hidden", value: "true" },
+          { name: "include_redis", key: "include_redis", type: "hidden", value: "false" },
         ]
     },
     postgresql: {
         default: false,
         name: "PostgreSQL database",
         formFields: [
-          { name: "include_postgresql", key: "include_postgresql", type: "hidden", value: "true" },
+          { name: "include_postgresql", key: "include_postgresql", type: "hidden", value: "false" },
         ]
     }
   },
