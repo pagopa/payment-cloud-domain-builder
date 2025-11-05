@@ -44,7 +44,7 @@ export const Helper: React.FC<HelperProps> = ({
     },
     {
       name: 'location_string',
-      source: 'env',
+      source: 'var',
       description: 'e.g Italy North'
     },
     {
