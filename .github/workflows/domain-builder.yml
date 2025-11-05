@@ -165,8 +165,8 @@ jobs:
       if: steps.ansible.outcome == 'success'
       run: |
         ### Copy artifacts
-        mkdir -p /tmp/output
-        cp -r ansible/src/output/ /tmp/output
+        mkdir -p /tmp/
+        cp -r ansible/src/output/ /tmp/
 
     - name: Checkout pagopa-infra repository
       if: steps.ansible.outcome == 'success'
@@ -185,7 +185,7 @@ jobs:
         git checkout -b domain_builder/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
         
         ### Copy artifacts
-        cp -r /tmp/output src/domains/
+        cp -r /tmp/output/* src/domains/
         
         # Commit and push
         git config user.name "GitHub Action Bot"
