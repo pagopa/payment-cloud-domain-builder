@@ -90,7 +90,7 @@ export const ExportImport: React.FC<ExportImportProps> = ({
             notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-up';
             notification.innerHTML = `
               <div class="flex items-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
                 <span>Configuration imported! ${activeComponents.length} component(s) activated.</span>
@@ -110,7 +110,7 @@ export const ExportImport: React.FC<ExportImportProps> = ({
           errorNotification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
           errorNotification.innerHTML = `
             <div class="flex items-center gap-2">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="w-5 h-5" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
               </svg>
               <span>Failed to import configuration. Invalid JSON file.</span>
@@ -157,7 +157,7 @@ export const ExportImport: React.FC<ExportImportProps> = ({
       />
       <button
         onClick={handleImport}
-        className="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-white hover:bg-white dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-700 flex items-center gap-2"
+        className="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-white hover:bg-zinc-600 border border-zinc-300 dark:border-zinc-700 flex items-center gap-2"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -167,7 +167,7 @@ export const ExportImport: React.FC<ExportImportProps> = ({
       
       <button
         onClick={handleExport}
-        className="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-white hover:bg-white dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-700 flex items-center gap-2"
+        className="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-white hover:bg-zinc-600 border border-zinc-300 dark:border-zinc-700 flex items-center gap-2"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
