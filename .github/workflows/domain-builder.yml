@@ -8,17 +8,6 @@ jobs:
   domain-builder:
     name: Domain Builder Job
     runs-on: ubuntu-latest
-    outputs:
-      domain_name: ${{ steps.set_vars.outputs.DOMAIN_NAME }}
-      product_name: ${{ steps.set_vars.outputs.PRODUCT_NAME }}
-      vars_file: ${{ steps.set_vars.outputs.VARS_FILE }}
-      request_id: ${{ steps.set_vars.outputs.REQUEST_ID }}
-      repo_name: ${{ steps.set_vars.outputs.REPO_NAME }}
-      repo_owner: ${{ steps.set_vars.outputs.REPO_OWNER }}
-      repo_url: ${{ steps.set_vars.outputs.REPO_URL }}
-      repo_ref: ${{ steps.set_vars.outputs.REPO_REF }}
-      repo_sha: ${{ steps.set_vars.outputs.REPO_SHA }}
-      repo_actor: ${{ steps.set_vars.outputs.REPO_ACTOR }}
 
     steps:
     - name: Checkout main repository
@@ -133,6 +122,7 @@ jobs:
         python3 -m pip install ansible
     
     - name: Run Ansible Playbook
+      id: ansible
       working-directory: ansible
       run: |
         echo "=== Ansible Execution Info ==="
@@ -164,65 +154,42 @@ jobs:
         tree -R -a ansible/src/output || ls -laR ansible/src/output
     
     - name: Upload generated files
-      if: always()
+      if: steps.ansible.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: domain-${{ env.DOMAIN_NAME }}-output
         path: ansible/src/output/
         retention-days: 3
 
-    - name: Set Vars
-      id: set_vars
+    - name: Save domain
+      if: steps.ansible.outcome == 'success'
       run: |
-        echo "DOMAIN_NAME=${{ env.DOMAIN_NAME }}" >> $GITHUB_OUTPUT
-        echo "PRODUCT_NAME=${{ env.PRODUCT_NAME }}" >> $GITHUB_OUTPUT
-        echo "VARS_FILE=${{ env.VARS_FILE }}" >> $GITHUB_OUTPUT
-        echo "REQUEST_ID=${{ env.REQUEST_ID }}" >> $GITHUB_OUTPUT
-        echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
-        echo "REPO_OWNER=${{ github.event.repository.owner.login }}" >> $GITHUB_OUTPUT
-        echo "REPO_URL=${{ github.event.repository.html_url }}" >> $GITHUB_OUTPUT
-        echo "REPO_REF=${{ github.ref }}" >> $GITHUB_OUTPUT
-        echo "REPO_SHA=${{ github.sha }}" >> $GITHUB_OUTPUT
-        echo "REPO_ACTOR=${{ github.actor }}" >> $GITHUB_OUTPUT
+        ### Copy artifacts
+        mkdir -p /tmp/output
+        cp -r ansible/src/output/ /tmp/output
 
-  push-artifacts:
-    needs: domain-builder
-    name: Push Artifacts
-    runs-on: ubuntu-latest
+    - name: Checkout pagopa-infra repository
+      if: steps.ansible.outcome == 'success'
+      uses: actions/checkout@v4
+      with:
+        repository: pagopa/pagopa-infra
+        token: ${{ secrets.PAT_GITHUB }}
+        ref: main
 
-    steps:
-      - name: Checkout pagopa-infra repository
-        uses: actions/checkout@v4
-        with:
-          repository: pagopa/pagopa-infra
-          token: ${{ secrets.PAT_GITHUB }}
-          ref: main
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: domain-${{ needs.domain-builder.outputs.domain_name }}-output
-          path: downloaded-artifacts
-
-      - name: Copy and commit artifacts
-        env:
-          GH_TOKEN: ${{ secrets.PAT_GITHUB }}
-        run: |
-          # Create branch
-          git checkout -b domain_builder/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
-          
-          ### Copy artifacts
-          tree -R -a downloaded-artifacts
-          cd downloaded-artifacts
-          cp -r * ../src/domains/
-          cd ..
-          
-          # Remove downloaded-artifacts directory
-          rm -rf downloaded-artifacts
-          
-          # Commit and push
-          git config user.name "GitHub Action Bot"
-          git config user.email "action@github.com"
-          git add .
-          git commit -m "Add domain artifacts for ${{ needs.domain-builder.outputs.domain_name }} (Request ID: ${{ needs.domain-builder.outputs.request_id }})"
-          git push origin domain_builder/domain-${{ needs.domain-builder.outputs.domain_name }}-${{ needs.domain-builder.outputs.request_id }}
+    - name: Copy and commit artifacts
+      if: steps.ansible.outcome == 'success'
+      env:
+        GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+      run: |
+        # Create branch
+        git checkout -b domain_builder/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
+        
+        ### Copy artifacts
+        cp -r /tmp/output src/domains/
+        
+        # Commit and push
+        git config user.name "GitHub Action Bot"
+        git config user.email "action@github.com"
+        git add .
+        git commit -m "Add domain artifacts for ${{ env.DOMAIN_NAME }} (Request ID: ${{ env.REQUEST_ID }})"
+        git push origin domain_builder/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
