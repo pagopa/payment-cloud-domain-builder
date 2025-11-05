@@ -7,14 +7,14 @@ interface Summary {
 }
 
 export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData }) => (
-  <div className="overflow-auto bg-zinc-900 rounded-lg border border-zinc-800 shadow-md">
-    <table className="min-w-full table-auto text-left text-sm text-zinc-300">
+  <div className="overflow-auto bg-white dark:bg-zinc-900 rounded-lg border border-zinc-400 dark:border-zinc-800 shadow-md">
+    <table className="min-w-full table-auto text-left text-sm text-zinc-600 dark:text-zinc-300">
       <thead>
-        <tr className="bg-zinc-700">
-          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-200">
+        <tr className="bg-white dark:bg-zinc-700">
+          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">
             Campo
           </th>
-          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-200">
+          <th className="px-4 py-2 text-left text-sm font-bold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">
             Valore
           </th>
         </tr>
@@ -23,7 +23,7 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
         {summaryData
           // Filtra le categorie che hanno almeno un campo configurato
           .filter((section) => section.rows.some((row) => row.value.trim() !== ""))
-          .map((section, index) => (
+          .map((section) => (
             <React.Fragment key={section.category}>
               {/* Separatore Evidenziato per Categoria */}
               <tr>
@@ -36,14 +36,14 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
               </tr>
               {/* Righe dei Campi Configurati */}
               {section.rows
-                .filter((row) => row.value.trim() !== "") // Mostra solo campi configurati
+                .filter((row) => row.value.trim() !== "")
                 .map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className="hover:bg-zinc-700 transition-colors duration-150"
+                    className="dark:hover:bg-zinc-700 dark:bg-zinc-900 transition-colors duration-150"
                   >
-                    <td className="px-4 py-2 border-b border-zinc-800">{row.field}</td>
-                    <td className="px-4 py-2 border-b border-zinc-800 font-semibold text-zinc-100">
+                    <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800">{row.field}</td>
+                    <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800 font-semibold text-zinc-900 dark:text-zinc-100">
                       {row.value}
                     </td>
                   </tr>
@@ -57,15 +57,14 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
 
 
 export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSummary}, ) => {
-  // Genera il riassunto a partire dai dati del form
   const summaryData = generateTableSummaryData(formData);
 
   return (
-    <div className="p-6 rounded-2xl bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
+    <div className="p-6 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border border-emerald-800 shadow-inner hover:shadow-emerald-500/10 transition-shadow">
       <h2 className="text-2xl font-semibold text-emerald-400 mb-3">
         Configurazione Completa
       </h2>
-      <div className="text-zinc-200 mb-2 text-sm">
+      <div className="text-zinc-600 dark:text-zinc-200 mb-2 text-sm">
         Ecco un riepilogo dettagliato della configurazione.
       </div>
 
@@ -74,7 +73,7 @@ export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSumm
 
       <div className="flex gap-4 mt-6">
         <button
-          className="bg-zinc-600 hover:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
+          className="bg-zinc-600 hover:bg-white dark:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
           onClick={() => setShowSummary(false)}
         >
           Torna al Wizard

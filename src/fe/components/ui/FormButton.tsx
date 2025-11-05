@@ -1,7 +1,7 @@
 // components/ui/FormButton.tsx
 import React from 'react';
 import { STEP_COLORS } from '../../utils/constants';
-import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from 'react-icons/ai'; // Importa l'icona ">>"
+import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from 'react-icons/ai';
 
 interface FormButtonProps {
   onNext: () => void;
@@ -32,7 +32,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
           <button
             type="button"
             onClick={goToFirst}
-            className="flex items-center justify-center gap-2 bg-zinc-700 hover:bg-zinc-600 transition text-zinc-200 px-3 py-1 rounded w-fit text-sm"
+            className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-700 hover:bg-zinc-600 transition text-zinc-600 dark:text-zinc-200 px-3 py-1 rounded w-fit text-sm"
           >
             <AiOutlineDoubleLeft className="text-base" />
           </button>
@@ -43,7 +43,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
           <button
             type="button"
             onClick={onPrev}
-            className="bg-zinc-700 hover:bg-zinc-600 transition text-zinc-200 px-4 py-2 rounded w-1/2"
+            className="bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 transition text-zinc-600 dark:text-zinc-200 px-4 py-2 rounded w-1/2"
           >
             Back
           </button>
@@ -73,7 +73,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
           <button
             type="button"
             onClick={goToLast}
-            className="flex items-center justify-center gap-2 bg-zinc-700 hover:bg-zinc-600 transition text-zinc-200 px-3 py-1 rounded w-fit text-sm"
+            className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-700 hover:bg-zinc-600 transition text-zinc-600 dark:text-zinc-200 px-3 py-1 rounded w-fit text-sm"
           >
             <AiOutlineDoubleRight className="text-base" />
           </button>

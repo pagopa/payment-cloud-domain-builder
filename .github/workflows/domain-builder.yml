@@ -8,7 +8,7 @@ jobs:
   domain-builder:
     name: Domain Builder Job
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout main repository
       uses: actions/checkout@v4
@@ -93,6 +93,7 @@ jobs:
             f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
             f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
             f.write(f"VARS_FILE={vars_file}\n")
+            f.write(f"REQUEST_ID={metadata.get('requestId','')}\n")
         
         print("\n=== Environment variables written ===")
         EOF
@@ -121,6 +122,7 @@ jobs:
         python3 -m pip install ansible
     
     - name: Run Ansible Playbook
+      id: ansible
       working-directory: ansible
       run: |
         echo "=== Ansible Execution Info ==="
@@ -152,9 +154,42 @@ jobs:
         tree -R -a ansible/src/output || ls -laR ansible/src/output
     
     - name: Upload generated files
-      if: always()
+      if: steps.ansible.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: domain-${{ env.DOMAIN_NAME }}-output
         path: ansible/src/output/
         retention-days: 3
+
+    - name: Save domain
+      if: steps.ansible.outcome == 'success'
+      run: |
+        ### Copy artifacts
+        mkdir -p /tmp/
+        cp -r ansible/src/output/ /tmp/
+
+    - name: Checkout pagopa-infra repository
+      if: steps.ansible.outcome == 'success'
+      uses: actions/checkout@v4
+      with:
+        repository: pagopa/pagopa-infra
+        token: ${{ secrets.PAT_GITHUB }}
+        ref: main
+
+    - name: Copy and commit artifacts
+      if: steps.ansible.outcome == 'success'
+      env:
+        GH_TOKEN: ${{ secrets.PAT_GITHUB }}
+      run: |
+        # Create branch
+        git checkout -b domain_builder/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}
+        
+        ### Copy artifacts
+        cp -r /tmp/output/* src/domains/
+        
+        # Commit and push
+        git config user.name "GitHub Action Bot"
+        git config user.email "action@github.com"
+        git add .
+        git commit -m "Add domain artifacts for ${{ env.DOMAIN_NAME }} (Request ID: ${{ env.REQUEST_ID }})"
+        git push origin domain_builder/domain-${{ env.DOMAIN_NAME }}-${{ env.REQUEST_ID }}

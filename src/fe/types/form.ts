@@ -2,7 +2,7 @@ import { formConfig } from '../utils/inputs';
 
 type InferFieldType<T> =
     T extends { type: 'boolean' } ? boolean :
-        T extends { type: 'select' | 'text' | 'textarea' | 'hidden' } ? string :
+        T extends { type: 'select' | 'text' | 'textarea' | 'hidden' | 'static' } ? string :
             T extends { type: 'number' } ? number :
                 string;
 
@@ -19,28 +19,26 @@ type GenerateFormDataType = {
 }[keyof typeof formConfig.steps];
 
 export type CustomFormData = UnionToIntersection<GenerateFormDataType> & {
-  // extra fields for formFields
-  location_mapping: Record<string, string>;
-  location_string_mapping: Record<string, string>;
+  // extra fields for formFields, if needed
 };
 
 type UnionToIntersection<U> =
     (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
 export const defaultForm: CustomFormData = (() => {
-  const form: any = {
-    location_mapping: {},
-    location_string_mapping: {},
-  };
+  const form: any = {};
 
   Object.values(formConfig.steps).forEach((step) => {
     step.formFields.forEach((field) => {
       switch (field.type) {
         case 'boolean':
-          form[field.key] = false;
+          form[field.key] = field.value;
           break;
         case 'hidden':
-          form[field.key] = false;
+          form[field.key] = field.value;
+          break;
+        case 'static':
+          form[field.key] = field.value;
           break;
         case 'number':
           form[field.key] = 0;

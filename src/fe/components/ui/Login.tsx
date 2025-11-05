@@ -11,6 +11,12 @@ interface UserProfile {
   imageUrl: string;
 }
 
+interface GoogleCredentialResponse {
+  credential?: string;
+  select_by?: string;
+  clientId?: string;
+}
+
 export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }> = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +60,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
   };
 
 
-  const handleGoogleLoginSuccess = (credentialResponse: any) => {
+  const handleGoogleLoginSuccess = (credentialResponse: GoogleCredentialResponse) => {
     if (credentialResponse.credential) {
       const profile = decodeJWT(credentialResponse.credential);
       onLoginSuccess(profile || undefined);
@@ -70,14 +76,14 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div className="flex items-center justify-center min-h-screen from-gray-900 via-black to-zinc-900">
-        <div className="bg-zinc-800 text-white shadow-md rounded-2xl p-8 w-full max-w-md">
+        <div className="bg-zinc-100 dark:bg-zinc-100 dark:bg-zinc-800 text-white shadow-md rounded-2xl p-8 w-full max-w-md">
 
           {/* Header Personalizzato per IDH */}
           <header className="mb-8 text-center">
             <div className="bg-gradient-to-r from-indigo-500 to-indigo-300 text-transparent bg-clip-text font-extrabold text-4xl drop-shadow-lg">
               IDH Platform Login
             </div>
-            <p className="text-zinc-400 text-sm mt-2">
+            <p className="text-zinc-800 dark:text-zinc-400 text-sm mt-2">
               Accedi per configurare facilmente domini e infrastrutture IDH.
             </p>
           </header>
@@ -86,7 +92,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
 
           {/* Modulo di login manuale */}
           <form onSubmit={handleFakeLogin} className="space-y-4">
-            <div className="flex items-center bg-zinc-900 border border-zinc-700 p-3 rounded-lg">
+            <div className="flex items-center bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 p-3 rounded-lg">
               <FiUser className="text-indigo-500 mr-3" size={20} />
               <input
                 type="text"
@@ -96,7 +102,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
                 className="w-full bg-transparent text-white text-sm outline-none placeholder:text-zinc-500 placeholder:italic"
               />
             </div>
-            <div className="flex items-center bg-zinc-900 border border-zinc-700 p-3 rounded-lg">
+            <div className="flex items-center bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 p-3 rounded-lg">
               <MdLockOutline className="text-indigo-500 mr-3" size={20} />
               <input
                 type="password"
@@ -117,7 +123,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
             </button>
           </form>
 
-          <div className="my-6 border-t border-zinc-700"></div>
+          <div className="my-6 border-t border-zinc-300 dark:border-zinc-700"></div>
 
           {/* Login con Google */}
           <div className="text-center">
