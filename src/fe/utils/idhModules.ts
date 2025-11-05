@@ -1,5 +1,12 @@
 // src/fe/utils/idhModules.ts
 
+import {
+  AzCacheRedisProducticonColor, AzDatabaseGeneral,
+  AzEventHubs,
+  AzKeyVaultColor, AzStorage, AzVirtualNetworkColor,
+} from 'azure-react-icons';
+
+
 export interface IdhModuleField {
   name: string;
   label: string;
@@ -25,7 +32,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'event_hub',
     name: 'Event Hub',
     description: 'Azure Event Hub per streaming di eventi',
-    icon: '📡',
+    icon: AzEventHubs,
     sourcePath: './.terraform/modules/__v4__/IDH/event_hub',
     fields: [
       {
@@ -67,7 +74,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'key_vault',
     name: 'Key Vault',
     description: 'Azure Key Vault per gestione secrets e certificati',
-    icon: '🔐',
+    icon: AzKeyVaultColor,
     sourcePath: './.terraform/modules/__v4__/IDH/key_vault',
     fields: [
       {
@@ -135,7 +142,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'subnet',
     name: 'Subnet',
     description: 'Azure Subnet per network segmentation',
-    icon: '🌐',
+    icon: AzVirtualNetworkColor,
     sourcePath: './.terraform/modules/__v4__/IDH/subnet',
     fields: [
       {
@@ -202,7 +209,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'redis',
     name: 'Redis Cache',
     description: 'Azure Redis Cache per caching e sessioni',
-    icon: '🔴',
+    icon: AzCacheRedisProducticonColor,
     sourcePath: './.terraform/modules/__v4__/IDH/redis',
     fields: [
       {
@@ -262,7 +269,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'postgres_flexible_server',
     name: 'PostgreSQL Flexible Server',
     description: 'Azure PostgreSQL Flexible Server per database relazionali',
-    icon: '🐘',
+    icon: AzDatabaseGeneral,
     sourcePath: './.terraform/modules/__v4__/IDH/postgres_flexible_server',
     fields: [
       {
@@ -346,7 +353,7 @@ export const idhModules: Record<string, IdhModule> = {
     id: 'storage_account',
     name: 'Storage Account',
     description: 'Azure Storage Account per blob, files, tables',
-    icon: '💾',
+    icon: AzStorage,
     sourcePath: './.terraform/modules/__v4__/IDH/storage_account',
     fields: [
       {

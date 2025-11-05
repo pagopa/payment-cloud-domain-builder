@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { idhModules, IdhModule } from '../../utils/idhModules';
+import { idhModules } from '../../utils/idhModules';
 
 export const IdhAdvisor: React.FC = () => {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export const IdhAdvisor: React.FC = () => {
                 }`}
             >
               <div className="flex items-start gap-4">
-                <span className="text-4xl">{module.icon}</span>
+                <module.icon />
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-white mb-2">{module.name}</h3>
                   <p className="text-sm text-zinc-400">{module.description}</p>
@@ -221,7 +221,7 @@ export const IdhAdvisor: React.FC = () => {
   return (
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-3 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-white mb-3 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text">
             IDH Module Advisor
           </h1>
           <p className="text-zinc-400 text-lg">
