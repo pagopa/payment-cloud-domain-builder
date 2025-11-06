@@ -12,11 +12,6 @@ dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"
 
 alert_use_opsgenie = false
 
-### Aks
-{% if include_kubernetes %}
-ingress_load_balancer_ip = "{{ingress_load_balancer_ip}}"
-{% endif %}
-
 
 {% if include_postgresql %}
 pgres_flex_params = {

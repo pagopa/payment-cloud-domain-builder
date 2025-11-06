@@ -48,14 +48,6 @@ variable "alert_use_opsgenie" {
   description = "Use opsgenie for alerts"
 }
 
-{% if include_kubernetes %}
-#
-# kubernetes variables
-#
-variable "ingress_load_balancer_ip" {
-  type = string
-}
-{% endif %}
 
 
 {% if include_postgresql %}
