@@ -140,7 +140,7 @@ data "azurerm_private_dns_zone" "privatelink_file_core_windows_net" {
 }
 {% endif %}
 
-{% if "file" in storage_account_data_types  %}
+{% if "table" in storage_account_data_types  %}
 data "azurerm_private_dns_zone" "privatelink_table_core_windows_net" {
   {% if is_dev_public %}
   count               = var.env_short != "d" ? 1 : 0
@@ -150,7 +150,7 @@ data "azurerm_private_dns_zone" "privatelink_table_core_windows_net" {
 }
 {% endif %}
 
-{% if "file" in storage_account_data_types  %}
+{% if "web" in storage_account_data_types  %}
 data "azurerm_private_dns_zone" "privatelink_web_core_windows_net" {
   {% if is_dev_public %}
   count               = var.env_short != "d" ? 1 : 0
