@@ -1,7 +1,6 @@
 prefix         = "{{product_name}}"
 env_short      = "d"
 env            = "dev"
-domain         = "{{domain_name}}"
 location       = "{{location}}"
 location_short = "{{location_mapping[location]}}"
 
@@ -11,11 +10,6 @@ external_domain          =  "{{external_domain}}"
 dns_zone_internal_prefix = "{{dns_zone_internal_prefix}}"
 
 alert_use_opsgenie = false
-
-### Aks
-{% if include_kubernetes %}
-ingress_load_balancer_ip = "{{ingress_load_balancer_ip}}"
-{% endif %}
 
 
 {% if include_postgresql %}

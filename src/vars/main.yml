@@ -75,7 +75,6 @@ gh_runner_pat_kv_rg: "${local.prefix}-${var.env_short}-sec-rg"
 ########
 #aks_name: "${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks"
 #aks_rg_name: "${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg"
-#ingress_load_balancer_ip: "10.1.100.250"
 #
 ########
 ## STORAGE ACCOUNT

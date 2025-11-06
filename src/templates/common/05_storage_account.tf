@@ -20,7 +20,7 @@ module "{{domain_name}}_{{storage_account_scope_name}}_storage_account" {
   resource_group_name = azurerm_resource_group.storage_account_rg.name
 
 {% if is_dev_public %}
-  subnet_id                  = var.env_short == "d" ? null : data.azurerm_subnet.private_endpoint_subnet[0].id
+  private_endpoint_subnet_id                  = var.env_short == "d" ? null : data.azurerm_subnet.private_endpoint_subnet[0].id
 {% if "queue" in storage_account_data_types  %}
   private_dns_zone_queue_ids  = var.env_short == "d" ? [] : data.azurerm_private_dns_zone.privatelink_queue_core_windows_net[0].id
 {% endif     %}
@@ -41,7 +41,7 @@ module "{{domain_name}}_{{storage_account_scope_name}}_storage_account" {
 {% endif %}
 
 {% else %}
-  subnet_id                  = data.azurerm_subnet.private_endpoint_subnet.id
+  private_endpoint_subnet_id                  = data.azurerm_subnet.private_endpoint_subnet.id
 {% if "queue" in storage_account_data_types  %}
   private_dns_zone_queue_ids  = data.azurerm_private_dns_zone.privatelink_queue_core_windows_net
 {% endif     %}

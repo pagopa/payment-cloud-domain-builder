@@ -137,7 +137,6 @@ export const templatesConfig = [
             "include_kubernetes": true,
             "aks_name": "${local.product}-${var.location_short}-${var.env}-aks",
             "aks_rg_name": "${local.product}-${var.location_short}-${var.env}-aks-rg",
-            "ingress_load_balancer_ip": "10.3.2.250",
             "include_storage_account": false,
             "storage_account_scope_name": "",
             "storage_account_data_types": "",
@@ -195,7 +194,6 @@ export const templatesConfig = [
             "include_kubernetes": true,
             "aks_name": "${local.product}-${var.location_short}-${var.env}-aks",
             "aks_rg_name": "${local.product}-${var.location_short}-${var.env}-aks-rg",
-            "ingress_load_balancer_ip": "10.1.100.250",
             "include_storage_account": false,
             "storage_account_scope_name": "",
             "storage_account_data_types": "",
@@ -252,7 +250,6 @@ export const templatesConfig = [
             "include_aks": false,
             "aks_name": "${local.prefix}-${var.env_short}-${var.location_short}-${local.project}-aks",
             "aks_rg_name": "${local.prefix}-${var.env_short}-${var.location_short}-${local.project}-aks-rg",
-            "ingress_load_balancer_ip": "10.1.100.250",
             "include_storage_account": true,
             "storage_account_scope_name": "myscope",
             "storage_account_data_types": [
