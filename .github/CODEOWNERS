@@ -1,0 +1,4 @@
+# see https://help.github.com/en/articles/about-code-owners#example-of-a-codeowners-file
+
+# @pagopa/payments-cloud-admin must be the owner of the whole repo and must not be removed or overriden in the nested folders,
+* @pagopa/payments-cloud-admin
