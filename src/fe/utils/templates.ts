@@ -92,8 +92,6 @@ export const templatesConfig = [
         description: 'Setup per dominio pagoPA basato in Italy North con risorse base. Include riferimenti APIM, AKS e CI/CD',
         icon: VscAzure,
         template: {
-            "location_mapping": {},
-            "location_string_mapping": {},
             "domain_name": "",
             "is_dev_public": false,
             "storage_account_state_name": "tfinfdevpagopa",
@@ -149,8 +147,6 @@ export const templatesConfig = [
         description: 'Setup per dominio pagoPA basato in West Europe con risorse base. Include riferimenti APIM, AKS e CI/CD',
         icon: VscAzure,
         template: {
-            "location_mapping": {},
-            "location_string_mapping": {},
             "domain_name": "",
             "is_dev_public": false,
             "storage_account_state_name": "tfinfdevpagopa",

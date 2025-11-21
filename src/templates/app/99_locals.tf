@@ -38,6 +38,9 @@ locals {
   domain_hostname = "${var.dns_zone_prefix}.${local.internal_dns_zone_name}"
 {% endif %}
 
+{% if include_app_service_webapp %}
+  {{app_service_webapp_name_snake}}_rg_name = "${local.project}-{{app_service_webapp_name_kebab}}-rg"
+{% endif %}
 
 
 }

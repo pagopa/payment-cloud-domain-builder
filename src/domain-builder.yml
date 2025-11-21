@@ -8,6 +8,15 @@
       ansible.builtin.include_vars:
         file: vars/statics.yml
 
+    - name: load variables elaborations
+      ansible.builtin.include_vars:
+        file: vars/elaborations.yml
+
+    - name: load local variables
+      ansible.builtin.include_vars:
+        file: vars/local.yml
+      when: "{{ local_run|default(false) }}"
+
     - name: Ensure dir app output exists
       ansible.builtin.file:
         path: output/{{ domain_name }}-{{ item }}/env/dev
