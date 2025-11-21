@@ -164,4 +164,25 @@ npm run dev
 
 l'applicazione sarà raggiungibile all'indirizzo [http://localhost:3000](http://localhost:3000)
 
+### Esecuzione ansible in locale
+
+Definire le variabili di configurazione del builder nel file `src/vars/local.yml`
+è possibile estrarre le variabili dal frontend una volta configurato il dominio, cliccando sul tasto "Export config" e convertendo il contenuto del campo "formData" in formato yml
+
+_es parziale:_
+```yml
+domain_name: "mydomain"
+is_dev_public: true
+storage_account_state_name: "tfinfdevpagopa"
+storage_account_container_state_name: "terraform-state"
+storage_account_state_rg_name: "terraform-state-rg"
+subscription: "DEV-pagoPA"
+[...]
+```
+
+```bash
+cd src
+ansible-playbook -i src/inventory/hosts domain-builder.yml --extra-vars "local_run=true"
+```
+
 

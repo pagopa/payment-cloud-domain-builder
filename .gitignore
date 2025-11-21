@@ -9,3 +9,5 @@
 **/output/*
 
 # End of https://www.toptal.com/developers/gitignore/api/ansible
+
+/src/vars/local.yml
