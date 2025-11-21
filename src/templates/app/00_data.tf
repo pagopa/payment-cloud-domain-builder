@@ -55,6 +55,15 @@ data "azurerm_private_dns_zone" "internal" {
   resource_group_name = local.internal_dns_zone_resource_group_name
 }
 
+data "azurerm_subnet" "private_endpoint_subnet" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                 = "{{ private_endpoint_subnet_name }}"
+  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
+  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
+}
+
 
 {% if include_kubernetes %}
 data "azurerm_kubernetes_cluster" "aks" {
@@ -68,4 +77,22 @@ data "azurerm_api_management" "apim" {
   name                = local.apim_name
   resource_group_name = local.apim_rg_name
 }
+{% endif %}
+
+{% if include_app_service_webapp %}
+data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
+  name                 = "${local.project}-{{app_service_webapp_name_kebab}}-snet"
+  virtual_network_name = local.vnet_name
+  resource_group_name  = local.vnet_resource_group_name
+
+}
+
+data "azurerm_private_dns_zone" "azurewebsites" {
+  {% if is_dev_public %}
+  count               = var.env_short != "d" ? 1 : 0
+  {% endif %}
+  name                = "privatelink.azurewebsites.net"
+  resource_group_name = local.vnet_name
+}
+
 {% endif %}

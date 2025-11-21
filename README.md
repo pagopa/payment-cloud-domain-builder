@@ -62,7 +62,7 @@ Sfruttare la text area in basso per comporre un valore complesso e riutilizzarlo
 </p>
 
 
-## Cosa viene prodotto
+### Cosa viene prodotto
 
 L'applicazione genera un branch sul repository GitHub collegato, contenente la configurazione del dominio appena creato.
 Il nome del branch segue la convenzione `domain-builder/domain-<domain_name>-<unique_id>`, e conterrà:
@@ -73,9 +73,72 @@ Il nome del branch segue la convenzione `domain-builder/domain-<domain_name>-<un
 Altre cartelle di ambiente, con le relative variabili, configurazione del backend devono essere create manualmente dall'utente.
 
 
+## Contributing
 
+### Definizione di nuovi componenti
 
-## Avvio dell'applicazione in locale
+#### Template jinja2
+Nella cartella `src/templates` sono definiti i template in formato jinja2 che vengono utilizzati per generare i file terraform relativi ai vari componenti.
+Utilizzare un singolo file per includere tutte le risorse relative ad un componente; il nome dle file **deve coincidere** (numerazione esclusa) con la variabile `include_<nome_componente>` 
+utilizzata per determinare se il componente è stato attivato o meno. 
+Nel file `00_data.tf` riportare i blocchi di tipo `data` necessari per il componente raccogliendoli dentro un blocco `if` sulla variabile `include_<nome_componente>`.
+
+_es:_
+```hcl 
+{% if include_apim %} # jinja2 
+data "azurerm_api_management" "apim" { # hcl
+  name                = local.apim_name
+  resource_group_name = local.apim_rg_name
+}
+{% endif %}
+```
+Nel file `99_variables.tf` definire le variabili necessarie per la configurazione del componente, sempre racchiuse in un blocco `if` sulla variabile `include_<nome_componente>`.
+
+_es:_ 
+```hcl
+{% if include_redis %} # jinja2 
+variable "redis_idh_resource_tier" { # hcl
+    type        = string
+    description = "The IDH resource tier for the Redis cache."
+}
+{% endif %}
+```
+
+Per chiarezza e facilità di manutenzione è consigliato nominare le variabili jinja2 con il prefisso `<nome_componente>_`, in modo da poterle facilmente identificare come appartenenti ad un determinato componente.
+
+###### Elaborazione variabili
+Se dovesse essere necessario effettuare delle elaborazioni sulle variabili jinja2 in input ai template per poter essere utilizzate in modo più efficace, è possibile definirle nel file `src/vars/elaborations.yml`
+Utilizzare sempre il filtro `default('')` per evitare errori in caso di componente non abilitato (e quindi variabile non definita).
+
+_es:_
+```yml
+<processed_variable_name>: "{{<variable_name> | default('') | lower | replace(' ', '-')}}"
+```
+
+#### Frontend
+
+Una volta definiti i file template per il componente, è necessario censire il nuovo componente e le variabili attese nel frontend, in modo che l'utente possa abilitarlo e configurarlo.
+Nella cartella `src/fe/utils` è presente il file `inputs.ts` dove sono definiti tutti i componenti disponibili e le relative variabili di configurazione.
+Di seguito sono riportati il minimo di campi necessari per definire un componente:
+
+```json
+<component_name>: {
+        default: false,
+        name: "<Component Display Name>",
+        formFields: [
+          { name: "include_<component_name>", key: "include_<component_name>", type: "hidden", value: "false" },
+        ]
+}
+```
+dove:
+
+- `component_name`: nome del componente, in snake_case, che deve coincidere con il nome dei file jinja2 definiti in precedenza
+- `name`: nome visualizzato nell'interfaccia utente
+- `formFields`: array di campi di configurazione del componente; deve essere presente il campo `include_<component_name>` di tipo `hidden` per permettere l'abilitazione/disabilitazione del componente
+
+Eventuali altri campi di input possono essere definiti seguendo la documentazione presente nel file stesso.
+
+### Avvio dell'applicazione in locale
 
 Setup ambiente:
 ```bash

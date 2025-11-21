@@ -10,10 +10,10 @@
  * Field configuration options:
  * - name: Display name of the field
  * - key: Unique identifier for the field
- * - type: Input type ('text', 'boolean', 'select', 'radio', 'hidden')
+ * - type: Input type ('text', 'boolean', 'select', 'checkboxgroup', 'hidden', 'static')
  * - placeholder: Helper text shown in the input (optional)
  * - value: Default value (optional, true or false not string if type='boolean')
- * - options: Array of {label, value} for select inputs (required for type='select')
+ * - options: Array of {label, value} for select inputs (required for type='select|checkboxgroup')
  *
  * Example:
  * {
@@ -103,7 +103,7 @@ export const formConfig = {
       default: false,
       name: "CosmosDB",
       formFields: [
-        { name: "include_cosmos", key: "include_cosmos", type: "hidden", value: "false" },
+        { name: "include_cosmosdb", key: "include_cosmos", type: "hidden", value: "false" },
         { name: "CosmosDB Account Database Type", key: "cosmosdb_account_database_type", type: "select",
           options: [
             { label: "Mongo", value: "mongo" },
@@ -163,6 +163,17 @@ export const formConfig = {
         name: "PostgreSQL database",
         formFields: [
           { name: "include_postgresql", key: "include_postgresql", type: "hidden", value: "false" },
+        ]
+    },
+    app_service_webapp: {
+        default: false,
+        name: "AppService webapp",
+        info: "La configurazione di default prevede una WebApp con immagine docker recuperata da dockerhub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.",
+        formFields: [
+          { name: "include_app_service_webapp", key: "include_app_service_webapp", type: "hidden", value: "false" },
+          { name: "WebApp Name (short)", key: "app_service_webapp_name", type: "text", placeholder: "WebApp name" },
+          { name: "WebApp always on", key: "app_service_webapp_always_on", type: "boolean", placeholder: "WebApp always on?" },
+          { name: "WebApp docker image", key: "app_service_webapp_docker_image", type: "text", placeholder: "WebApp docker image. latest is configured by default" },
         ]
     }
   },

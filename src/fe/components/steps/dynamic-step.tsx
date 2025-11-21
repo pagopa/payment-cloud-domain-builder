@@ -254,6 +254,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     <div>
       <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>Configurazione {formConfig.steps[stepName.toLowerCase()].name}</h2>
       <div className="space-y-4">
+          {stepConfig.info && stepConfig.info.length > 0 ?
+              <div className={`p-4 rounded-lg bg-blue-300 text-black text-center shadow-md`}>
+                  <p className="text-sm">
+                      {stepConfig.info}
+                  </p>
+              </div> : ""
+          }
+
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
             <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{(field.type !== 'hidden' && field.type !== 'static') && field.name}</label>
