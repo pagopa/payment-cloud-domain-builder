@@ -109,3 +109,39 @@ variable "{{app_service_webapp_name_snake}}_image" {
    description = "Docker image settings for {{app_service_webapp_name}}"
 }
 {% endif %}
+
+
+{% if include_app_service_function %}
+variable "{{app_service_function_name_snake}}_plan_idh_tier" {
+  type        = string
+  description = "The IDH resource tier for {{app_service_function_name}}"
+}
+
+variable "{{app_service_function_name_snake}}_autoscale_settings" {
+  type = object({
+    max_capacity                       = number                 # maximum capacity for this app service
+    scale_up_requests_threshold        = optional(number, null) # request count threshold which triggers scale up
+    scale_down_requests_threshold      = optional(number, null) # request count threshold which triggers scale down
+    scale_up_response_time_threshold   = optional(number, null) # response time threshold which triggers scale up
+    scale_down_response_time_threshold = optional(number, null) # response time threshold which triggers scale down
+    scale_up_cpu_threshold             = optional(number, null) # cpu threshold which triggers scale up
+    scale_down_cpu_threshold           = optional(number, null) # cpu threshold which triggers scale down
+  })
+  description = "Autoscale settings for {{app_service_function_name}}"
+}
+
+variable "{{app_service_function_name_snake}}_always_on" {
+  type        = bool
+  description = "Specifies whether the Web App is in Always On mode. Default is false."
+  default     = true
+}
+
+variable "{{app_service_function_name_snake}}_image" {
+  type = object({
+  docker_image        = string
+  docker_image_tag    = string
+  docker_registry_url = string
+  })
+  description = "Docker image settings for {{app_service_function_name}}"
+}
+{% endif %}

@@ -1,24 +1,23 @@
 import {
   FaCloud,
   FaDatabase,
-  FaMicrosoft,
-  FaNetworkWired,
-  FaLock,
   FaGithub,
-  FaDocker
 } from 'react-icons/fa';
+import {
+    AzAppServiceWebApp, APIManagement,
+    CosmosDBcolor,
+    AzStoragecs, AzFunctionsColor
+} from 'azure-react-icons';
 import {
   SiKubernetes,
   SiRedis,
 } from 'react-icons/si';
-import { MdStorage } from 'react-icons/md';
-import { AiOutlineDatabase } from "react-icons/ai";
 import { VscAzureDevops, VscAzure } from "react-icons/vsc";
 
 
 export const COMPONENT_CONFIG = {
   apim: {
-    icon: FaNetworkWired,
+    icon: APIManagement,
     label: 'APIM',
     title: 'apim',
     color: "text-blue-300"
@@ -42,19 +41,19 @@ export const COMPONENT_CONFIG = {
     color: "text-black-400"
   },
   cosmos: {
-    icon: AiOutlineDatabase,
+    icon: CosmosDBcolor,
     label: 'Cosmos DB',
     title: 'Cosmos DB',
     color: "text-green-400"
   },
   cosmosdb: {
-    icon: AiOutlineDatabase,
+    icon: CosmosDBcolor,
     label: 'Cosmos DB',
     title: 'Cosmos DB',
     color: "text-green-400"
   },
   storage_account: {
-    icon: MdStorage,
+    icon: AzStoragecs,
     label: 'Storage Account',
     title: 'Storage Account',
     color: "text-zinc-400"
@@ -71,17 +70,23 @@ export const COMPONENT_CONFIG = {
     title: 'PostgreSQL',
     color: "text-blue-800"
   },
-  aks: {
-    icon: SiKubernetes,
-    label: 'AKS',
-    title: 'AKS',
-    color: "text-blue-600"
-  },
   tag_config: {
     icon: FaCloud,
     label: 'Tag Config',
     title: 'Tag Configuration',
     color: "text-red-200"
+  },
+  app_service_webapp: {
+      icon: AzAppServiceWebApp,
+      label: 'Webapp',
+      title: 'App Service Webapp',
+      color: "text-blue-800"
+  },
+  app_service_function: {
+      icon: AzFunctionsColor,
+      label: 'Function',
+      title: 'App Service Function',
+      color: "text-blue-800"
   }
 } as const;
 

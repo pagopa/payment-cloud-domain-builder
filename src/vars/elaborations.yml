@@ -1,2 +1,5 @@
 app_service_webapp_name_snake: "{{app_service_webapp_name | default('') | lower | replace('-', '_') | replace(' ', '_')}}"
 app_service_webapp_name_kebab: "{{app_service_webapp_name | default('') | lower | replace(' ', '-') | replace('_', '-')}}"
+
+app_service_function_name_snake: "{{app_service_function_name | default('') | lower | replace('-', '_') | replace(' ', '_')}}"
+app_service_function_name_kebab: "{{app_service_function_name | default('') | lower | replace(' ', '-') | replace('_', '-')}}"
