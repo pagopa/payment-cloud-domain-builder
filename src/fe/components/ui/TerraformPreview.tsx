@@ -3,7 +3,8 @@ import { generateTableSummaryData } from "../../utils/terraform";
 
 interface Summary {
   category: string;
-  rows: { field: string; value: string }[];
+  rows: { field: string; value: string, id: string }[];
+  enabled: boolean;
 }
 
 export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData }) => (
@@ -23,31 +24,36 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
         {summaryData
           // Filtra le categorie che hanno almeno un campo configurato
           .filter((section) => section.rows.some((row) => row.value.trim() !== ""))
+            .filter(section => section.enabled )
           .map((section) => (
             <React.Fragment key={section.category}>
               {/* Separatore Evidenziato per Categoria */}
               <tr>
                 <td
-                  colSpan={2}
-                  className="px-4 py-3 font-semibold uppercase bg-emerald-900 text-white border border-blue-500"
+                  className="px-4 py-3 font-semibold uppercase bg-emerald-900 text-white"
                 >
                   {section.category}
                 </td>
+                  <td className="px-4 py-3 font-semibold  bg-emerald-900 text-white">
+                      ✅ Abilitato
+                  </td>
               </tr>
               {/* Righe dei Campi Configurati */}
               {section.rows
-                .filter((row) => row.value.trim() !== "")
-                .map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className="dark:hover:bg-zinc-700 dark:bg-zinc-900 transition-colors duration-150"
-                  >
-                    <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800">{row.field}</td>
-                    <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800 font-semibold text-zinc-900 dark:text-zinc-100">
-                      {row.value}
-                    </td>
-                  </tr>
-                ))}
+                  .filter((row) => row.value.trim() !== "")
+                  .filter((row) => !row.id.startsWith("include_"))
+                  .map((row, rowIndex) => (
+                      <tr
+                          key={rowIndex}
+                          className="dark:hover:bg-zinc-700 dark:bg-zinc-900 transition-colors duration-150"
+                      >
+                          <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800">{row.field}</td>
+                          <td className="px-4 py-2 border-b border-zinc-400 dark:border-zinc-800 font-semibold text-zinc-900 dark:text-zinc-100">
+                              {row.value}
+                          </td>
+                      </tr>
+                  ))}
+
             </React.Fragment>
           ))}
       </tbody>

@@ -42,5 +42,8 @@ locals {
   {{app_service_webapp_name_snake}}_rg_name = "${local.project}-{{app_service_webapp_name_kebab}}-rg"
 {% endif %}
 
+{% if include_app_service_function %}
+{{app_service_function_name_snake}}_rg_name = "${local.project}-{{app_service_function_name_kebab}}-rg"
+{% endif %}
 
 }

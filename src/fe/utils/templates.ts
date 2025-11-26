@@ -1,88 +1,94 @@
 import {
-  FaCloud,
-  FaDatabase,
-  FaMicrosoft,
-  FaNetworkWired,
-  FaLock,
-  FaGithub,
-  FaDocker
+    FaCloud,
+    FaDatabase,
+    FaGithub,
+    FaTags,
 } from 'react-icons/fa';
 import {
-  SiKubernetes,
-  SiRedis,
+    AzAppServiceWebApp, APIManagement,
+    CosmosDBcolor,
+    AzStoragecs, AzFunctionsColor
+} from 'azure-react-icons';
+import {
+    SiKubernetes,
+    SiRedis,
 } from 'react-icons/si';
-import { MdStorage } from 'react-icons/md';
-import { AiOutlineDatabase } from "react-icons/ai";
 import { VscAzureDevops, VscAzure } from "react-icons/vsc";
 
 
 export const COMPONENT_CONFIG = {
-  apim: {
-    icon: FaNetworkWired,
-    label: 'APIM',
-    title: 'apim',
-    color: "text-blue-300"
-  },
-  kubernetes: {
-    icon: SiKubernetes,
-    label: 'AKS',
-    title: 'kubernetes',
-    color: "text-blue-600"
-  },
-  devops: {
-    icon: VscAzureDevops,
-    label: 'DevOps',
-    title: 'DevOps',
-    color: "text-blue-400"
-  },
-  github_runner: {
-    icon: FaGithub,
-    label: 'GitHub Runner',
-    title: 'GitHub',
-    color: "text-black-400"
-  },
-  cosmos: {
-    icon: AiOutlineDatabase,
-    label: 'Cosmos DB',
-    title: 'Cosmos DB',
-    color: "text-green-400"
-  },
-  cosmosdb: {
-    icon: AiOutlineDatabase,
-    label: 'Cosmos DB',
-    title: 'Cosmos DB',
-    color: "text-green-400"
-  },
-  storage_account: {
-    icon: MdStorage,
-    label: 'Storage Account',
-    title: 'Storage Account',
-    color: "text-zinc-400"
-  },
-  redis: {
-    icon: SiRedis,
-    label: 'Redis',
-    title: 'Redis',
-    color: "text-red-400"
-  },
-  postgresql: {
-    icon: FaDatabase,
-    label: 'PostgreSQL',
-    title: 'PostgreSQL',
-    color: "text-blue-800"
-  },
-  aks: {
-    icon: SiKubernetes,
-    label: 'AKS',
-    title: 'AKS',
-    color: "text-blue-600"
-  },
-  tag_config: {
-    icon: FaCloud,
-    label: 'Tag Config',
-    title: 'Tag Configuration',
-    color: "text-red-200"
-  }
+    apim: {
+        icon: APIManagement,
+        label: 'APIM',
+        title: 'apim',
+        color: "text-blue-300"
+    },
+    kubernetes: {
+        icon: SiKubernetes,
+        label: 'AKS',
+        title: 'kubernetes',
+        color: "text-blue-600"
+    },
+    devops: {
+        icon: VscAzureDevops,
+        label: 'DevOps',
+        title: 'DevOps',
+        color: "text-blue-400"
+    },
+    github_runner: {
+        icon: FaGithub,
+        label: 'GitHub Runner',
+        title: 'GitHub',
+        color: "text-zinc-600 dark:text-zinc-300"
+    },
+    cosmos: {
+        icon: CosmosDBcolor,
+        label: 'Cosmos DB',
+        title: 'Cosmos DB',
+        color: "text-green-400"
+    },
+    cosmosdb: {
+        icon: CosmosDBcolor,
+        label: 'Cosmos DB',
+        title: 'Cosmos DB',
+        color: "text-green-400"
+    },
+    storage_account: {
+        icon: AzStoragecs,
+        label: 'Storage Account',
+        title: 'Storage Account',
+        color: "text-zinc-400"
+    },
+    redis: {
+        icon: SiRedis,
+        label: 'Redis',
+        title: 'Redis',
+        color: "text-red-400"
+    },
+    postgresql: {
+        icon: FaDatabase,
+        label: 'PostgreSQL',
+        title: 'PostgreSQL',
+        color: "text-blue-800"
+    },
+    app_service_webapp: {
+        icon: AzAppServiceWebApp,
+        label: 'Webapp',
+        title: 'App Service Webapp',
+        color: "text-blue-800"
+    },
+    app_service_function: {
+        icon: AzFunctionsColor,
+        label: 'Function',
+        title: 'App Service Function',
+        color: "text-blue-800"
+    },
+    tag_config: {
+        icon: FaTags,
+        label: 'Tag Config',
+        title: 'Tag config',
+        color: "text-zinc-600 dark:text-zinc-300"
+    }
 } as const;
 
 

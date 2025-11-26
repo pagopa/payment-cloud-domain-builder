@@ -3,6 +3,8 @@ import { formConfig } from "../../utils/inputs";
 
 import { STEP_COLORS } from '../../utils/constants';
 import { FormButton } from '../ui/FormButton';
+import { RiInformation2Fill } from "react-icons/ri";
+
 
 interface DynamicStepProps {
   formData: CustomFormData
@@ -31,9 +33,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
     stepName
   }) => {
   const stepColor = STEP_COLORS[currentStep as keyof typeof STEP_COLORS];
-
-  const stepNameKey = stepName.toLowerCase().replace(/\s+/g, "_");
-  const stepConfig = formConfig.steps[stepNameKey];
+  const stepConfig = formConfig.steps[stepName];
   const inputClasses = {
     text: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none",
     number: "w-full p-2 border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 rounded text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none",
@@ -255,9 +255,9 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
       <h2 className={`text-2xl font-bold mb-2 ${stepColor.text}`}>Configurazione {formConfig.steps[stepName.toLowerCase()].name}</h2>
       <div className="space-y-4">
           {stepConfig.info && stepConfig.info.length > 0 ?
-              <div className={`p-4 rounded-lg bg-blue-300 text-black text-center shadow-md`}>
+              <div className={`p-4 rounded-lg bg-blue-400 text-black text-center shadow-md`}>
                   <p className="text-sm">
-                      {stepConfig.info}
+                      <RiInformation2Fill />  <em>{stepConfig.info}</em>
                   </p>
               </div> : ""
           }
@@ -274,9 +274,9 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
         ))}
 
         {stepConfig.formFields.length <= 1 ?
-            <div className={`p-4 rounded-lg bg-zinc-500 text-white text-center shadow-md`}>
+            <div className={`p-4 rounded-lg bg-gray-500 text-white text-center shadow-md`}>
                 <p className="text-sm">
-                  Nulla da definire in questo step :)
+                    <RiInformation2Fill />  Nulla da definire in questo step! :)
                 </p>
             </div> : ""
         }

@@ -79,14 +79,7 @@ data "azurerm_api_management" "apim" {
 }
 {% endif %}
 
-{% if include_app_service_webapp %}
-data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
-  name                 = "${local.project}-{{app_service_webapp_name_kebab}}-snet"
-  virtual_network_name = local.vnet_name
-  resource_group_name  = local.vnet_resource_group_name
-
-}
-
+{% if include_app_service_webapp or include_app_service_function %}
 data "azurerm_private_dns_zone" "azurewebsites" {
   {% if is_dev_public %}
   count               = var.env_short != "d" ? 1 : 0
@@ -94,5 +87,23 @@ data "azurerm_private_dns_zone" "azurewebsites" {
   name                = "privatelink.azurewebsites.net"
   resource_group_name = local.vnet_name
 }
+{% endif %}
 
+
+{% if include_app_service_webapp %}
+data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
+  name                 = "${local.project}-{{app_service_webapp_name_kebab}}-snet"
+  virtual_network_name = local.vnet_name
+  resource_group_name  = local.vnet_resource_group_name
+
+}
+{% endif %}
+
+{% if include_app_service_function %}
+data "azurerm_subnet" "{{app_service_function_name_snake}}_snet" {
+name                 = "${local.project}-{{app_service_function_name_kebab}}-snet"
+virtual_network_name = local.vnet_name
+resource_group_name  = local.vnet_resource_group_name
+
+}
 {% endif %}

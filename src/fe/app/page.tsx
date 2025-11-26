@@ -347,14 +347,8 @@ const handleGenerateWorkflow = async () => {
                 totalSteps={defaultSteps.length + selectedComponents.length}
                 onStepClick={goToStep}
                 stepNames={[
-                  ...defaultSteps.map((step) =>
-                    step
-                      .replace(/_/g, ' ')
-                      .replace(/^\w/, (c) => c.toUpperCase())
-                  ),
-                  ...selectedComponents.map((component) =>
-                    formConfig.steps[component].name
-                  ),
+                  ...defaultSteps,
+                  ...selectedComponents,
                 ]}
               />
 
@@ -383,7 +377,7 @@ const handleGenerateWorkflow = async () => {
                       goToLast={goToLast}
                       updateFormData={updateFormData}
                       currentStep={stepNumber}
-                      stepName={formatStepName(defaultStep)}
+                      stepName={defaultStep}
                       isLastStep={isLastStep}
                       onComplete={
                         isLastStep ? () => setShowSummary(true) : () => {}
@@ -475,11 +469,6 @@ const handleGenerateWorkflow = async () => {
   const defaultSteps = Object.keys(formConfig.steps).filter(
     step => (formConfig.steps as Record<string, { default: boolean }>)[step].default
   );
-
-  const formatStepName = (name: string) =>
-    name
-      .replace(/_/g, ' ')
-      .replace(/^\w/, c => c.toUpperCase());
 
 
   return (

@@ -126,7 +126,7 @@ Di seguito sono riportati il minimo di campi necessari per definire un component
         default: false,
         name: "<Component Display Name>",
         formFields: [
-          { name: "include_<component_name>", key: "include_<component_name>", type: "hidden", value: "false" },
+          { name: "Abilita <componente>", key: "include_<component_name>", type: "hidden", value: "false" },
         ]
 }
 ```

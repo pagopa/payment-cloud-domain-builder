@@ -1,6 +1,7 @@
 // components/ui/StepIndicator.tsx
 import React from "react";
 import { STEP_COLORS } from "../../utils/constants";
+import { formConfig } from "../../utils/inputs";
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -19,7 +20,6 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
     <div className="mb-6 flex items-center justify-center gap-4 flex-wrap">
       {Array.from({ length: totalSteps }, (_, i) => i + 1).map((stepNumber) => {
         const stepColor = STEP_COLORS[stepNumber as keyof typeof STEP_COLORS]; // Recupera i colori per lo step
-
         return (
           <div
             key={stepNumber}
@@ -32,7 +32,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                   : `border-${stepColor.primary}-500 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:${stepColor.hover}`
               }
             `}
-            title={`Step ${stepNumber}: ${stepNames[stepNumber - 1] || ""}`}
+            title={`Step ${stepNumber}: ${formConfig.steps[stepNames[stepNumber - 1]].name || ""}`}
           >
             <div
               className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold
@@ -45,7 +45,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
             >
               {stepNumber}
             </div>
-            <span className="text-sm font-medium">{stepNames[stepNumber - 1]}</span>
+            <span className="text-sm font-medium">{formConfig.steps[stepNames[stepNumber - 1]].name}</span>
           </div>
         );
       })}
