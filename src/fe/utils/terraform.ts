@@ -19,7 +19,7 @@ export function generateTableSummaryData(data: FormData) {
       .map((field):boolean => {
           return data[field.key] === "true" || data[field.key] === true;
       })
-      .pop() ;
+      .pop();
 
     if (rows.length > 0) {
       summary.push({ category: capitalize(stepConfig.name), rows: rows, enabled: stepEnabled});

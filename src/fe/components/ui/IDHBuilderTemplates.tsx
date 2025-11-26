@@ -102,7 +102,7 @@ export const IDHBuilderTemplates: React.FC<IDHBuilderTemplatesProps> = ({
           title={title}
       >
     <span className={`${color} text-sm`}>
-      <Icon />
+      <Icon size={18}/>
     </span>
         <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
       {label}

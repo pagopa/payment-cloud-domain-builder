@@ -51,14 +51,6 @@ export const formConfig = {
                         { label: "Italy North", value: "italynorth" }
                     ]
                 },
-                // { name: "Tag Config", key: "include_tag_config", type: "static", value: "true" },
-            ],
-        },
-        tag_config: {
-            default: true,
-            name: "Tag centralizzati",
-            formFields: [
-                { name: "Abilita Tag Config", key: "include_tag_config", type: "hidden", value: "true"  },
             ],
         },
         monitoring: {
@@ -89,6 +81,14 @@ export const formConfig = {
                 { name: "External Domain", key: "external_domain", type: "text", placeholder: "e.g. pagopa.it" },
                 { name: "Internal DNS Zone Resource Group Name", key: "internal_dns_zone_resource_group_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
                 { name: "Internal DNS Prefix", key: "dns_zone_internal_prefix", type: "text", placeholder: "e.g. internal.dev.platform" },
+            ],
+        },
+        tag_config: {
+            default: false,
+            name: "Tag centralizzati",
+            info: "Abilita la gestione centralizzata dei tag tramite l'utilizzo del modulo condiviso",
+            formFields: [
+                { name: "Abilita Tag Config", key: "include_tag_config", type: "hidden", value: "false"  },
             ],
         },
         devops: {

@@ -30,11 +30,13 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
               {/* Separatore Evidenziato per Categoria */}
               <tr>
                 <td
-                  colSpan={2}
-                  className="px-4 py-3 font-semibold uppercase bg-emerald-900 text-white border border-blue-500"
+                  className="px-4 py-3 font-semibold uppercase bg-emerald-900 text-white"
                 >
                   {section.category}
                 </td>
+                  <td className="px-4 py-3 font-semibold  bg-emerald-900 text-white">
+                      ✅ Abilitato
+                  </td>
               </tr>
               {/* Righe dei Campi Configurati */}
               {section.rows
