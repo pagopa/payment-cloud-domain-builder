@@ -130,13 +130,13 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
         return (
           <label
             htmlFor={field.key}
-            className="flex items-center gap-4 cursor-pointer mt-2"
+            className="flex w-6 gap-4 cursor-pointer mt-2"
           >
             <div className="relative">
               <input
                 type="checkbox"
                 name={field.key}
-                defaultChecked={field.value}
+                defaultChecked={field.value === "true" || value === true}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
                 id={field.key}
