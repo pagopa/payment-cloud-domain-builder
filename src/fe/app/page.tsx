@@ -493,7 +493,7 @@ const handleGenerateWorkflow = async () => {
       >
         <div className="text-center p-8">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <h3 className="text-xl font-semibold text-white mb-2">Generating Workflow...</h3>
+          <h3 className="text-xl font-semibold text-zinc-800 dark:text-white mb-2">Generating Workflow...</h3>
           <p className="text-zinc-800 dark:text-zinc-400">Please wait while we create your GitHub Actions workflow.</p>
         </div>
       </Modal>
