@@ -17,15 +17,25 @@ export async function POST(request: NextRequest) {
   try {
     // Verify origin
     const origin = request.headers.get('origin');
-    const allowedOrigins = [
-      'http://localhost:3000',
-    ];
 
-    if (!origin || !allowedOrigins.includes(origin)) {
+    // Define allowed origin logic
+    const isAllowedOrigin = (origin: string | null) => {
+      if (!origin) return false;
+
+      // Allow localhost
+      if (origin === 'http://localhost:3000') return true;
+
+      // Allow Azure Container Apps domains
+      // This regex matches https://<anything>.azurecontainerapps.io
+      const azureContainerAppsRegex = /^https:\/\/.*\.azurecontainerapps\.io$/;
+      return azureContainerAppsRegex.test(origin);
+    };
+
+    if (!isAllowedOrigin(origin)) {
       console.log(`❌  [${requestId}] Unauthorized origin: ${origin}`);
       return NextResponse.json(
-        { error: 'Unauthorized origin' },
-        { status: 403 }
+          { error: 'Unauthorized origin' },
+          { status: 403 }
       );
     }
 
