@@ -47,7 +47,8 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
 
   const handleFakeLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin';
+    if (username === "admin" && password === adminPassword) {
       setError("");
       onLoginSuccess({
         name: username,
@@ -56,8 +57,8 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
       });
     } else {
       setError("Credenziali non valide. Riprova.");
-    }
-  };
+      }
+    };
 
 
   const handleGoogleLoginSuccess = (credentialResponse: GoogleCredentialResponse) => {

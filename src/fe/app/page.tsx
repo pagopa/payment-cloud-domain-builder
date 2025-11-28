@@ -520,7 +520,7 @@ const handleGenerateWorkflow = async () => {
                 <p>Status: <span className="text-green-400">{apiResponse.status}</span></p>
                 <p>Duration: <span className="text-blue-400">{apiResponse.duration}ms</span></p>
                 {apiResponse.requestId && <p>Request ID: <span className="text-yellow-400">{apiResponse.requestId}</span></p>}
-                {apiResponse.requestId && <p>Branch Name: <span className="text-purple-400">domain-builder-{apiResponse.requestId}-{formData?.domain_name}</span></p>}
+                {apiResponse.requestId && <p>Branch Name: <span className="text-purple-400">domain-{formData?.domain_name}-{apiResponse.requestId}</span></p>}
                 <a
                   href="https://github.com/pagopa/payment-cloud-domain-builder/actions/workflows/domain-builder.yml"
                   target="_blank"
