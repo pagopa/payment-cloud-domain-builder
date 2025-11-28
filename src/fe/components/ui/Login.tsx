@@ -100,7 +100,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-transparent text-white text-sm outline-none placeholder:text-zinc-500 placeholder:italic"
+                className="w-full bg-transparent text-zinc-900 dark:text-white text-sm outline-none placeholder:text-zinc-500 placeholder:italic"
               />
             </div>
             <div className="flex items-center bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 p-3 rounded-lg">
@@ -110,7 +110,7 @@ export const Login: React.FC<{ onLoginSuccess: (profile?: UserProfile) => void }
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-transparent text-white text-sm outline-none placeholder:text-zinc-500 placeholder:italic"
+                className="w-full bg-transparent text-zinc-900 dark:text-white text-sm outline-none placeholder:text-zinc-500 placeholder:italic"
               />
             </div>
             {error && (
