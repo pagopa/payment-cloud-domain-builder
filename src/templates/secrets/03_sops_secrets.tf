@@ -8,7 +8,7 @@ data "external" "terrasops" {
     "bash", "terrasops.sh"
   ]
   query = {
-    env = "${var.location_short}-${var.env}"
+    env = var.env
   }
 
 }

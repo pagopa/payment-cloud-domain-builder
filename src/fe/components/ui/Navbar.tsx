@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 strokeLinejoin="round"
             />
           </svg>
-          <span className="text-xl font-bold tracking-tight text-indigo-200 font-mono drop-shadow">
+          <span className="text-xl font-bold tracking-tight text-indigo-800 dark:text-indigo-200 font-mono drop-shadow">
           {title}: <TypewriterText
               text={subtitle}
               typingSpeed={80}

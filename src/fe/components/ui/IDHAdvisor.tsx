@@ -69,14 +69,14 @@ export const IdhAdvisor: React.FC = () => {
                 className={`p-6 rounded-xl border-2 transition-all cursor-pointer text-left ${
                     selectedModule === module.id
                         ? 'border-indigo-500 bg-indigo-500/10'
-                        : 'border-zinc-700 bg-zinc-800 hover:border-zinc-600'
+                        : 'border-zinc-400 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 hover:border-indigo-500 hover:dark:border-zinc-600'
                 }`}
             >
               <div className="flex items-start gap-4">
                 <module.icon />
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-white mb-2">{module.name}</h3>
-                  <p className="text-sm text-zinc-400">{module.description}</p>
+                  <h3 className="text-lg font-bold text-zinc-800 dark:text-white mb-2">{module.name}</h3>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400">{module.description}</p>
                 </div>
               </div>
             </button>
@@ -96,7 +96,7 @@ export const IdhAdvisor: React.FC = () => {
               <span className="text-4xl">{module.icon}</span>
               <div>
                 <h3 className="text-2xl font-bold text-white">{module.name}</h3>
-                <p className="text-zinc-400">{module.description}</p>
+                <p className="text-zinc-800 dark:text-zinc-400">{module.description}</p>
               </div>
             </div>
             <button
@@ -104,23 +104,23 @@ export const IdhAdvisor: React.FC = () => {
                   setSelectedModule(null);
                   setShowCode(false);
                 }}
-                className="px-4 py-2 text-zinc-400 hover:text-white cursor-pointer transition-colors"
+                className="px-4 py-2 text-zinc-800 dark:text-zinc-400 hover:text-zinc-600 hover:dark:text-white cursor-pointer transition-colors"
             >
               ← Torna indietro
             </button>
           </div>
 
-          <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-            <h4 className="text-lg font-semibold text-white mb-4">Configurazione</h4>
+          <div className="bg-zinc-100 dark:bg-zinc-800 rounded-xl p-6 border border-indigo-300 dark:border-zinc-700">
+            <h4 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Configurazione</h4>
             <div className="space-y-4">
               {module.fields.map(field => (
                   <div key={field.name}>
-                    <label className="block text-sm font-medium text-zinc-300 mb-2">
+                    <label className="block text-sm font-medium text-zinc-800 dark:text-zinc-300 mb-2">
                       {field.label}
                       {field.required && <span className="text-red-400 ml-1">*</span>}
                     </label>
                     {field.description && (
-                        <p className="text-xs text-zinc-500 mb-2">{field.description}</p>
+                        <p className="text-xs text-zinc-700 dark:text-zinc-400 mb-2">{field.description}</p>
                     )}
 
                     {field.type === 'text' && (
@@ -129,7 +129,7 @@ export const IdhAdvisor: React.FC = () => {
                             value={(formValues[field.name] as string) || ''}
                             onChange={(e) => handleFieldChange(field.name, e.target.value)}
                             placeholder={field.placeholder}
-                            className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-500 dark:border-zinc-600 rounded-lg text-black dark:text-white focus:border-indigo-500 focus:outline-none transition-colors"
                         />
                     )}
 
@@ -138,7 +138,7 @@ export const IdhAdvisor: React.FC = () => {
                             type="number"
                             value={(formValues[field.name] as number) || ''}
                             onChange={(e) => handleFieldChange(field.name, parseInt(e.target.value))}
-                            className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-500 dark:border-zinc-600 rounded-lg text-black dark:text-white focus:border-indigo-500 focus:outline-none transition-colors"
                         />
                     )}
 
@@ -146,7 +146,7 @@ export const IdhAdvisor: React.FC = () => {
                         <select
                             value={(formValues[field.name] as string) || ''}
                             onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                            className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
+                            className="w-full px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-500 dark:border-zinc-600 rounded-lg text-black dark:text-white focus:border-indigo-500 focus:outline-none transition-colors"
                         >
                           <option value="">Seleziona...</option>
                           {field.options?.map(option => (
@@ -163,7 +163,7 @@ export const IdhAdvisor: React.FC = () => {
                               onChange={(e) => handleFieldChange(field.name, e.target.checked)}
                               className="w-4 h-4 rounded border-zinc-600 bg-zinc-900 text-indigo-600 focus:ring-indigo-500"
                           />
-                          <span className="text-sm text-zinc-400">Abilita</span>
+                          <span className="text-sm text-zinc-800 dark:text-zinc-400">Abilita</span>
                         </div>
                     )}
                   </div>
@@ -176,8 +176,7 @@ export const IdhAdvisor: React.FC = () => {
                 onClick={() => setShowCode(!showCode)}
                 className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors flex items-center gap-2"
             >
-              <span>🚀</span>
-              {showCode ? 'Nascondi Codice' : 'Genera Codice Terraform'}
+                <span className="w-45">{showCode ? '🕵️‍♂️   Nascondi Codice' : '🚀   Genera Codice'}</span>
             </button>
           </div>
         </div>
@@ -190,9 +189,9 @@ export const IdhAdvisor: React.FC = () => {
     const code = generateTerraformCode();
 
     return (
-        <div className="mt-6 bg-zinc-900 rounded-xl border border-zinc-700 overflow-hidden animate-fade-in">
-          <div className="flex items-center justify-between p-4 bg-zinc-800 border-b border-zinc-700">
-            <h4 className="text-lg font-semibold text-white flex items-center gap-2">
+        <div className="mt-6 bg-zinc-200 dark:bg-zinc-900 rounded-xl border border-indigo-300 dark:border-zinc-700 overflow-hidden animate-fade-in">
+          <div className="flex items-center justify-between p-4 bg-zinc-300 dark:bg-zinc-800 border-b border-zinc-700">
+            <h4 className="text-lg font-semibold text-zinc-800 dark:text-white flex items-center gap-2">
               <span>📝</span>
               Codice Terraform Generato
             </h4>
@@ -211,7 +210,7 @@ export const IdhAdvisor: React.FC = () => {
               📋 Copia
             </button>
           </div>
-          <pre className="p-6 text-sm text-zinc-300 overflow-x-auto">
+          <pre className="p-6 text-sm text-zinc-800 dark:text-zinc-300 overflow-x-auto">
           <code className="language-terraform">{code}</code>
         </pre>
         </div>
@@ -224,7 +223,7 @@ export const IdhAdvisor: React.FC = () => {
           <h1 className="text-4xl font-bold text-white mb-3 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text">
             IDH Module Advisor
           </h1>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-zinc-800 dark:text-zinc-400 text-lg">
             Configura e genera moduli Terraform IDH in modo semplice e veloce
           </p>
         </div>

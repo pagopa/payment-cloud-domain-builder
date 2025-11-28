@@ -40,8 +40,6 @@ Viene quindi mostrata una schermata di risposta dove è possibile trovare il nom
   <img src="docs/images/domain_builder_build_response.png" width="300" alt="Output genera dominio"/>
 </p>
 
-
-
 ### Configurazione manuale
 
 A differenza del quick start, è possibile configurare manualmente il dominio senza utilizzare un template predefinito; gli unici tab predefiniti sono quelli relativi al dominio stesso, al monitoraggio ed al networking, che costituiscono le componenti minime necessarie per la definizione di un dominio.
@@ -54,7 +52,7 @@ Il flusso di lavoro non prevede differenze rispetto a quello descritto nella sez
 
 ### Utilità
 
-Nella sezione di sono censite le variabili ed i locals che vengono generati dal builder per ogni dominio; ogni variabile/local utilizzabile liberamente all'interno di ogni campo di configurazione ed è possibile trascinare ogni elemento per comporre il valore desiderato
+Nella sezione sulla destra sono censite le variabili ed i locals che vengono generati dal builder per ogni dominio; ogni variabile/local utilizzabile liberamente all'interno di ogni campo di configurazione ed è possibile trascinare ogni elemento per comporre il valore desiderato
 Sfruttare la text area in basso per comporre un valore complesso e riutilizzarlo tramite copia-incolla in più campi di configurazione
 
 <p align="center">
@@ -72,6 +70,27 @@ Il nome del branch segue la convenzione `domain-builder/domain-<domain_name>-<un
 
 Altre cartelle di ambiente, con le relative variabili, configurazione del backend devono essere create manualmente dall'utente.
 
+In base ai moduli abilitati, potrebbero essere presenti nel codice dei `FIXME` che richiedono l'intervento manuale dell'utente per completare la configurazione del dominio.
+
+### Import/Export configurazione
+
+Sulla sinistra sono presenti i tasti per fare import ed export della configurazione. Verrà scaricato un file json nel seguente formato:
+
+```json
+{
+  "formData": {
+    "include_domain": true,
+    "domain_name": "tstdmo",
+    "is_dev_public": true,
+    "storage_account_state_name": "tfinfdevpagopa",
+    [...]
+}
+```
+
+Questo stesso file può essere importato tramite il tasto _Import config_, permettendo di caricare una configurazione precedentemente salvata.
+Questo strumento può essere utilizzato per salvare un lavoro non ancora concluso o condividere una configurazione con un altro utente.
+
+Per definire un nuovo template in _Quick start_ fare riferimento a la sezione _Contributing_ più in basso.
 
 ## Contributing
 
@@ -137,6 +156,46 @@ dove:
 - `formFields`: array di campi di configurazione del componente; deve essere presente il campo `include_<component_name>` di tipo `hidden` per permettere l'abilitazione/disabilitazione del componente
 
 Eventuali altri campi di input possono essere definiti seguendo la documentazione presente nel file stesso.
+
+### Definizione di nuovi template
+
+I template sono definiti nel file `src/fe/utils/templates.ts` come oggetti typescript.
+Il punto di partenza è il JSON esportato tramite interfaccia grafica, che deve essere modificato per rimuovere campi non necessari o preimpostare valori di default.
+
+Per definire un nuovo template è necessario definire un nuovo oggetto nella lista `templatesConfig` in `src/fe/utils/templates.ts` contenente i seguenti campi:
+
+- `name`: nome breve del template
+- `description`: descrizione del template, utile per capire cosa contiene
+- `icon`: icona rappresentativa del template, importabile da `react-icons`
+- `template`: oggetto JSON contenente i campi di configurazione del dominio
+
+```typescript
+{
+  name: 'pagoPA basic ITN domain',
+  description: 'Setup per dominio pagoPA basato in Italy North con risorse base. Include riferimenti APIM, AKS e CI/CD',
+  icon: VscAzure,
+  template: {
+      <contenuto del campo `formFata` esportato dal portale>
+  }
+}
+```
+
+es:
+```typescript
+{
+    name: 'pagoPA basic ITN domain',
+        description: 'Setup per dominio pagoPA basato in Italy North con risorse base. Include riferimenti APIM, AKS e CI/CD',
+        icon: VscAzure,
+        template:{
+            "domain_name":  "", 
+            "is_dev_public": true
+            [...]
+        }
+}
+    
+```
+
+
 
 ### Avvio dell'applicazione in locale
 
