@@ -14,12 +14,13 @@ export function generateTableSummaryData(data: FormData) {
     });
 
 
-    const stepEnabled: boolean = stepFields
-      .filter(field => field.key.startsWith("include_") )
-      .map((field):boolean => {
-          return data[field.key] === "true" || data[field.key] === true;
-      })
-      .pop();
+      var include_step = stepFields
+          .filter(field => field.key.startsWith("include_"))
+          .map((field): boolean => {
+              return data[field.key] === "true" || data[field.key] === true;
+          })
+          .pop();
+      const stepEnabled: boolean = include_step === undefined ? false : include_step;
 
     if (rows.length > 0) {
       summary.push({ category: capitalize(stepConfig.name), rows: rows, enabled: stepEnabled});
