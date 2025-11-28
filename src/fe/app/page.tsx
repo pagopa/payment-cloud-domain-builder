@@ -510,7 +510,7 @@ const handleGenerateWorkflow = async () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Workflow Generated Successfully!</h3>
+          <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">Workflow Generated Successfully!</h3>
           <p className="text-zinc-800 dark:text-zinc-400 mb-4">Your GitHub Actions workflow has been created.</p>
 
           {apiResponse && (

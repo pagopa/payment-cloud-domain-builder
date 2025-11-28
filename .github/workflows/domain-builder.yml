@@ -70,8 +70,7 @@ jobs:
             elif isinstance(value, (int, float)):
                 extra_vars.append(f"{key}={value}")
             elif isinstance(value, str):
-                if value.strip():
-                    extra_vars.append(f"{key}={q(value)}")
+                extra_vars.append(f"{key}={q(value.strip())}")
             elif isinstance(value, (dict, list)):
                 extra_vars.append(f"{key}={q(json.dumps(value))}")
 

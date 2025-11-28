@@ -37,7 +37,7 @@ export const formConfig = {
             default: true,
             name: "Definizione dominio",
             formFields: [
-                { name: "Abilita Dominio", key: "include_domain", type: "hidden", value: "true"  },
+                { name: "Abilita Dominio", key: "include_domain", type: "hidden", value: true  },
                 { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. meme" },
                 { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?" },
                 { name: "State Storage Account Name", key: "storage_account_state_name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
@@ -57,7 +57,7 @@ export const formConfig = {
             default: true,
             name: "Monitoraggio",
             formFields: [
-                { name: "Abilita Monitoraggio", key: "include_monitoring", type: "hidden", value: "true"  },
+                { name: "Abilita Monitoraggio", key: "include_monitoring", type: "hidden", value: true  },
                 { name: "Application Insight Name", key: "application_insight_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-appinsights" },
                 { name: "Log Analytics Workspace Name", key: "log_analytics_ws_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-law" },
                 { name: "Log Analytics Workspace RG Name", key: "log_analytics_ws_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-itn-core-monitor-rg" },
@@ -71,7 +71,7 @@ export const formConfig = {
             default: true,
             name: "Riferimenti Network",
             formFields: [
-                { name: "Abilita Network", key: "include_networking", type: "hidden", value: "true"  },
+                { name: "Abilita Network", key: "include_networking", type: "hidden", value: true  },
                 { name: "VNet Name", key: "vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet" },
                 { name: "VNet RG Name", key: "vnet_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
                 { name: "Private Endpoint Subnet Name", key: "private_endpoint_subnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-common-private-endpoint-snet" },
@@ -95,7 +95,7 @@ export const formConfig = {
             default: false,
             name: "Riferimenti Agent DevOps",
             formFields: [
-                { name: "Abilita Agent DevOps", key: "include_devops", type: "hidden", value: "false" },
+                { name: "Abilita Agent DevOps", key: "include_devops", type: "hidden", value: false },
                 { name: "Azure DevOps managed identity RG Name", key: "azdo_managed_identity_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-identity-rg" },
                 { name: "Azure DevOps managed identity IAC Prefix", key: "azdo_managed_identity_iac_prefix", type: "text", placeholder: "e.g. azdo-${var.env}-${local.prefix}-iac" },
             ],
@@ -104,7 +104,7 @@ export const formConfig = {
             default: false,
             name: "Riferimenti API Management",
             formFields: [
-                { name: "Abilita APIM", key: "include_apim", type: "hidden", value: "false" },
+                { name: "Abilita APIM", key: "include_apim", type: "hidden", value: false },
                 { name: "APIM Name", key: "apim_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-apim" },
                 { name: "APIM RG Name", key: "apim_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-api-rg" },
             ],
@@ -113,7 +113,7 @@ export const formConfig = {
             default: false,
             name: "CosmosDB",
             formFields: [
-                { name: "Abilita CosmosDB", key: "include_cosmos", type: "hidden", value: "false" },
+                { name: "Abilita CosmosDB", key: "include_cosmosdb", type: "hidden", value: false },
                 { name: "CosmosDB Account Database Type", key: "cosmosdb_account_database_type", type: "select",
                     options: [
                         { label: "Mongo", value: "mongo" },
@@ -126,7 +126,7 @@ export const formConfig = {
             default: false,
             name: "GitHub Runner self hosted",
             formFields: [
-                { name: "Abilita GitHub Runner", key: "include_github_runner", type: "hidden", value: "false" },
+                { name: "Abilita GitHub Runner", key: "include_github_runner", type: "hidden", value: false },
                 { name: "GitHub Runner CAE Name", key: "gh_runner_cae_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-cae" },
                 { name: "GitHub Runner RG", key: "gh_runner_cae_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-tools-rg" },
                 { name: "GitHub Runner PAT Key", key: "gh_runner_pat_key", type: "text", placeholder: "e.g. gh-runner-job-pat" },
@@ -138,7 +138,7 @@ export const formConfig = {
             default: false,
             name: "Riferimenti AKS",
             formFields: [
-                { name: "Abilita AKS", key: "include_kubernetes", type: "hidden", value: "false" },
+                { name: "Abilita AKS", key: "include_kubernetes", type: "hidden", value: false },
                 { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
                 { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" }
             ],
@@ -147,7 +147,7 @@ export const formConfig = {
             default: false,
             name: "Storage Account",
             formFields: [
-                { name: "Abilita StorageAccount", key: "include_storage_account", type: "hidden", value: "false" },
+                { name: "Abilita StorageAccount", key: "include_storage_account", type: "hidden", value: false },
                 { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
                 { name: "Storage Account Data Types", key: "storage_account_data_types", type: "checkboxgroup",
                     options: [
@@ -165,14 +165,14 @@ export const formConfig = {
             default: false,
             name: "Redis cluster",
             formFields: [
-                { name: "Abilita Redis", key: "include_redis", type: "hidden", value: "false" },
+                { name: "Abilita Redis", key: "include_redis", type: "hidden", value: false },
             ]
         },
         postgresql: {
             default: false,
             name: "PostgreSQL database",
             formFields: [
-                { name: "Abilita PostgreSQL", key: "include_postgresql", type: "hidden", value: "false" },
+                { name: "Abilita PostgreSQL", key: "include_postgresql", type: "hidden", value: false },
             ]
         },
         app_service_webapp: {
@@ -180,7 +180,7 @@ export const formConfig = {
             name: "AppService Webapp",
             info: "La configurazione di default prevede una WebApp con immagine docker recuperata da DockerHub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.  Ricordati di definire i tuoi APP_SETTINGS una volta creato",
             formFields: [
-                { name: "Abilita AppService Webapp", key: "include_app_service_webapp", type: "hidden", value: "false" },
+                { name: "Abilita AppService Webapp", key: "include_app_service_webapp", type: "hidden", value: false },
                 { name: "WebApp Name (short)", key: "app_service_webapp_name", type: "text", placeholder: "WebApp name" },
                 { name: "WebApp always on", key: "app_service_webapp_always_on", type: "boolean", placeholder: "WebApp always on?" },
                 { name: "WebApp docker image", key: "app_service_webapp_docker_image", type: "text", placeholder: "WebApp docker image. latest is configured by default" },
@@ -191,7 +191,7 @@ export const formConfig = {
             name: "AppService Function",
             info: "La configurazione di default prevede una Function con immagine docker recuperata da DockerHub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.  Ricordati di definire i tuoi APP_SETTINGS una volta creato",
             formFields: [
-                { name: "Abilita AppService Function", key: "include_app_service_function", type: "hidden", value: "false" },
+                { name: "Abilita AppService Function", key: "include_app_service_function", type: "hidden", value: false },
                 { name: "Function Name (short)", key: "app_service_function_name", type: "text", placeholder: "Function name" },
                 { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?" },
                 { name: "Function docker image", key: "app_service_function_docker_image", type: "text", placeholder: "Function docker image. latest is configured by default" },

@@ -4,8 +4,6 @@ export const filterEmptyFields = <T extends Record<string, any>>(data: T): Parti
 
   Object.entries(data).forEach(([key, value]) => {
     if (
-      value !== "" &&
-      value !== false &&
       value !== null &&
       value !== undefined &&
       !(typeof value === "object" && Object.keys(value).length === 0)
