@@ -2,15 +2,15 @@ import { formConfig } from "./inputs";
 
 
 export function generateTableSummaryData(data: FormData) {
-  const summary: { category: string; rows: { field: string; value: any, id: string }[]; enabled: boolean }[] = [];
+  const summary: { category: string; rows: { field: string; value: any, id: string }[]; enabled: boolean, missingFields: boolean }[] = [];
 
 
   Object.entries(formConfig.steps).forEach(([stepName, stepConfig]) => {
     const stepFields = stepConfig.formFields || [];
     const rows = stepFields.map((field) => {
       const fieldKey = field.key;
-      const value = data[fieldKey];
-      return { field: field.name, value: formatValue(value), id: fieldKey };
+      const fieldData = formatValue(data[fieldKey])
+      return { field: field.name, value: fieldData.value, id: fieldKey, present: fieldData.present };
     });
 
 
@@ -23,7 +23,7 @@ export function generateTableSummaryData(data: FormData) {
       const stepEnabled: boolean = include_step === undefined ? false : include_step;
 
     if (rows.length > 0) {
-      summary.push({ category: capitalize(stepConfig.name), rows: rows, enabled: stepEnabled});
+      summary.push({ category: capitalize(stepConfig.name), rows: rows, enabled: stepEnabled, missingFields: rows.some(row => row.present === false)  });
     }
   });
 
@@ -31,20 +31,20 @@ export function generateTableSummaryData(data: FormData) {
 }
 
 
-function formatValue(value: any): string {
+function formatValue(value: any): { value: string, present: boolean }  {
   if (typeof value === "boolean") {
-    return value ? "✅ Abilitato" : "⛔️ Disabilitato";
+    return value ? {value: "✅ Abilitato", present: true} : {value: "⛔️ Disabilitato", present: true};
   }
   if (value === "true" || value === true) {
-    return "✅ Abilitato";
+    return {value: "✅ Abilitato", present: true};
   }
   if (value === "false" || value === false) {
-    return "⛔️ Disabilitato";
+    return {value: "⛔️ Disabilitato", present: true};
   }
   if (value === null || value === undefined || value === "") {
-    return "⚠️ Non configurato";
+    return {value: "⚠️ Non configurato", present: false};
   }
-  return value.toString();
+  return {value: value.toString(), present: true};
 }
 
 

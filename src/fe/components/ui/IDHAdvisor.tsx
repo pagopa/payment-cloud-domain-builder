@@ -226,6 +226,9 @@ export const IdhAdvisor: React.FC = () => {
           <p className="text-zinc-800 dark:text-zinc-400 text-lg">
             Configura e genera moduli Terraform IDH in modo semplice e veloce
           </p>
+            <p className="text-zinc-800 dark:text-zinc-400 text-lg">
+                <i className="text-amber-600">Technical preview</i>
+            </p>
         </div>
 
         {!selectedModule && renderModuleSelector()}
