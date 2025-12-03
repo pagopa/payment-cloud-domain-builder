@@ -74,7 +74,7 @@ jobs:
             elif isinstance(value, (dict, list)):
                 extra_vars.append(f"{key}={q(json.dumps(value))}")
 
-        extra_vars_str = json.dump(data)
+        extra_vars_str = json.dumps(data)
         
         print(f"\n=== Generated extra vars ===")
         print(f"Count: {len(extra_vars)}")
