@@ -3,19 +3,17 @@
   hosts: localhost
   vars_files:
     - vars/main.yml
+    - vars/statics.yml
+    - vars/elaborations.yml
   tasks:
-    - name: load statics variables
-      ansible.builtin.include_vars:
-        file: vars/statics.yml
-
-    - name: load variables elaborations
-      ansible.builtin.include_vars:
-        file: vars/elaborations.yml
-
     - name: load local variables
       ansible.builtin.include_vars:
         file: vars/local.yml
       when: "{{ local_run|default(false) }}"
+
+    - name: print include app service
+      debug:
+        msg: "webapp: '{{ include_app_service_webapp }}', function: '{{ include_app_service_function }}'"
 
     - name: Ensure dir app output exists
       ansible.builtin.file:

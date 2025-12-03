@@ -177,10 +177,10 @@ const handleGenerateWorkflow = async () => {
       setShowLoadingModal(false);
       setShowSuccessModal(true);
 
-      // Auto-close success modal after 5 seconds
-      setTimeout(() => {
-        setShowSuccessModal(false);
-      }, 60000);
+      // // Auto-close success modal after 5 seconds
+      // setTimeout(() => {
+      //   setShowSuccessModal(false);
+      // }, 60000);
     }, 2000);
 
   } catch (error) {
@@ -434,7 +434,6 @@ const handleGenerateWorkflow = async () => {
             description: `Configurazione dettagliata per lo step ${step}. Queste variabili sono utilizzabili per la generazione.`,
             tips: [
               "Le variabili sono predefinite e testate",
-              "Prega sempre i sistemisti.",
               "Consulta la documentazione per maggiori dettagli"
             ],
             examples: [

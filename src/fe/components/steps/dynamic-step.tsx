@@ -207,16 +207,14 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                           strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className={`absolute w-4 h-4 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ${
+                          className={`absolute w-4 h-4 text-zinc-900 dark:text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ${
                             isChecked ? 'opacity-100' : 'opacity-0'
                           }`}
                       >
                         <path d="M5 13l4 4L19 7"/>
                       </svg>
                     </div>
-                    <span className={`text-sm transition-colors ${
-                      isChecked ? 'text-'+stepColor.text+'-500' : 'text-zinc-600 dark:text-zinc-300'
-                    }`}>
+                    <span className={`text-sm transition-colors text-zinc-600 dark:text-zinc-300`}>
                       {option.label}
                     </span>
                   </label>

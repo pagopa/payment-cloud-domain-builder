@@ -5,6 +5,7 @@ interface Summary {
   category: string;
   rows: { field: string; value: string, id: string }[];
   enabled: boolean;
+  missingFields: boolean;
 }
 
 export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData }) => (
@@ -35,7 +36,7 @@ export const SummaryTable: React.FC<{ summaryData: Summary[] }> = ({ summaryData
                   {section.category}
                 </td>
                   <td className="px-4 py-3 font-semibold  bg-emerald-900 text-white">
-                      ✅ Abilitato
+                      { section.missingFields ? "❌ Incompleto": "✅ Abilitato"}
                   </td>
               </tr>
               {/* Righe dei Campi Configurati */}

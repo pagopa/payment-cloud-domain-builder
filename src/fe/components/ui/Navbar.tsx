@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         : 'text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700'
                 }`}
             >
-              IDH Module Advisor
+              IDH Module Advisor (tech preview)
             </button>
           </div>
         </div>
