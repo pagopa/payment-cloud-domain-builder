@@ -90,7 +90,7 @@ data "azurerm_private_dns_zone" "azurewebsites" {
 {% endif %}
 
 
-{% if include_app_service_webapp is defined and include_app_service_webapp %}
+{% if include_app_service_webapp %}
 data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
   name                 = "${local.project}-{{app_service_webapp_name_kebab}}-snet"
   virtual_network_name = local.vnet_name
@@ -98,7 +98,7 @@ data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
 }
 {% endif %}
 
-{% if include_app_service_function is defined and include_app_service_function %}
+{% if include_app_service_function  %}
 data "azurerm_subnet" "{{app_service_function_name_snake}}_snet" {
   name                 = "${local.project}-{{app_service_function_name_kebab}}-snet"
   virtual_network_name = local.vnet_name
