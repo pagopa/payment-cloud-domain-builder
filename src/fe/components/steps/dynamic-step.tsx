@@ -136,7 +136,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
               <input
                 type="checkbox"
                 name={field.key}
-                defaultChecked={field.value}
+                checked={value}
                 onChange={handleChange}
                 className={inputClasses.checkbox}
                 id={field.key}
@@ -175,7 +175,6 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
                       <input
                           type="checkbox"
                           name={field.key}
-                          value={option.value}
                           checked={isChecked}
                           onChange={(e) => {
                             const currentValues = Array.isArray(value) ? value : [];

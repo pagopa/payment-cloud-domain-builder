@@ -32,7 +32,7 @@ export const defaultForm: CustomFormData = (() => {
     step.formFields.forEach((field) => {
       switch (field.type) {
         case 'boolean':
-          form[field.key] = field.value;
+          form[field.key] = field.value || false;
           break;
         case 'hidden':
           form[field.key] = field.value;

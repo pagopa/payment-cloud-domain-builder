@@ -39,7 +39,7 @@ export const formConfig = {
             formFields: [
                 { name: "Abilita Dominio", key: "include_domain", type: "hidden", value: true  },
                 { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. meme" },
-                { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?" },
+                { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?"},
                 { name: "State Storage Account Name", key: "storage_account_state_name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
                 { name: "State Storage Account Container Name", key: "storage_account_container_state_name", type: "text", placeholder: "e.g. terraform-state" },
                 { name: "State Storage Account RG Name", key: "storage_account_state_rg_name", type: "text", placeholder: "e.g. terraform-state-rg" },
