@@ -141,12 +141,15 @@ export const templatesConfig = [
             "include_kubernetes": true,
             "aks_name": "${local.product}-${var.location_short}-${var.env}-aks",
             "aks_rg_name": "${local.product}-${var.location_short}-${var.env}-aks-rg",
-            "include_storage_account": false,
-            "storage_account_scope_name": "",
-            "storage_account_data_types": "",
             "include_redis": false,
-            "include_postgresql": false
-        }
+            "include_postgresql": false,
+            "include_storage_account": true,
+            "storage_account_scope_name": "asdasd",
+            "storage_account_data_types": [
+                "blob",
+                "dfs",
+                "file"
+            ]        }
     },
     {
         name: 'pagoPA basic WEU domain',

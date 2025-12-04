@@ -9,10 +9,10 @@ export const useWizard = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
-
+    console.log("handleChange:", name, value, type, checked);
     // @ts-ignore
     setFormData(prev => ({
       ...prev,
