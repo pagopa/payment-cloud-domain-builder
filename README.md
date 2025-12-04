@@ -202,7 +202,7 @@ es:
 Setup ambiente:
 ```bash
 cd src/fe
-npm install --legacy-peer-deps
+npm install
 ```
 
 creare il file `.env.local` nella cartella `src/fe` con il seguente contenuto:
