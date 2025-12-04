@@ -57,23 +57,6 @@ jobs:
         print(f"Data content: {json.dumps(data, indent=2)}")
         print(f"Metadata: {json.dumps(metadata, indent=2)}")
 
-        def q(val: str) -> str:
-            """Quote and escape values for shell"""
-            return "'" + str(val).replace("'", "'\"'\"'") + "'"
-
-        extra_vars = []
-        for key, value in data.items():
-            if value is None:
-                continue
-            elif isinstance(value, bool):
-                extra_vars.append(f"{key}={str(value).lower()}")
-            elif isinstance(value, (int, float)):
-                extra_vars.append(f"{key}={value}")
-            elif isinstance(value, str):
-                extra_vars.append(f"{key}={q(value.strip())}")
-            elif isinstance(value, (dict, list)):
-                extra_vars.append(f"{key}={q(json.dumps(value))}")
-
         extra_vars_str = json.dumps(data)
         
         print(f"\n=== Generated extra vars ===")

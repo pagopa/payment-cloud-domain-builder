@@ -182,7 +182,7 @@ export const formConfig = {
             formFields: [
                 { name: "Abilita AppService Webapp", key: "include_app_service_webapp", type: "hidden", value: false },
                 { name: "WebApp Name (short)", key: "app_service_webapp_name", type: "text", placeholder: "WebApp name" },
-                { name: "WebApp always on", key: "app_service_webapp_always_on", type: "boolean", placeholder: "WebApp always on?" },
+                { name: "WebApp always on", key: "app_service_webapp_always_on", type: "boolean", placeholder: "WebApp always on?", value: false },
                 { name: "WebApp docker image", key: "app_service_webapp_docker_image", type: "text", placeholder: "WebApp docker image. latest is configured by default" },
             ]
         },
@@ -193,7 +193,7 @@ export const formConfig = {
             formFields: [
                 { name: "Abilita AppService Function", key: "include_app_service_function", type: "hidden", value: false },
                 { name: "Function Name (short)", key: "app_service_function_name", type: "text", placeholder: "Function name" },
-                { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?" },
+                { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?", value: false },
                 { name: "Function docker image", key: "app_service_function_docker_image", type: "text", placeholder: "Function docker image. latest is configured by default" },
             ]
         }
