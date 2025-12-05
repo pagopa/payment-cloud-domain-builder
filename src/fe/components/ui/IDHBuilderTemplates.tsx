@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { formConfig } from '../../utils/inputs';
-import { STEP_COLORS } from '../../utils/constants';
-import {templatesConfig, COMPONENT_CONFIG} from '../../utils/templates';
+import { formConfig } from '@/utils/inputs';
+import { STEP_COLORS } from '@/utils/constants';
+import {templatesConfig, COMPONENT_CONFIG} from '@/utils/templates';
 
 
 interface Template {

@@ -1,6 +1,6 @@
 // services/api.ts
-import { CustomFormData } from '../types/form';
-import { filterEmptyFields } from '../utils/variables';
+import { CustomFormData } from '@/types/form';
+import { filterEmptyFields } from '@/utils/variables';
 
 export interface ApiResponse {
   status: string;

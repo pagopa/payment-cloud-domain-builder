@@ -1,23 +1,23 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useWizard } from '../hooks/useWizard';
-import { DynamicStep } from '../components/steps/dynamic-step';
-import { ComponentSelector } from '../components/ui/ComponentSelector';
-import { ExportImport } from '../components/ui/ExportImport';
-import { StepIndicator } from '../components/ui/StepIndicator';
-import { Helper } from '../components/ui/Helper';
-import { Modal } from '../components/ui/Modal';
-import { ErrorModal } from '../components/ui/ErrorModal';
-import { Navbar } from '../components/ui/Navbar';
-import { TerraformPreview } from "../components/ui/TerraformPreview";
-import { triggerGithubWorkflow, ApiResponse } from '../services/api';
-import { STEP_COLORS } from '../utils/constants';
-import { Login } from "../components/ui/Login";
-import { Logout } from "../components/ui/Logout";
-import { IdhAdvisor } from "../components/ui/IDHAdvisor";
-import { formConfig } from '../utils/inputs';
-import { IDHBuilderTemplates } from '../components/ui/IDHBuilderTemplates';
+import { useWizard } from '@/hooks/useWizard';
+import { DynamicStep } from '@/components/steps/dynamic-step';
+import { ComponentSelector } from '@/components/ui/ComponentSelector';
+import { ExportImport } from '@/components/ui/ExportImport';
+import { StepIndicator } from '@/components/ui/StepIndicator';
+import { Helper } from '@/components/ui/Helper';
+import { Modal } from '@/components/ui/Modal';
+import { ErrorModal } from '@/components/ui/ErrorModal';
+import { Navbar } from '@/components/ui/Navbar';
+import { TerraformPreview } from '@/components/ui/TerraformPreview';
+import { triggerGithubWorkflow, ApiResponse } from '@/services/api';
+import { STEP_COLORS } from '@/utils/constants';
+import { Login } from '@/components/ui/Login';
+import { Logout } from '@/components/ui/Logout';
+import { IdhAdvisor } from '@/components/ui/IDHAdvisor';
+import { formConfig } from '@/utils/inputs';
+import { IDHBuilderTemplates } from '@/components/ui/IDHBuilderTemplates';
 
 export default function Wizard() {
   const {

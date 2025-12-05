@@ -1,7 +1,7 @@
 // components/ui/ComponentSelector.tsx
 import React from 'react';
-import { STEP_COLORS } from '../../utils/constants';
-import { formConfig } from '../../utils/inputs';
+import { STEP_COLORS } from '@/utils/constants';
+import { formConfig } from '@/utils/inputs';
 
 interface ComponentSelectorProps {
   selectedComponents: string[];

@@ -1,7 +1,7 @@
 
 // components/ui/Navbar.tsx
 import React from 'react';
-import { TypewriterText } from './TypewriterText';
+import { TypewriterText } from '@/components/ui/TypewriterText';
 
 interface NavbarProps {
   title?: string;

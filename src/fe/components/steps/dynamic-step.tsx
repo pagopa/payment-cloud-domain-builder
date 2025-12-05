@@ -1,8 +1,8 @@
-import { CustomFormData } from '../../types/form';
-import { formConfig } from "../../utils/inputs";
+import { CustomFormData } from '@/types/form';
+import { formConfig } from "@/utils/inputs";
 
-import { STEP_COLORS } from '../../utils/constants';
-import { FormButton } from '../ui/FormButton';
+import { STEP_COLORS } from '@/utils/constants';
+import { FormButton } from '@components/ui/FormButton';
 import { RiInformation2Fill } from "react-icons/ri";
 
 

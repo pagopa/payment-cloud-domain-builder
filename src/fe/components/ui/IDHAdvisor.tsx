@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { idhModules } from '../../utils/idhModules';
+import { idhModules } from '@/utils/idhModules';
 
 export const IdhAdvisor: React.FC = () => {
   const [selectedModule, setSelectedModule] = useState<string | null>(null);

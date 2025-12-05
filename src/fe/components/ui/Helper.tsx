@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { STEP_COLORS } from '../../utils/constants';
-import { Modal } from './Modal'; // Assumendo che tu abbia già il componente Modal
+import { STEP_COLORS } from '@/utils/constants';
+import { Modal } from './Modal';
 
 interface HelperProps {
   title: string;
