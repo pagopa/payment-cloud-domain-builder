@@ -2,10 +2,9 @@ name: Release And Deploy
 
 # Controls when the workflow will run
 on:
-  merge_group:
-    branches: [main]
-  pull_request:
-    types: [closed]
+  push:
+    branches: [ test-release ]
+
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -136,7 +135,7 @@ jobs:
         uses: pagopa/github-actions-template/ghcr-build-push@d91a1fd0b913c9830589be5d86cdb71c90813fae # v1.5.4
         with:
           github_token: ${{ secrets.BOT_TOKEN_GITHUB }}
-          tag: "latest"
+          tag: "test-release"
           build_args: APP_NAME=pagopa-domain-builder
 
   deploy_aks:
