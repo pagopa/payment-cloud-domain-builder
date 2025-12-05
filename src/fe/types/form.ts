@@ -1,4 +1,4 @@
-import { formConfig } from '../utils/inputs';
+import { formConfig } from '@/utils/inputs';
 
 type InferFieldType<T> =
     T extends { type: 'boolean' } ? boolean :

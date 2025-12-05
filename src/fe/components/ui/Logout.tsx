@@ -1,8 +1,8 @@
 import React from "react";
-import { FiUser } from "react-icons/fi"; // Usa una libreria di icone come react-icons (installalo con 'npm install react-icons')
+import { FiUser } from "react-icons/fi";
 
 interface LogoutProps {
-  onLogout: () => void; // Callback per eseguire il logout
+  onLogout: () => void;
 }
 
 export const Logout: React.FC<LogoutProps> = ({ onLogout }) => {

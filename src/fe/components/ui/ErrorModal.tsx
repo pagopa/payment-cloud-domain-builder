@@ -1,6 +1,6 @@
 // components/ui/ErrorModal.tsx
 import React from 'react';
-import { Modal } from './Modal';
+import { Modal } from '@/components/ui/Modal';
 
 interface ErrorModalProps {
   isOpen: boolean;

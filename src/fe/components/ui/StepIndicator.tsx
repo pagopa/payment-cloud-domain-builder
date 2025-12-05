@@ -1,7 +1,7 @@
 // components/ui/StepIndicator.tsx
 import React from "react";
-import { STEP_COLORS } from "../../utils/constants";
-import { formConfig } from "../../utils/inputs";
+import { STEP_COLORS } from "@/utils/constants";
+import { formConfig } from "@/utils/inputs";
 
 interface StepIndicatorProps {
   currentStep: number;

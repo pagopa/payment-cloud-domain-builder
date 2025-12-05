@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { formConfig } from '../../utils/inputs';
+import { formConfig } from '@/utils/inputs';
 
 interface ExportImportProps {
   formData: any; /* eslint-disable-line  @typescript-eslint/no-explicit-any */

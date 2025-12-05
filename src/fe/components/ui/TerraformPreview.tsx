@@ -1,5 +1,5 @@
 import React from "react";
-import { generateTableSummaryData } from "../../utils/terraform";
+import { generateTableSummaryData } from "@/utils/terraform";
 
 interface Summary {
   category: string;

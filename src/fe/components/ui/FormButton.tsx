@@ -1,6 +1,6 @@
 // components/ui/FormButton.tsx
 import React from 'react';
-import { STEP_COLORS } from '../../utils/constants';
+import { STEP_COLORS } from '@/utils/constants';
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from 'react-icons/ai';
 
 interface FormButtonProps {

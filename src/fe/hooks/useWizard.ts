@@ -1,7 +1,7 @@
 // hooks/useWizard.ts
 import { useState } from 'react';
-import { CustomFormData, defaultForm } from '../types/form';
-import { formConfig } from '../utils/inputs';
+import { CustomFormData, defaultForm } from '@/types/form';
+import { formConfig } from '@/utils/inputs';
 
 export const useWizard = () => {
   const [step, setStep] = useState(1);

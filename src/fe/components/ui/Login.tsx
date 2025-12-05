@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { FiUser } from "react-icons/fi"; // Icona utente
-import { MdLockOutline } from "react-icons/md"; // Icona di blocco per password
+import { FiUser } from "react-icons/fi";
+import { MdLockOutline } from "react-icons/md";
 
 const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
 

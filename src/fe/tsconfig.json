@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noImplicitAny": false,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
