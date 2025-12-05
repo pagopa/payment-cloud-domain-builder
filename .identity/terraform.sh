@@ -44,9 +44,23 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit 1
 fi
 
+
+
 #
 # 🌎 Terraform
 #
+if [ -n "$ENV" ]; then
+  # shellcheck source=/dev/null
+  source "./env/$ENV/backend.ini"
+  if [ -z "$(command -v az)" ]; then
+    echo "az not found, cannot proceed"
+    exit 1
+  fi
+  az account set -s "${subscription}"
+  export ARM_SUBSCRIPTION_ID=$(az account list --query "[?isDefault].id" --output tsv)
+fi
+
+
 if echo "init plan apply refresh import output state taint destroy" | grep -w "$ACTION" > /dev/null; then
   if [ "$ACTION" = "init" ]; then
     echo "[INFO] init tf on ENV: ${ENV}"

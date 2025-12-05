@@ -9,10 +9,10 @@ data "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = local.aks_cluster.resource_group_name
 }
 
-data "github_organization_teams" "all" {
-  root_teams_only = true
-  summary_only    = true
-}
+# data "github_organization_teams" "all" {
+#   root_teams_only = true
+#   summary_only    = true
+# }
 
 data "azurerm_key_vault" "key_vault" {
   name                = "pagopa-${var.env_short}-kv"
@@ -20,8 +20,8 @@ data "azurerm_key_vault" "key_vault" {
 }
 
 data "azurerm_key_vault" "domain_key_vault" {
-  name                = "pagopa-${var.env_short}-${local.location_short}-${local.domain}-kv"
-  resource_group_name = "pagopa-${var.env_short}-${local.location_short}-${local.domain}-sec-rg"
+  name                = "pagopa-${var.env_short}-${local.domain}-kv"
+  resource_group_name = "pagopa-${var.env_short}-${local.domain}-sec-rg"
 }
 
 
