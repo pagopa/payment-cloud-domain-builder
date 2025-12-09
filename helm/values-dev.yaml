@@ -4,7 +4,7 @@ microservice-chart:
   fullnameOverride: ""
   image:
     repository: ghcr.io/pagopa/payment-cloud-domain-builder/frontend
-    tag: "sha-8b2849e"
+    tag: "sha-5dab0e9"
     pullPolicy: Always
   # https://github.com/Azure/azure-functions-host/blob/dev/src/WebJobs.Script.WebHost/Controllers/HostController.cs
   livenessProbe:
@@ -32,7 +32,7 @@ microservice-chart:
   ingress:
     create: true
     host: "weudev.shared.internal.dev.platform.pagopa.it"
-    path: /domain-builder/(.*)
+    path: /domain-builder(/|$)(.*)
     servicePort: 8080
   serviceAccount:
     create: false
