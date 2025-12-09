@@ -67,7 +67,7 @@ microservice-chart:
   envSecret:
     GITHUB_TOKEN: 'payments-cloud-github-bot-pat'
   keyvault:
-    name: "pagopa-d-kv"
+    name: "pagopa-d-shared-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
   nodeSelector: {}
   tolerations: []
