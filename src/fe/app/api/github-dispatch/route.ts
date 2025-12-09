@@ -14,32 +14,32 @@ export async function POST(request: NextRequest) {
   console.log(`    [${requestId}] Origin: ${request.headers.get('origin') || 'none'}`);
   console.log(`    [${requestId}] User-Agent: ${request.headers.get('user-agent') || 'unknown'}`);
 
-  try {
-    // Verify origin
-    const origin = request.headers.get('origin');
+  // try {
+  //   // Verify origin
+  //   const origin = request.headers.get('origin');
+  //
+  //   // Define allowed origin logic
+  //   const isAllowedOrigin = (origin: string | null) => {
+  //     if (!origin) return false;
+  //
+  //     // Allow localhost
+  //     if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return true;
+  //
+  //     // Allow Azure Container Apps domains
+  //     // This regex matches https://<anything>.azurecontainerapps.io
+  //     const azureContainerAppsRegex = /^https:\/\/.*\.azurecontainerapps\.io$/;
+  //     return azureContainerAppsRegex.test(origin);
+  //   };
+  //
+  //   if (!isAllowedOrigin(origin)) {
+  //     console.log(`❌  [${requestId}] Unauthorized origin: ${origin}`);
+  //     return NextResponse.json(
+  //         { error: 'Unauthorized origin' },
+  //         { status: 403 }
+  //     );
+  //   }
+    // console.log(`✅  [${requestId}] Origin verified successfully`);
 
-    // Define allowed origin logic
-    const isAllowedOrigin = (origin: string | null) => {
-      if (!origin) return false;
-
-      // Allow localhost
-      if (origin === 'http://localhost:3000') return true;
-
-      // Allow Azure Container Apps domains
-      // This regex matches https://<anything>.azurecontainerapps.io
-      const azureContainerAppsRegex = /^https:\/\/.*\.azurecontainerapps\.io$/;
-      return azureContainerAppsRegex.test(origin);
-    };
-
-    if (!isAllowedOrigin(origin)) {
-      console.log(`❌  [${requestId}] Unauthorized origin: ${origin}`);
-      return NextResponse.json(
-          { error: 'Unauthorized origin' },
-          { status: 403 }
-      );
-    }
-
-    console.log(`✅  [${requestId}] Origin verified successfully`);
 
     // Parse body
     const body = await request.json();
