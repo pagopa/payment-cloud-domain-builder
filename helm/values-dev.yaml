@@ -31,7 +31,7 @@ microservice-chart:
       - 8080
   ingress:
     create: true
-    host: "shared.weu.internal.dev.platform.pagopa.it"
+    host: "weudev.shared.internal.dev.platform.pagopa.it"
     path: /domain-builder/(.*)
     servicePort: 8080
   serviceAccount:
