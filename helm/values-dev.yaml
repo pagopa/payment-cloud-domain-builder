@@ -33,6 +33,7 @@ microservice-chart:
     create: true
     host: "weudev.shared.internal.dev.platform.pagopa.it"
     path: /domain-builder(/|$)(.*)
+    rewriteTarget: /$2
     servicePort: 8080
   serviceAccount:
     create: false
@@ -64,6 +65,7 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
+    CONTEXT_ROOT: "/domain-builder"
   envSecret:
     GITHUB_TOKEN: 'payments-cloud-github-bot-pat'
   keyvault:
