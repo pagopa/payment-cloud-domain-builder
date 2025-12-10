@@ -80,7 +80,7 @@ export const TerraformPreview = ({ formData, handleGenerateWorkflow, setShowSumm
 
       <div className="flex gap-4 mt-6">
         <button
-          className="bg-zinc-600 hover:bg-white dark:bg-zinc-700 text-white px-4 py-2 rounded shadow transition-colors"
+          className="bg-zinc-200 dark:bg-zinc-600 hover:bg-zinc-600 hover:dark:bg-zinc-600 dark:bg-zinc-700 text-zinc-800 hover:text-zinc-100 dark:text-white px-4 py-2 rounded shadow transition-colors"
           onClick={() => setShowSummary(false)}
         >
           Torna al Wizard
