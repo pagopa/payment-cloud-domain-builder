@@ -19,7 +19,7 @@ export async function triggerGithubWorkflow(formData: CustomFormData): Promise<a
         apiUrl = "/domain-builder/api/github-dispatch"
     }
 
-  const response = await fetch("/api/github-dispatch", {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
