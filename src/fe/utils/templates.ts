@@ -143,13 +143,8 @@ export const templatesConfig = [
             "aks_rg_name": "${local.product}-${var.location_short}-${var.env}-aks-rg",
             "include_redis": false,
             "include_postgresql": false,
-            "include_storage_account": true,
-            "storage_account_scope_name": "asdasd",
-            "storage_account_data_types": [
-                "blob",
-                "dfs",
-                "file"
-            ]        }
+            "include_storage_account": false
+           }
     },
     {
         name: 'pagoPA basic WEU domain',
