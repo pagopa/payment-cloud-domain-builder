@@ -2,7 +2,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: process.env.NEXT_PUBLIC_CONTEXT_ROOT || '',
+  assetPrefix: "/root",
+  basePath: "/root",
   images: {
     remotePatterns: [
       {
