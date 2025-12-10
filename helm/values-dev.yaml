@@ -64,9 +64,9 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
+    CONTEXT_ROOT: '/domain-builder'
   envSecret:
     GITHUB_TOKEN: 'payments-cloud-github-bot-pat'
-    CONTEXT_ROOT: '/domain-builder'
   keyvault:
     name: "pagopa-d-shared-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
