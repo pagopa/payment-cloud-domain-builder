@@ -2,7 +2,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  assetPrefix: `${process.env.CONTEXT_ROOT}`,
+  assetPrefix: `/domain-builder`, //`${process.env.CONTEXT_ROOT}`,
   images: {
     remotePatterns: [
       {

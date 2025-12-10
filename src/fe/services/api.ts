@@ -13,10 +13,10 @@ export async function triggerGithubWorkflow(formData: CustomFormData): Promise<a
   const filteredData = filterEmptyFields(formData);
 
     let apiUrl: string
-    if(process.env.CONTEXT_ROOT){
-      apiUrl = `${process.env.CONTEXT_ROOT}/api/github-dispatch`;
-    }else {
-      apiUrl = "/api/github-dispatch"
+    if (process.env.CONTEXT_ROOT) {
+        apiUrl = `${process.env.CONTEXT_ROOT}/api/github-dispatch`;
+    } else {
+        apiUrl = "/api/github-dispatch"
     }
 
   const response = await fetch(apiUrl, {
