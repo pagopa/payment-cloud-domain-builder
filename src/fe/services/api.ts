@@ -16,7 +16,7 @@ export async function triggerGithubWorkflow(formData: CustomFormData): Promise<a
     if (process.env.CONTEXT_ROOT) {
         apiUrl = `${process.env.CONTEXT_ROOT}/api/github-dispatch`;
     } else {
-        apiUrl = "/api/github-dispatch"
+        apiUrl = "/domain-builder/api/github-dispatch"
     }
 
   const response = await fetch(apiUrl, {
