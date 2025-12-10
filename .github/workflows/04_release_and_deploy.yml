@@ -151,6 +151,7 @@ jobs:
           tags: |
             type=ref,event=pr
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=${{ needs.setup.outputs.semver }}
             type=sha,format=short
 
       - name: Build and push Docker image
@@ -172,4 +173,5 @@ jobs:
     uses: ./.github/workflows/04h_deploy_with_github_runner.yml
     with:
       environment: ${{ needs.setup.outputs.environment }}
+      image_tag: ${{ needs.setup.outputs.semver }}
     secrets: inherit
