@@ -64,8 +64,6 @@ microservice-chart:
           type: Utilization # Allowed types are 'Utilization' or 'AverageValue'
           value: "75"
   envConfig:
-    NEXT_PUBLIC_CONTEXT_ROOT: "/domain-builder"
-    CONTEXT_ROOT: "/domain-builder"
   envSecret:
     GITHUB_TOKEN: 'payments-cloud-github-bot-pat'
   keyvault:

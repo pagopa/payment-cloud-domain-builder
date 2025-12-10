@@ -12,7 +12,7 @@ export interface ApiResponse {
 export async function triggerGithubWorkflow(formData: CustomFormData): Promise<any> {
   const filteredData = filterEmptyFields(formData);
 
-    let apiUrl = "/root/api/github-dispatch"
+    let apiUrl = "/domain-builder/api/github-dispatch"
     // if (process.env.NEXT_PUBLIC_CONTEXT_ROOT) {
     //     apiUrl = `${process.env.NEXT_PUBLIC_CONTEXT_ROOT}/api/github-dispatch`;
     // } else {
