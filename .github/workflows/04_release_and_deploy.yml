@@ -107,7 +107,7 @@ jobs:
         version: ${{ steps.release.outputs.version }}
       steps:
         - name: Github release
-          uses: pagopa/github-actions-template/node-release@7f654f07eeaac35a1fd4420901ded9205e22b6be #v2.3.0
+          uses: pagopa/github-actions-template/node-release@663ab604cf2d06c12bcbf8a115eee71696410a02 #v2.3.0
           id: release
           with:
             semver: ${{ needs.setup.outputs.semver }}
@@ -148,7 +148,6 @@ jobs:
             type=ref,event=pr
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
             type=raw,value=${{ needs.setup.outputs.semver }}
-            type=raw,value=${{ needs.release.outputs.version }}
             type=sha,format=short
 
       - name: Build and push Docker image
