@@ -116,7 +116,7 @@ jobs:
           id: release
           with:
             semver: ${{ needs.setup.outputs.semver }}
-            github_token: ${{ secrets.BOT_TOKEN_GITHUB }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
             skip_ci: true
             prerelease: ${{  github.ref_name != 'main' }}
             only_tag: false
