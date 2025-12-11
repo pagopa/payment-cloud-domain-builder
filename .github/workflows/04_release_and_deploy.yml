@@ -121,6 +121,7 @@ jobs:
             prerelease: ${{  github.ref_name != 'main' }}
             only_tag: false
             beta: false
+            package_path: './src/fe'
 
   build:
     name: Build
