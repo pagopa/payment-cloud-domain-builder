@@ -11,10 +11,6 @@ on:
         required: false
         default: ${{ github.ref_name }}
         type: string
-      image_tag:
-        required: true
-        description: Image tag to deploy
-        type: string
 
 env:
   APP_NAME: pagopadomainbuilder
@@ -42,6 +38,6 @@ jobs:
           cluster_name: ${{ vars.CLUSTER_NAME }}
           resource_group: ${{ vars.CLUSTER_RESOURCE_GROUP }}
           app_name: ${{ env.APP_NAME }}
-          helm_upgrade_options: '--debug --set microservice-chart.azure.workloadIdentityClientId=${{vars.WORKLOAD_IDENTITY_ID}} --set microservice-chart.image.tag=${{ inputs.image_tag }}'
+          helm_upgrade_options: '--debug --set microservice-chart.azure.workloadIdentityClientId=${{vars.WORKLOAD_IDENTITY_ID}}'
           timeout: '10m0s'
 
