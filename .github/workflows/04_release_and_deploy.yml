@@ -112,7 +112,7 @@ jobs:
         version: ${{ steps.release.outputs.version }}
       steps:
         - name: Github release
-          uses: pagopa/github-actions-template/node-release@7d965e573f2a7cbc823b6aa8a17424b31d7fac99 #v2.3.0
+          uses: pagopa/github-actions-template/node-release@7f654f07eeaac35a1fd4420901ded9205e22b6be #v2.3.0
           id: release
           with:
             semver: ${{ needs.setup.outputs.semver }}
@@ -121,7 +121,7 @@ jobs:
             prerelease: ${{  github.ref_name != 'main' }}
             only_tag: false
             beta: false
-            package_path: './src/fe'
+            package_path: './src/fe/'
 
   build:
     name: Build
