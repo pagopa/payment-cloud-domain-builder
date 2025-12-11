@@ -2,8 +2,10 @@ name: Release And Deploy
 
 # Controls when the workflow will run
 on:
-  push:
-    branches: [ fix-gha ]
+  merge_group:
+    branches: [main]
+  pull_request:
+    types: [closed]
 
 
   # Allows you to run this workflow manually from the Actions tab
@@ -24,11 +26,6 @@ on:
           - skip_or_promote
           - new_release
           - breaking_change
-      beta:
-        required: false
-        type: boolean
-        description: deploy beta version on AKS
-        default: false
 
   workflow_call:
     inputs:
