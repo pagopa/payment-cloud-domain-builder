@@ -2,8 +2,8 @@ apiVersion: v2
 name: pagopadomainbuilder
 description: Microservice description
 type: application
-version: 0.203.0
-appVersion: 0.0.0-1-fix-gha
+version: 0.204.0
+appVersion: 0.1.0-1-fix-gha
 dependencies:
   - name: microservice-chart
     version: 7.5.0
