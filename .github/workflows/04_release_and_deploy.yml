@@ -107,7 +107,7 @@ jobs:
         version: ${{ steps.release.outputs.version }}
       steps:
         - name: Github release
-          uses: pagopa/github-actions-template/node-release@663ab604cf2d06c12bcbf8a115eee71696410a02 #v2.3.0
+          uses: pagopa/github-actions-template/node-release@27e1f41675aaf08d4b869d09a66abb373f992ca0 #v2.3.1
           id: release
           with:
             semver: ${{ needs.setup.outputs.semver }}
