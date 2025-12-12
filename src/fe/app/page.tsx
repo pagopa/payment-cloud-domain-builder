@@ -279,54 +279,58 @@ const handleGenerateWorkflow = async () => {
               Reset Wizard
             </button>
           </div>
+          {process.env.NEXT_PUBLIC_ENABLE_LOGIN == "true" ? (
+            <>
+              <div className="flex items-center gap-3 mt-3 p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
+                {userProfile?.imageUrl ? (
+                  <Image
+                      src={userProfile.imageUrl}
+                      alt="Profile"
+                      width={40}
+                      height={40}
+                      className="rounded-full border-2 border-zinc-600"
+                  />
+                ) : (
+                  (() => {
+                    const username = userProfile?.name || 'admin';
+                    const { bgColor, grid } = generatePixelAvatar(username);
+                    return (
+                      <div
+                        className="w-10 h-10 rounded-full border-2 border-zinc-600 shadow-lg overflow-hidden"
+                        style={{ backgroundColor: '#1a1a1a' }}
+                      >
+                        <div className="w-full h-full p-1 grid grid-cols-5 gap-px">
+                          {grid.flat().map((isActive, index) => (
+                            <div
+                              key={index}
+                              className="rounded-[1px]"
+                              style={{
+                                backgroundColor: isActive ? bgColor : 'transparent'
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()
+                )}
 
-          <div className="flex items-center gap-3 mt-3 p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-300 dark:border-zinc-700">
-            {userProfile?.imageUrl ? (
-              <Image
-                  src={userProfile.imageUrl}
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full border-2 border-zinc-600"
-              />
-            ) : (
-              (() => {
-                const username = userProfile?.name || 'admin';
-                const { bgColor, grid } = generatePixelAvatar(username);
-                return (
-                  <div
-                    className="w-10 h-10 rounded-full border-2 border-zinc-600 shadow-lg overflow-hidden"
-                    style={{ backgroundColor: '#1a1a1a' }}
-                  >
-                    <div className="w-full h-full p-1 grid grid-cols-5 gap-[1px]">
-                      {grid.flat().map((isActive, index) => (
-                        <div
-                          key={index}
-                          className="rounded-[1px]"
-                          style={{
-                            backgroundColor: isActive ? bgColor : 'transparent'
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })()
-            )}
-            <div className="flex flex-col flex-1">
-              {userProfile?.name ? (
-                <>
-                  <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">{userProfile.name}</span>
-                  <span className="text-zinc-800 dark:text-zinc-400 text-xs">{userProfile.email}</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">Admin User</span>
-                  <span className="text-zinc-800 dark:text-zinc-400 text-xs">Local Account</span>
-                </>
-              )}
-            </div>
-          </div>
+                <div className="flex flex-col flex-1">
+                  {userProfile?.name ? (
+                      <>
+                        <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">{userProfile.name}</span>
+                        <span className="text-zinc-800 dark:text-zinc-400 text-xs">{userProfile.email}</span>
+                      </>
+                  ) : (
+                      <>
+                        <span className="text-zinc-600 dark:text-zinc-200 font-medium text-sm">Admin User</span>
+                        <span className="text-zinc-800 dark:text-zinc-400 text-xs">Local Account</span>
+                      </>
+                  )}
+                </div>
+              </div>
+            </>
+          ): (<></>)}
 
           {process.env.NEXT_PUBLIC_ENABLE_LOGIN == "true" ? (
             <>
@@ -460,7 +464,7 @@ const handleGenerateWorkflow = async () => {
 
   if (isLoadingAuth) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-zinc-900">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-gray-900 via-black to-zinc-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500 mx-auto mb-4"></div>
           <p className="text-zinc-800 dark:text-zinc-400">Loading...</p>
