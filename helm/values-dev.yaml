@@ -66,6 +66,7 @@ microservice-chart:
           value: "75"
   envConfig:
     CONTEXT_ROOT: "/domain-builder"
+    NEXT_PUBLIC_DISABLE_LOGIN: "true"
   envSecret:
     GITHUB_TOKEN: 'payments-cloud-github-bot-pat'
   keyvault:
