@@ -328,11 +328,11 @@ const handleGenerateWorkflow = async () => {
             </div>
           </div>
 
-          {process.env.NEXT_PUBLIC_DISABLE_LOGIN == "true" ? (<></>) : (
+          {process.env.NEXT_PUBLIC_ENABLE_LOGIN == "true" ? (
             <>
               <Logout onLogout={handleLogout}/>
             </>
-          )}
+          ): (<></>)}
         </div>
 
 
@@ -477,7 +477,7 @@ const handleGenerateWorkflow = async () => {
   return (
     <>
       <div>
-        {!isLoggedIn && process.env.NEXT_PUBLIC_DISABLE_LOGIN != "true" ? (
+        {!isLoggedIn && process.env.NEXT_PUBLIC_ENABLE_LOGIN == "true" ? (
           <Login onLoginSuccess={handleLoginSuccess} />
         ) : (
           <>
