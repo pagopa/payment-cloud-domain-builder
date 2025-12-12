@@ -55,22 +55,27 @@ export async function POST(request: NextRequest) {
     console.log(`🐙  [${requestId}] Sending request to GitHub API...`);
     const githubStartTime = Date.now();
 
-    const response = await fetch('https://api.github.com/repos/pagopa/payment-cloud-domain-builder/dispatches', {
+    const response = await fetch('https://api.github.com/repos/pagopa/payment-cloud-domain-builder/actions/workflows/domain-builder-wk/dispatches' , {
       method: 'POST',
       headers: {
         'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
       },
       body: JSON.stringify({
-        event_type: 'domain-builder-wk',
-        client_payload: {
-          data: body.data,
-          metadata: {
-            requestId,
-            timestamp: new Date().toISOString(),
-          }
-        }
+          ref: "ansible-on-branch",
+          inputs:body.data
       })
+      //   JSON.stringify({
+      //   event_type: 'domain-builder-wk',
+      //   client_payload: {
+      //     data: body.data,
+      //     metadata: {
+      //       requestId,
+      //       timestamp: new Date().toISOString(),
+      //     }
+      //   }
+      // })
     });
 
     const githubDuration = Date.now() - githubStartTime;
