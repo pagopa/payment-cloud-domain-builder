@@ -1,6 +1,6 @@
 {
   "name": "fe",
-  "version": "1.0.0-5-fix-gha",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
