@@ -31,6 +31,7 @@ COPY . .
 
 # Set the context root for build time
 ENV NEXT_PUBLIC_CONTEXT_ROOT=/domain-builder
+ENV NEXT_PUBLIC_DISABLE_LOGIN=${NEXT_PUBLIC_DISABLE_LOGIN}
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
