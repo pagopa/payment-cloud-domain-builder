@@ -527,12 +527,16 @@ const handleGenerateWorkflow = async () => {
                 <p>Status: <span className="text-green-400">{apiResponse.status}</span></p>
                 <p>Duration: <span className="text-blue-400">{apiResponse.duration}ms</span></p>
                 {apiResponse.requestId && <p>Request ID: <span className="text-yellow-400">{apiResponse.requestId}</span></p>}
-                {apiResponse.requestId && <p>Branch Name: <span className="text-purple-400">domain-{formData?.domain_name}-{apiResponse.requestId}</span></p>}
+                {apiResponse.requestId && <p>Branch Name: <a target="_blank"
+                                                             href={"https://github.com/pagopa/pagopa-infra/tree/domain_builder/domain-" + formData?.domain_name + "-" + apiResponse.requestId}>
+                                                             <span className="font-bold text-purple-600">domain-{formData?.domain_name}-{apiResponse.requestId} →</span>
+                                                          </a>
+                                          </p>}
                 <a
                   href="https://github.com/pagopa/payment-cloud-domain-builder/actions/workflows/domain-builder.yml"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-2 text-pink-400 hover:text-pink-300 transition-colors"
+                  className="inline-block mt-2 font-bold text-pink-600 hover:text-pink-300 transition-colors"
                 >
                   View workflow on GitHub →
                 </a>

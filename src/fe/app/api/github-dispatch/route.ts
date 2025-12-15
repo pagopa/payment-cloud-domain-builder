@@ -52,24 +52,22 @@ export async function POST(request: NextRequest) {
         fieldsCount: Object.keys(body.formData || {}).length
     });
 
-    console.log(`🐙  [${requestId}] Sending request to GitHub API...`);
+    console.log(`🐙  [${requestId}] Sending request to GitHub API on branch '${process.env.BRANCH_NAME || 'main'}'...`);
     const githubStartTime = Date.now();
 
-    const response = await fetch('https://api.github.com/repos/pagopa/payment-cloud-domain-builder/dispatches', {
+    const response = await fetch('https://api.github.com/repos/pagopa/payment-cloud-domain-builder/actions/workflows/domain-builder.yml/dispatches' , {
       method: 'POST',
       headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+        // 'Accept': 'application/vnd.github.v3+json',
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
       },
       body: JSON.stringify({
-        event_type: 'domain-builder-wk',
-        client_payload: {
-          data: body.data,
-          metadata: {
-            requestId,
-            timestamp: new Date().toISOString(),
+          ref: `${process.env.BRANCH_NAME || 'main'}`,
+          inputs: {
+              data: JSON.stringify(body.data),
+              request_id: requestId
           }
-        }
       })
     });
 

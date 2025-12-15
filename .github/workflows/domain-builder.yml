@@ -1,8 +1,16 @@
 name: Domain Builder
 
 on:
-  repository_dispatch:
-    types: [ domain-builder-wk ]
+  workflow_dispatch:
+    inputs:
+      data:
+        type: string
+        description: 'Domain Builder data payload in JSON stringified format'
+        required: true
+      request_id:
+        type: string
+        description: 'Unique request identifier'
+        required: true
 
 jobs:
   domain-builder:
@@ -19,7 +27,7 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       with:
         repository: pagopa/payment-cloud-domain-builder
-        ref: main
+        ref: ${{ github.ref_name }}
         path: ansible
         token: ${{ secrets.GITHUB_TOKEN }}
     
@@ -30,7 +38,8 @@ jobs:
     
     - name: Parse Payload and Generate Vars File
       env:
-        CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        CLIENT_PAYLOAD: ${{ github.event.inputs.data }}
+        REQUEST_ID: ${{ github.event.inputs.request_id }}
       run: |
         echo "=== DEBUG: Full payload ==="
         echo "$CLIENT_PAYLOAD" | python3 -m json.tool
@@ -40,6 +49,7 @@ jobs:
 
         # Parse payload
         raw = os.environ.get('CLIENT_PAYLOAD', '{}')
+        request_id = os.environ.get('REQUEST_ID', '{}')
         print(f"Raw payload length: {len(raw)}")
         
         try:
@@ -49,15 +59,7 @@ jobs:
             print(f"JSON decode error: {e}")
             sys.exit(1)
 
-        # Extract data
-        data = payload.get('data', {})
-        metadata = payload.get('metadata', {})
-        
-        print(f"Data keys: {list(data.keys())}")
-        print(f"Data content: {json.dumps(data, indent=2)}")
-        print(f"Metadata: {json.dumps(metadata, indent=2)}")
-
-        extra_vars_str = json.dumps(data)
+        extra_vars_str = json.dumps(payload)
         
         # Scrivi in un file invece che in GITHUB_ENV
         vars_file = 'ansible_extra_vars.txt'
@@ -68,10 +70,10 @@ jobs:
         
         # Scrivi solo le variabili piccole in GITHUB_ENV
         with open(os.environ['GITHUB_ENV'], 'a') as f:
-            f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
-            f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
+            f.write(f"DOMAIN_NAME={payload.get('domain_name','')}\n")
+            f.write(f"PRODUCT_NAME={payload.get('product_name','')}\n")
             f.write(f"VARS_FILE={vars_file}\n")
-            f.write(f"REQUEST_ID={metadata.get('requestId','')}\n")
+            f.write(f"REQUEST_ID={request_id}\n")
         
         print("\n=== Environment variables written ===")
         EOF
