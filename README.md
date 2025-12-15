@@ -208,6 +208,7 @@ npm install
 creare il file `.env.local` nella cartella `src/fe` con il seguente contenuto:
 ```env
 GITHUB_TOKEN=<your github token>
+BRANCH_NAME=<branch name to run ansible playbook | defaults to main>
 ```
 se si vuole utilizzare l'autenticazione Google, aggiungere anche:
 ```env
