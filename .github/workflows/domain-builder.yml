@@ -37,7 +37,7 @@ jobs:
     
     - name: Parse Payload and Generate Vars File
       env:
-        CLIENT_PAYLOAD: ${{ toJson(github.event.inputs.data) }}
+        CLIENT_PAYLOAD: ${{ github.event.inputs.data }}
       run: |
         echo "=== DEBUG: Full payload ==="
         echo "$CLIENT_PAYLOAD" | python3 -m json.tool
