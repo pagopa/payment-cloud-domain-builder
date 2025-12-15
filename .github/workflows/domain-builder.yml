@@ -1,8 +1,6 @@
 name: Domain Builder
 
 on:
-  repository_dispatch:
-    types: [ domain-builder-wk ]
   workflow_dispatch:
     inputs:
       data:

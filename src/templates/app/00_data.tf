@@ -105,6 +105,3 @@ data "azurerm_subnet" "{{app_service_function_name_snake}}_snet" {
   resource_group_name  = local.vnet_resource_group_name
 }
 {% endif %}
-
-prova
-# test ansible on branch
