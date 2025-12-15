@@ -9,7 +9,10 @@ on:
         type: string
         description: 'Domain Builder data payload in JSON stringified format'
         required: true
-        default: '{}'
+      request_id:
+        type: string
+        description: 'Unique request identifier'
+        required: true
 
 jobs:
   domain-builder:
@@ -38,6 +41,7 @@ jobs:
     - name: Parse Payload and Generate Vars File
       env:
         CLIENT_PAYLOAD: ${{ github.event.inputs.data }}
+        REQUEST_ID: ${{ github.event.inputs.request_id }}
       run: |
         echo "=== DEBUG: Full payload ==="
         echo "$CLIENT_PAYLOAD" | python3 -m json.tool
@@ -47,8 +51,8 @@ jobs:
 
         # Parse payload
         raw = os.environ.get('CLIENT_PAYLOAD', '{}')
+        request_id = os.environ.get('REQUEST_ID', '{}')
         print(f"Raw payload length: {len(raw)}")
-        print(f"Raw payload  {raw}")
         
         try:
             payload = json.loads(raw)
@@ -57,15 +61,7 @@ jobs:
             print(f"JSON decode error: {e}")
             sys.exit(1)
 
-        # Extract data
-        data = payload.get('data', {})
-        metadata = payload.get('metadata', {})
-        
-        print(f"Data keys: {list(data.keys())}")
-        print(f"Data content: {json.dumps(data, indent=2)}")
-        print(f"Metadata: {json.dumps(metadata, indent=2)}")
-
-        extra_vars_str = json.dumps(data)
+        extra_vars_str = json.dumps(payload)
         
         # Scrivi in un file invece che in GITHUB_ENV
         vars_file = 'ansible_extra_vars.txt'
@@ -79,7 +75,7 @@ jobs:
             f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
             f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
             f.write(f"VARS_FILE={vars_file}\n")
-            f.write(f"REQUEST_ID={metadata.get('requestId','')}\n")
+            f.write(f"REQUEST_ID={request_id}\n")
         
         print("\n=== Environment variables written ===")
         EOF
