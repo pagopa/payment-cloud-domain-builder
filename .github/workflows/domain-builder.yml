@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
     inputs:
       data:
-        description: 'Domain Builder data payload in JSON format'
+        type: string
+        description: 'Domain Builder data payload in JSON stringified format'
         required: true
         default: '{}'
 

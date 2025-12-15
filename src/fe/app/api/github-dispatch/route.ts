@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
           ref: "ansible-on-branch",
           inputs: {
-              data: body.data
+              data: JSON.stringify(body.data)
           }
       })
     });
