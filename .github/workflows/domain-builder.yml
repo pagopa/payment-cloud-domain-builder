@@ -72,8 +72,8 @@ jobs:
         
         # Scrivi solo le variabili piccole in GITHUB_ENV
         with open(os.environ['GITHUB_ENV'], 'a') as f:
-            f.write(f"DOMAIN_NAME={data.get('domain_name','')}\n")
-            f.write(f"PRODUCT_NAME={data.get('product_name','')}\n")
+            f.write(f"DOMAIN_NAME={payload.get('domain_name','')}\n")
+            f.write(f"PRODUCT_NAME={payload.get('product_name','')}\n")
             f.write(f"VARS_FILE={vars_file}\n")
             f.write(f"REQUEST_ID={request_id}\n")
         
