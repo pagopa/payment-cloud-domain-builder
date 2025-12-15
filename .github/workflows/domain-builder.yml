@@ -4,6 +4,11 @@ on:
   repository_dispatch:
     types: [ domain-builder-wk ]
   workflow_dispatch:
+    inputs:
+      data:
+        description: 'Domain Builder data payload in JSON format'
+        required: true
+        default: '{}'
 
 jobs:
   domain-builder:
@@ -31,7 +36,7 @@ jobs:
     
     - name: Parse Payload and Generate Vars File
       env:
-        CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        CLIENT_PAYLOAD: ${{ toJson(github.event.inputs.data) }}
       run: |
         echo "=== DEBUG: Full payload ==="
         echo "$CLIENT_PAYLOAD" | python3 -m json.tool
