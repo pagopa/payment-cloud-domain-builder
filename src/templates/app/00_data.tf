@@ -106,4 +106,5 @@ data "azurerm_subnet" "{{app_service_function_name_snake}}_snet" {
 }
 {% endif %}
 
+prova
 # test ansible on branch
