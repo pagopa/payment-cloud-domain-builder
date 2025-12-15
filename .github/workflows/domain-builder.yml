@@ -3,6 +3,7 @@ name: Domain Builder
 on:
   repository_dispatch:
     types: [ domain-builder-wk ]
+  workflow_dispatch:
 
 jobs:
   domain-builder:
