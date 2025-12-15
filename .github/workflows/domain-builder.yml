@@ -48,6 +48,7 @@ jobs:
         # Parse payload
         raw = os.environ.get('CLIENT_PAYLOAD', '{}')
         print(f"Raw payload length: {len(raw)}")
+        print(f"Raw payload  {raw}")
         
         try:
             payload = json.loads(raw)
