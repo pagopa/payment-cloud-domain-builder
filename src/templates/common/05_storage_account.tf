@@ -20,7 +20,12 @@ module "{{domain_name}}_{{storage_account_scope_name}}_storage_account" {
   resource_group_name = azurerm_resource_group.storage_account_rg.name
 
 {% if is_dev_public %}
-  private_endpoint_subnet_id                  = var.env_short == "d" ? null : data.azurerm_subnet.private_endpoint_subnet[0].id
+  embedded_subnet = {
+    enabled      = var.env_short == "d"
+    vnet_name    = local.spoke_data_vnet_name
+    vnet_rg_name = local.spoke_data_vnet_resource_group_name
+  }
+
 {% if "queue" in storage_account_data_types  %}
   private_dns_zone_queue_ids  = var.env_short == "d" ? [] : data.azurerm_private_dns_zone.privatelink_queue_core_windows_net[0].id
 {% endif     %}
@@ -41,7 +46,11 @@ module "{{domain_name}}_{{storage_account_scope_name}}_storage_account" {
 {% endif %}
 
 {% else %}
-  private_endpoint_subnet_id                  = data.azurerm_subnet.private_endpoint_subnet.id
+  embedded_subnet = {
+    enabled      = true
+    vnet_name    = local.spoke_data_vnet_name
+    vnet_rg_name = local.spoke_data_vnet_resource_group_name
+  }
 {% if "queue" in storage_account_data_types  %}
   private_dns_zone_queue_ids  = data.azurerm_private_dns_zone.privatelink_queue_core_windows_net
 {% endif     %}
@@ -61,6 +70,12 @@ module "{{domain_name}}_{{storage_account_scope_name}}_storage_account" {
   private_dns_zone_table_ids  = data.azurerm_private_dns_zone.privatelink_table_core_windows_net
 {% endif %}
 {% endif %}
+
+  # fixme configure the cidr list and service name allowed on this storage account
+  embedded_nsg_configuration    = {
+    source_address_prefixes      = ["*"]
+    source_address_prefixes_name = "All"
+  }
 
   tags                = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 

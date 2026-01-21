@@ -8,4 +8,4 @@ location_string_mapping:
   westeurope: "West Europe"
   northeurope: "North Europe"
 
-terraform_module_v4_hash: 85e4ec77e6b7e918de10108e052aba4348695e8d #7.21.0
+terraform_module_v4_hash: f0182ea2976ff98f598f4c0dd626f67efb14ff23 #8.3.1

@@ -6,16 +6,8 @@ resource "azurerm_resource_group" "cosmos_rg" {
 
 }
 
-data "azurerm_subnet" "private_endpoint_subnet" {
-  name                 = "{{ private_endpoint_subnet_name }}"
-  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
-  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
-}
 
-data "azurerm_private_dns_zone" "privatelink_redis_cache_windows_net" {
-  name                = "privatelink.redis.cache.windows.net"
-  resource_group_name = "{{ private_dns_zone_rg_name }}"
-}
+
 
 module "cosmos" {
   source = "./.terraform/modules/__v4__/IDH/cosmosdb_account"
@@ -33,11 +25,26 @@ module "cosmos" {
 
   additional_geo_locations = []
 
+
 {% if is_dev_public %}
-  subnet_id = var.env_short != "d" ? data.azurerm_subnet.private_endpoint_subnet[0].id : null
+  embedded_subnet = {
+    enabled              = var.env_short != "d"
+    vnet_name            = local.spoke_data_vnet_name
+    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
+  }}
 {% else %}
-  subnet_id = data.azurerm_subnet.private_endpoint_subnet.id
+  embedded_subnet = {
+    enabled              = true
+    vnet_name            = local.spoke_data_vnet_name
+    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
+  }}
 {% endif %}
+
+  # fixme configure the cidr list and service name allowed on this cosmosdb
+  embedded_nsg_configuration = {
+    source_address_prefixes      = ["*"]
+    source_address_prefixes_name = "All"
+  }
 
   private_endpoint_config = {
 {% if is_dev_public %}
