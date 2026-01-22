@@ -107,5 +107,3 @@ data "azurerm_private_dns_zone" "azurewebsites" {
 }
 {% endif %}
 
-
-{% endif %}
