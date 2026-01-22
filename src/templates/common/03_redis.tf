@@ -23,7 +23,7 @@ module "redis" {
     enabled              = var.env_short != "d"
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net[0].id]
+    private_dns_zone_ids = var.env_short != "d" ? [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net[0].id] : []
   }
 {% else %}
   embedded_subnet = {
@@ -37,7 +37,7 @@ module "redis" {
   # fixme configure the cidr list and service name allowed on this redis
   embedded_nsg_configuration    = {
     source_address_prefixes      = ["*"]
-    source_address_prefixes_name = local.domain_name
+    source_address_prefixes_name = local.domain
   }
 
   patch_schedules = [
@@ -75,19 +75,19 @@ module "redis" {
 
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_access_key" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_access_key" {
   name         = "redis-${local.domain}-access-key"
   value        = module.redis.primary_access_key
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_hostname" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_hostname" {
   name         = "redis-${local.domain}-hostname"
   value        = module.redis.hostname
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_connection_string" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_connection_string" {
   name         = "redis-${local.domain}-hostname"
   value        = module.redis.primary_connection_string
   key_vault_id = data.azurerm_key_vault.domain_kv.id

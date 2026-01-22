@@ -17,7 +17,7 @@ data "azurerm_key_vault_secret" "pgres_flex_admin_pwd" {
 }
 
 
-module "postgres_flexible_server_{{ domain_name }}" {
+module "postgres_flexible_server_{{ domain_name_snake }}" {
   source = "./.terraform/modules/__v4__/IDH/postgres_flexible_server"
 
   name                = "${local.project}-flexible-postgresql"
@@ -37,7 +37,7 @@ module "postgres_flexible_server_{{ domain_name }}" {
   #fixme configure the cidr list and service name allowed on this database
   embedded_nsg_configuration = {
     source_address_prefixes      = ["*"]
-    source_address_prefixes_name = local.domain_name
+    source_address_prefixes_name = local.domain
   }
 
 {% if is_dev_public %}

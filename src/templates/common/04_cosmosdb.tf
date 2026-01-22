@@ -31,13 +31,13 @@ module "cosmos" {
     enabled              = var.env_short != "d"
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-  }}
+  }
 {% else %}
   embedded_subnet = {
     enabled              = true
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-  }}
+  }
 {% endif %}
 
   # fixme configure the cidr list and service name allowed on this cosmosdb
@@ -81,7 +81,7 @@ module "cosmos" {
 }
 
 
-resource "azurerm_key_vault_secret" "cosmos_{{domain_name}}_pkey" {
+resource "azurerm_key_vault_secret" "cosmos_{{domain_name_snake}}_pkey" {
   name         = "${local.domain}-${var.env_short}-cosmos-pkey"
   value        = module.cosmos.primary_key
   content_type = "text/plain"
