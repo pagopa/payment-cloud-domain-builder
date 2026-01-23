@@ -143,7 +143,7 @@ export const templatesConfig = [
             "gh_runner_cae_name": "${local.product}-${var.location_short}-core-tools-cae",
             "gh_runner_cae_rg": "${local.product}-${var.location_short}-core-tools-rg",
             "gh_runner_pat_key": "pagopa-platform-domain-github-bot-cd-pat",
-            "gh_runner_pat_kv_name": "${local.project}-kv",
+            "gh_runner_pat_kv_name": "${local.project_short}-kv",
             "gh_runner_pat_kv_rg": "${local.project}-sec-rg",
             "include_kubernetes": true,
             "aks_name": "${local.product}-${var.location_short}-${var.env}-aks",

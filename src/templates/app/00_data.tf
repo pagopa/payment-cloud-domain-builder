@@ -5,7 +5,7 @@ data "azurerm_resource_group" "identity_rg" {
 }
 
 data "azurerm_key_vault" "key_vault" {
-  name                = "${local.product}-${var.location_short}-${local.domain}-kv"
+  name                = "${local.project_short}-kv"
   resource_group_name = "${local.product}-${var.location_short}-${local.domain}-sec-rg"
 
 }
@@ -103,7 +103,7 @@ data "azurerm_private_dns_zone" "azurewebsites" {
   count               = var.env_short != "d" ? 1 : 0
   {% endif %}
   name                = "privatelink.azurewebsites.net"
-  resource_group_name = local.vnet_name
+  resource_group_name = local.private_dns_zone_rg_name
 }
 {% endif %}
 
