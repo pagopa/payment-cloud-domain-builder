@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "storage_account_rg" {
 module "{{domain_name_snake}}_{{storage_account_scope_name}}_storage_account" {
   source = "./.terraform/modules/__v4__/IDH/storage_account"
 
-  name = replace("${local.project}-{{storage_account_scope_name}}-sa", "-", "")
+  name = replace("${local.project_short}-{{storage_account_scope_name}}-sa", "-", "")
 
   product_name        = local.prefix
   env                 = var.env

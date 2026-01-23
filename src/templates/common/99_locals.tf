@@ -3,7 +3,7 @@ locals {
   domain_short        = "{{domain_name_short}}"
   prefix        = "{{product_name}}"
   product       = "${local.prefix}-${var.env_short}"
-  project_short = "${local.prefix}-${var.env_short}-${local.domain}"
+  project_short = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain_short}"
   project       = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
 
 

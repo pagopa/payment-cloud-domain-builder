@@ -158,7 +158,7 @@ export const formConfig = {
             name: "Storage Account",
             formFields: [
                 { name: "Abilita StorageAccount", key: "include_storage_account", type: "hidden", value: false },
-                { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
+                { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope", maxLength: 6 },
                 { name: "Storage Account Data Types", key: "storage_account_data_types", type: "checkboxgroup",
                     options: [
                         { label: "Blob", value: "blob" },
