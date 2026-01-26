@@ -26,19 +26,11 @@ module "cosmos" {
   additional_geo_locations = []
 
 
-{% if is_dev_public %}
-  embedded_subnet = {
-    enabled              = var.env_short != "d"
-    vnet_name            = local.spoke_data_vnet_name
-    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-  }
-{% else %}
   embedded_subnet = {
     enabled              = true
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
   }
-{% endif %}
 
   # fixme configure the cidr list and service name allowed on this cosmosdb
   embedded_nsg_configuration = {
@@ -47,19 +39,6 @@ module "cosmos" {
   }
 
   private_endpoint_config = {
-{% if is_dev_public %}
-    enabled              = var.env_short != "d"
-{% if cosmosdb_account_database_type == "mongo" %}
-    private_dns_zone_mongo_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com[0].id : null
-    service_connection_name_mongo = var.env_short != "d" ?  "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
-    name_mongo = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
-{% endif %}
-{% if cosmosdb_account_database_type == "sql" %}
-    private_dns_zone_sql_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id : null
-    name_sql = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-sql-endpoint" : null
-{% endif %}
-
-{% else %}
       enabled = true
 {% if cosmosdb_account_database_type == "mongo" %}
     private_dns_zone_mongo_ids = data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id
@@ -69,7 +48,6 @@ module "cosmos" {
 {% if cosmosdb_account_database_type == "sql" %}
     private_dns_zone_sql_ids = data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id
     name_sql = "${local.project}-${local.domain}-cosmos-sql-endpoint"
-{% endif %}
 {% endif %}
 
 

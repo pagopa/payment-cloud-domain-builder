@@ -99,7 +99,7 @@ export const templatesConfig = [
         icon: VscAzure,
         template: {
             "domain_name": "",
-            "is_dev_public": true,
+            "is_dev_aks_public": true,
             "storage_account_state_name": "tfinfdevpagopa",
             "storage_account_container_state_name": "terraform-state",
             "storage_account_state_rg_name": "terraform-state-rg",

@@ -16,7 +16,7 @@ resource "azurerm_key_vault_secret" "tenant_id" {
 
 {% if include_kubernetes %}
 locals {
-{% if is_dev_public %}
+{% if is_dev_aks_public %}
   aks_api_url = var.env_short == "d" ? data.azurerm_kubernetes_cluster.aks.fqdn : data.azurerm_kubernetes_cluster.aks.private_fqdn
 {% else %}
   aks_api_url = data.azurerm_kubernetes_cluster.aks.private_fqdn

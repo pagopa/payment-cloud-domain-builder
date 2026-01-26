@@ -81,7 +81,7 @@ Sulla sinistra sono presenti i tasti per fare import ed export della configurazi
   "formData": {
     "include_domain": true,
     "domain_name": "tstdmo",
-    "is_dev_public": true,
+    "is_dev_aks_public": true,
     "storage_account_state_name": "tfinfdevpagopa",
     [...]
 }
@@ -188,7 +188,7 @@ es:
         icon: VscAzure,
         template:{
             "domain_name":  "", 
-            "is_dev_public": true
+            "is_dev_aks_public": true
             [...]
         }
 }
@@ -232,7 +232,7 @@ Definire le variabili di configurazione del builder nel file `src/vars/local.yml
 _es parziale:_
 ```yml
 domain_name: "mydomain"
-is_dev_public: true
+is_dev_aks_public: true
 storage_account_state_name: "tfinfdevpagopa"
 storage_account_container_state_name: "terraform-state"
 storage_account_state_rg_name: "terraform-state-rg"

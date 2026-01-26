@@ -99,9 +99,6 @@ data "azurerm_api_management" "apim" {
 
 {% if (include_app_service_webapp is defined and include_app_service_webapp ) or (include_app_service_function is defined and include_app_service_function) %}
 data "azurerm_private_dns_zone" "azurewebsites" {
-  {% if is_dev_public %}
-  count               = var.env_short != "d" ? 1 : 0
-  {% endif %}
   name                = "privatelink.azurewebsites.net"
   resource_group_name = local.private_dns_zone_rg_name
 }

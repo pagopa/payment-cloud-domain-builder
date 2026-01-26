@@ -40,11 +40,7 @@ module "postgres_flexible_server_{{ domain_name_snake }}" {
     source_address_prefixes_name = local.domain
   }
 
-{% if is_dev_public %}
-  private_dns_zone_id = var.env_short != "d" ? data.azurerm_private_dns_zone.postgres[0].id : null
-{% else %}
   private_dns_zone_id = data.azurerm_private_dns_zone.postgres.id
-{% endif %}
 
 
   administrator_login    = data.azurerm_key_vault_secret.pgres_flex_admin_login.value

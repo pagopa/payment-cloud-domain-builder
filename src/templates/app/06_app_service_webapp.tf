@@ -30,7 +30,7 @@ module "{{app_service_webapp_name_snake}}_app_service" {
   allowed_subnet_ids = []
 
 
-  private_endpoint_dns_zone_id = {% if is_dev_public %} var.env_short == "d" ? null : data.azurerm_private_dns_zone.azurewebsites[0].id{% else %}data.azurerm_private_dns_zone.azurewebsites.id{% endif %}
+  private_endpoint_dns_zone_id = data.azurerm_private_dns_zone.azurewebsites.id
 
   embedded_subnet = {
     enabled      = true

@@ -18,21 +18,12 @@ module "redis" {
   resource_group_name = azurerm_resource_group.redis_rg.name
   alert_action_group_ids = concat([data.azurerm_monitor_action_group.email.id, data.azurerm_monitor_action_group.slack.id], var.alert_use_opsgenie ? [] : [])
 
-{% if is_dev_public %}
-  embedded_subnet = {
-    enabled              = var.env_short != "d"
-    vnet_name            = local.spoke_data_vnet_name
-    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-    private_dns_zone_ids = var.env_short != "d" ? [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net[0].id] : []
-  }
-{% else %}
   embedded_subnet = {
     enabled              = true
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
     private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net.id]
   }
-{% endif %}
 
   # fixme configure the cidr list and service name allowed on this redis
   embedded_nsg_configuration    = {

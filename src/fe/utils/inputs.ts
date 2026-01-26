@@ -40,7 +40,6 @@ export const formConfig = {
                 { name: "Abilita Dominio", key: "include_domain", type: "hidden", value: true  },
                 { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. my-domain" },
                 { name: "Domain Short Name", key: "domain_name_short", type: "text", placeholder: "e.g. mydmn", maxLength: 6 },
-                { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?"},
                 { name: "State Storage Account Name", key: "storage_account_state_name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
                 { name: "State Storage Account Container Name", key: "storage_account_container_state_name", type: "text", placeholder: "e.g. terraform-state" },
                 { name: "State Storage Account RG Name", key: "storage_account_state_rg_name", type: "text", placeholder: "e.g. terraform-state-rg" },
@@ -150,7 +149,8 @@ export const formConfig = {
             formFields: [
                 { name: "Abilita AKS", key: "include_kubernetes", type: "hidden", value: false },
                 { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
-                { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" }
+                { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
+                { name: "Is Dev AKS Public?", key: "is_dev_aks_public", type: "boolean", placeholder: "Enable public access in dev AKS?"}
             ],
         },
         storage_account: {
@@ -202,7 +202,7 @@ export const formConfig = {
             info: "La configurazione di default prevede una Function con immagine docker recuperata da DockerHub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.  Ricordati di definire i tuoi APP_SETTINGS una volta creato",
             formFields: [
                 { name: "Abilita AppService Function", key: "include_app_service_function", type: "hidden", value: false },
-                { name: "Function Name", key: "app_service_function_name", type: "text", placeholder: "Function name", maxLength: 6 },
+                { name: "Function Name", key: "app_service_function_name", type: "text", placeholder: "Function name", maxLength: 5 },
                 { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?", value: false },
                 { name: "Function docker image", key: "app_service_function_docker_image", type: "text", placeholder: "Function docker image. latest is configured by default" },
             ]
