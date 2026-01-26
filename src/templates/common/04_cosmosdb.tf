@@ -41,12 +41,12 @@ module "cosmos" {
   private_endpoint_config = {
       enabled = true
 {% if cosmosdb_account_database_type == "mongo" %}
-    private_dns_zone_mongo_ids = data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id
+    private_dns_zone_mongo_ids = [data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id]
     service_connection_name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
     name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
 {% endif %}
 {% if cosmosdb_account_database_type == "sql" %}
-    private_dns_zone_sql_ids = data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id
+    private_dns_zone_sql_ids = [data.azurerm_private_dns_zone.privatelink_documents_azure_com.id]
     name_sql = "${local.project}-${local.domain}-cosmos-sql-endpoint"
 {% endif %}
 
