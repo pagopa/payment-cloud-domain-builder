@@ -19,7 +19,7 @@ module "workload_identity" {
   key_vault_secret_permissions      = ["Get"]
 }
 
-resource "kubernetes_pod_disruption_budget_v1" "{{domain_name}}_pdb" {
+resource "kubernetes_pod_disruption_budget_v1" "{{domain_name_snake}}_pdb" {
 
   for_each = var.pod_disruption_budgets
 

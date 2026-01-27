@@ -18,17 +18,18 @@ module "redis" {
   resource_group_name = azurerm_resource_group.redis_rg.name
   alert_action_group_ids = concat([data.azurerm_monitor_action_group.email.id, data.azurerm_monitor_action_group.slack.id], var.alert_use_opsgenie ? [] : [])
 
-{% if is_dev_public %}
-  private_endpoint = var.env_short != "d" ? {
-    subnet_id            = data.azurerm_subnet.private_endpoint_subnet[0].id
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net[0].id]
-  } : null
-{% else %}
-  private_dns_zone_id = {
-    subnet_id            = data.azurerm_subnet.private_endpoint_subnet.id
+  embedded_subnet = {
+    enabled              = true
+    vnet_name            = local.spoke_data_vnet_name
+    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
     private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net.id]
   }
-{% endif %}
+
+  # fixme configure the cidr list and service name allowed on this redis
+  embedded_nsg_configuration    = {
+    source_address_prefixes      = ["*"]
+    source_address_prefixes_name = local.domain
+  }
 
   patch_schedules = [
     {
@@ -65,19 +66,19 @@ module "redis" {
 
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_access_key" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_access_key" {
   name         = "redis-${local.domain}-access-key"
   value        = module.redis.primary_access_key
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_hostname" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_hostname" {
   name         = "redis-${local.domain}-hostname"
   value        = module.redis.hostname
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name}}_connection_string" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_connection_string" {
   name         = "redis-${local.domain}-hostname"
   value        = module.redis.primary_connection_string
   key_vault_id = data.azurerm_key_vault.domain_kv.id

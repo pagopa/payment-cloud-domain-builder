@@ -38,8 +38,8 @@ export const formConfig = {
             name: "Definizione dominio",
             formFields: [
                 { name: "Abilita Dominio", key: "include_domain", type: "hidden", value: true  },
-                { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. meme" },
-                { name: "Is Dev Public?", key: "is_dev_public", type: "boolean", placeholder: "Enable public access in dev?"},
+                { name: "Domain Name", key: "domain_name", type: "text", placeholder: "e.g. my-domain" },
+                { name: "Domain Short Name", key: "domain_name_short", type: "text", placeholder: "e.g. mydmn", maxLength: 6 },
                 { name: "State Storage Account Name", key: "storage_account_state_name", type: "text", placeholder: "e.g. tfinfdevpagopa" },
                 { name: "State Storage Account Container Name", key: "storage_account_container_state_name", type: "text", placeholder: "e.g. terraform-state" },
                 { name: "State Storage Account RG Name", key: "storage_account_state_rg_name", type: "text", placeholder: "e.g. terraform-state-rg" },
@@ -72,11 +72,20 @@ export const formConfig = {
             name: "Riferimenti Network",
             formFields: [
                 { name: "Abilita Network", key: "include_networking", type: "hidden", value: true  },
-                { name: "VNet Name", key: "vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet" },
-                { name: "VNet RG Name", key: "vnet_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
-                { name: "Private Endpoint Subnet Name", key: "private_endpoint_subnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-common-private-endpoint-snet" },
-                { name: "Private Endpoint Subnet RG Name", key: "private_endpoint_subnet_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
-                { name: "Private Endpoint Subnet Vnet name", key: "private_endpoint_subnet_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet" },
+
+                { name: "Compute Vnet name", key: "compute_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-hub-vnet" },
+                { name: "Compute Vnet RG name", key: "compute_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-vnet-rg" },
+                { name: "Data Vnet name", key: "data_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-spoke-data-vnet" },
+                { name: "Data Vnet RG name", key: "data_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
+                { name: "Security Vnet name", key: "security_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-spoke-security-vnet" },
+                { name: "Security Vnet RG name", key: "security_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
+                { name: "Streaming Vnet name", key: "streaming_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-spoke-streaming-vnet" },
+                { name: "Streaming Vnet RG name", key: "streaming_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
+                { name: "Tools Vnet name", key: "tools_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-spoke-tools-vnet" },
+                { name: "Tools Vnet RG name", key: "tools_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
+                { name: "Hub Vnet name", key: "hub_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-hub-vnet" },
+                { name: "Hub Vnet RG name", key: "hub_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
+
                 { name: "Private DNS Zone RG Name", key: "private_dns_zone_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
                 { name: "External Domain", key: "external_domain", type: "text", placeholder: "e.g. pagopa.it" },
                 { name: "Internal DNS Zone Resource Group Name", key: "internal_dns_zone_resource_group_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
@@ -140,7 +149,8 @@ export const formConfig = {
             formFields: [
                 { name: "Abilita AKS", key: "include_kubernetes", type: "hidden", value: false },
                 { name: "AKS Name", key: "aks_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks" },
-                { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" }
+                { name: "AKS RG Name", key: "aks_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-${var.env}-aks-rg" },
+                { name: "Is Dev AKS Public?", key: "is_dev_aks_public", type: "boolean", placeholder: "Enable public access in dev AKS?"}
             ],
         },
         storage_account: {
@@ -148,7 +158,7 @@ export const formConfig = {
             name: "Storage Account",
             formFields: [
                 { name: "Abilita StorageAccount", key: "include_storage_account", type: "hidden", value: false },
-                { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope" },
+                { name: "Storage Account Scope Name", key: "storage_account_scope_name", type: "text", placeholder: "e.g. myscope", maxLength: 6 },
                 { name: "Storage Account Data Types", key: "storage_account_data_types", type: "checkboxgroup",
                     options: [
                         { label: "Blob", value: "blob" },
@@ -181,7 +191,7 @@ export const formConfig = {
             info: "La configurazione di default prevede una WebApp con immagine docker recuperata da DockerHub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.  Ricordati di definire i tuoi APP_SETTINGS una volta creato",
             formFields: [
                 { name: "Abilita AppService Webapp", key: "include_app_service_webapp", type: "hidden", value: false },
-                { name: "WebApp Name (short)", key: "app_service_webapp_name", type: "text", placeholder: "WebApp name" },
+                { name: "WebApp Name ", key: "app_service_webapp_name", type: "text", placeholder: "WebApp name", maxLength: 6 },
                 { name: "WebApp always on", key: "app_service_webapp_always_on", type: "boolean", placeholder: "WebApp always on?", value: false },
                 { name: "WebApp docker image", key: "app_service_webapp_docker_image", type: "text", placeholder: "WebApp docker image. latest is configured by default" },
             ]
@@ -192,7 +202,7 @@ export const formConfig = {
             info: "La configurazione di default prevede una Function con immagine docker recuperata da DockerHub con tag 'latest'. Una volta creato il dominio sarà possibile modificare la configurazione a proprio piacimento.  Ricordati di definire i tuoi APP_SETTINGS una volta creato",
             formFields: [
                 { name: "Abilita AppService Function", key: "include_app_service_function", type: "hidden", value: false },
-                { name: "Function Name (short)", key: "app_service_function_name", type: "text", placeholder: "Function name" },
+                { name: "Function Name", key: "app_service_function_name", type: "text", placeholder: "Function name", maxLength: 5 },
                 { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?", value: false },
                 { name: "Function docker image", key: "app_service_function_docker_image", type: "text", placeholder: "Function docker image. latest is configured by default" },
             ]

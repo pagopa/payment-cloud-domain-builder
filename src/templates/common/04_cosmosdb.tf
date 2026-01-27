@@ -6,16 +6,8 @@ resource "azurerm_resource_group" "cosmos_rg" {
 
 }
 
-data "azurerm_subnet" "private_endpoint_subnet" {
-  name                 = "{{ private_endpoint_subnet_name }}"
-  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
-  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
-}
 
-data "azurerm_private_dns_zone" "privatelink_redis_cache_windows_net" {
-  name                = "privatelink.redis.cache.windows.net"
-  resource_group_name = "{{ private_dns_zone_rg_name }}"
-}
+
 
 module "cosmos" {
   source = "./.terraform/modules/__v4__/IDH/cosmosdb_account"
@@ -33,36 +25,29 @@ module "cosmos" {
 
   additional_geo_locations = []
 
-{% if is_dev_public %}
-  subnet_id = var.env_short != "d" ? data.azurerm_subnet.private_endpoint_subnet[0].id : null
-{% else %}
-  subnet_id = data.azurerm_subnet.private_endpoint_subnet.id
-{% endif %}
+
+  embedded_subnet = {
+    enabled              = true
+    vnet_name            = local.spoke_data_vnet_name
+    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
+  }
+
+  # fixme configure the cidr list and service name allowed on this cosmosdb
+  embedded_nsg_configuration = {
+    source_address_prefixes      = ["*"]
+    source_address_prefixes_name = "All"
+  }
 
   private_endpoint_config = {
-{% if is_dev_public %}
-    enabled              = var.env_short != "d"
-{% if cosmosdb_account_database_type == "mongo" %}
-    private_dns_zone_mongo_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com[0].id : null
-    service_connection_name_mongo = var.env_short != "d" ?  "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
-    name_mongo = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-mongo-endpoint" : null
-{% endif %}
-{% if cosmosdb_account_database_type == "sql" %}
-    private_dns_zone_sql_ids = var.env_short != "d" ? data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id : null
-    name_sql = var.env_short != "d" ? "${local.project}-${local.domain}-cosmos-sql-endpoint" : null
-{% endif %}
-
-{% else %}
       enabled = true
 {% if cosmosdb_account_database_type == "mongo" %}
-    private_dns_zone_mongo_ids = data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id
+    private_dns_zone_mongo_ids = [data.azurerm_private_dns_zone.privatelink_mongo_cosmos_azure_com.id]
     service_connection_name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
     name_mongo = "${local.project}-${local.domain}-cosmos-mongo-endpoint"
 {% endif %}
 {% if cosmosdb_account_database_type == "sql" %}
-    private_dns_zone_sql_ids = data.azurerm_private_dns_zone.privatelink_documents_azure_com[0].id
+    private_dns_zone_sql_ids = [data.azurerm_private_dns_zone.privatelink_documents_azure_com.id]
     name_sql = "${local.project}-${local.domain}-cosmos-sql-endpoint"
-{% endif %}
 {% endif %}
 
 
@@ -74,7 +59,7 @@ module "cosmos" {
 }
 
 
-resource "azurerm_key_vault_secret" "cosmos_{{domain_name}}_pkey" {
+resource "azurerm_key_vault_secret" "cosmos_{{domain_name_snake}}_pkey" {
   name         = "${local.domain}-${var.env_short}-cosmos-pkey"
   value        = module.cosmos.primary_key
   content_type = "text/plain"

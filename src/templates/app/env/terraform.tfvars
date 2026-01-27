@@ -19,7 +19,7 @@ dns_zone_prefix          = "{{domain_name}}.{{location_mapping[location]}}"
 }
 {{app_service_webapp_name_snake }}_image = {
     docker_image         = "{{app_service_webapp_docker_image}}"
-    docker_tag           = "latest"
+    docker_image_tag           = "latest"
     docker_registry_url  = "https://index.docker.io"
 }
 {{app_service_webapp_name_snake }}_always_on = true
@@ -35,7 +35,7 @@ dns_zone_prefix          = "{{domain_name}}.{{location_mapping[location]}}"
 }
 {{app_service_function_name_snake }}_image = {
   docker_image         = "{{app_service_webapp_docker_image}}"
-  docker_tag           = "latest"
+  docker_image_tag           = "latest"
   docker_registry_url  = "https://index.docker.io"
 }
 {{app_service_function_name_snake }}_always_on = true

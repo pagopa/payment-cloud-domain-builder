@@ -8,28 +8,16 @@ resource "azurerm_resource_group" "db_rg" {
 
 data "azurerm_key_vault_secret" "pgres_flex_admin_login" {
   name         = "db-administrator-login"
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
 data "azurerm_key_vault_secret" "pgres_flex_admin_pwd" {
   name         = "db-administrator-login-password"
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+  key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-# Postgres Flexible Server subnet
-module "postgres_flexible_snet" {
-  source               = "./.terraform/modules/__v4__/IDH/subnet"
-  name                 = "${local.project}-pgres-flexible-snet"
-  resource_group_name  = data.azurerm_resource_group.rg_vnet.name
-  virtual_network_name = data.azurerm_virtual_network.vnet.name
-  service_endpoints    = ["Microsoft.Storage"]
 
-  env                = var.env
-  idh_resource_tier  = "postgres_flexible"
-  product_name       = local.prefix
-}
-
-module "postgres_flexible_server_{{ domain_name }}" {
+module "postgres_flexible_server_{{ domain_name_snake }}" {
   source = "./.terraform/modules/__v4__/IDH/postgres_flexible_server"
 
   name                = "${local.project}-flexible-postgresql"
@@ -40,13 +28,20 @@ module "postgres_flexible_server_{{ domain_name }}" {
   idh_resource_tier = var.pgres_flex_params.idh_resource_tier
   product_name      = local.prefix
 
-{% if is_dev_public %}
-  private_dns_zone_id = var.env_short != "d" ? data.azurerm_private_dns_zone.postgres[0].id : null
-{% else %}
-  private_dns_zone_id = data.azurerm_private_dns_zone.postgres.id
-{% endif %}
+  embedded_subnet = {
+    enabled              = true
+    vnet_name            = local.spoke_data_vnet_name
+    vnet_rg_name         = local.spoke_data_vnet_resource_group_name
+  }
 
-  delegated_subnet_id = module.postgres_flexible_snet.id
+  #fixme configure the cidr list and service name allowed on this database
+  embedded_nsg_configuration = {
+    source_address_prefixes      = ["*"]
+    source_address_prefixes_name = local.domain
+  }
+
+  private_dns_zone_id = data.azurerm_private_dns_zone.postgres.id
+
 
   administrator_login    = data.azurerm_key_vault_secret.pgres_flex_admin_login.value
   administrator_password = data.azurerm_key_vault_secret.pgres_flex_admin_pwd.value
@@ -77,7 +72,7 @@ module "postgres_flexible_server_{{ domain_name }}" {
 
   private_dns_registration = var.postgres_dns_registration_enabled
   private_dns_zone_name    = "${var.env_short}.internal.postgresql.pagopa.it"
-  private_dns_zone_rg_name = data.azurerm_resource_group.rg_vnet.name
+  private_dns_zone_rg_name = local.private_dns_zone_rg_name
   private_dns_record_cname = "${local.domain}-db"
 
   tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}

@@ -230,6 +230,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
             placeholder={field.placeholder}
             onChange={handleChange}
             className={inputClasses[field.type] || inputClasses.text}
+            maxLength={field.maxLength}
           />
         );
     }
@@ -261,7 +262,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
 
         {stepConfig.formFields.map((field, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{(field.type !== 'hidden' && field.type !== 'static') && field.name}</label>
+            <label className="block text-sm font-semibold text-zinc-600 dark:text-white mt-2">{(field.type !== 'hidden' && field.type !== 'static') && field.name}</label><label className="block text-sm font-semibold text-red-600 dark:text-red mb-2">{field.maxLength ? ` (Max ${field.maxLength} chars)`: ""}</label>
           {renderInputField(
             field,
             formData[field.key],

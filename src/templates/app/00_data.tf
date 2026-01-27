@@ -5,7 +5,7 @@ data "azurerm_resource_group" "identity_rg" {
 }
 
 data "azurerm_key_vault" "key_vault" {
-  name                = "${local.product}-${var.location_short}-${local.domain}-kv"
+  name                = "${local.project_short}-kv"
   resource_group_name = "${local.product}-${var.location_short}-${local.domain}-sec-rg"
 
 }
@@ -45,24 +45,42 @@ data "azurerm_monitor_action_group" "opsgenie" {
   name                = local.monitor_action_group_opsgenie_name
 }
 
-data "azurerm_virtual_network" "vnet" {
-  name                = local.vnet_name
-  resource_group_name = local.vnet_resource_group_name
+data "azurerm_virtual_network" "hub_vnet" {
+  name                = local.hub_vnet_name
+  resource_group_name = local.hub_vnet_resource_group_name
 }
+
+data "azurerm_virtual_network" "spoke_data_vnet" {
+  name                = local.spoke_data_vnet_name
+  resource_group_name = local.spoke_data_vnet_resource_group_name
+}
+
+data "azurerm_virtual_network" "spoke_compute_vnet" {
+  name                = local.spoke_compute_vnet_name
+  resource_group_name = local.spoke_compute_vnet_resource_group_name
+}
+
+data "azurerm_virtual_network" "spoke_security_vnet" {
+  name                = local.spoke_security_vnet_name
+  resource_group_name = local.spoke_security_vnet_resource_group_name
+}
+
+data "azurerm_virtual_network" "spoke_streaming_vnet" {
+  name                = local.spoke_streaming_vnet_name
+  resource_group_name = local.spoke_streaming_vnet_resource_group_name
+}
+
+data "azurerm_virtual_network" "spoke_tools_vnet" {
+  name                = local.spoke_tools_vnet_name
+  resource_group_name = local.spoke_tools_vnet_resource_group_name
+}
+
 
 data "azurerm_private_dns_zone" "internal" {
   name                = local.internal_dns_zone_name
   resource_group_name = local.internal_dns_zone_resource_group_name
 }
 
-data "azurerm_subnet" "private_endpoint_subnet" {
-  {% if is_dev_public %}
-  count               = var.env_short != "d" ? 1 : 0
-  {% endif %}
-  name                 = "{{ private_endpoint_subnet_name }}"
-  resource_group_name  = "{{ private_endpoint_subnet_rg_name }}"
-  virtual_network_name = "{{ private_endpoint_subnet_vnet_name }}"
-}
 
 
 {% if include_kubernetes %}
@@ -81,27 +99,8 @@ data "azurerm_api_management" "apim" {
 
 {% if (include_app_service_webapp is defined and include_app_service_webapp ) or (include_app_service_function is defined and include_app_service_function) %}
 data "azurerm_private_dns_zone" "azurewebsites" {
-  {% if is_dev_public %}
-  count               = var.env_short != "d" ? 1 : 0
-  {% endif %}
   name                = "privatelink.azurewebsites.net"
-  resource_group_name = local.vnet_name
+  resource_group_name = local.private_dns_zone_rg_name
 }
 {% endif %}
 
-
-{% if include_app_service_webapp %}
-data "azurerm_subnet" "{{app_service_webapp_name_snake}}_snet" {
-  name                 = "${local.project}-{{app_service_webapp_name_kebab}}-snet"
-  virtual_network_name = local.vnet_name
-  resource_group_name  = local.vnet_resource_group_name
-}
-{% endif %}
-
-{% if include_app_service_function  %}
-data "azurerm_subnet" "{{app_service_function_name_snake}}_snet" {
-  name                 = "${local.project}-{{app_service_function_name_kebab}}-snet"
-  virtual_network_name = local.vnet_name
-  resource_group_name  = local.vnet_resource_group_name
-}
-{% endif %}

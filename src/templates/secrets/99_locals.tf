@@ -1,8 +1,10 @@
 locals {
   domain        = "{{domain_name}}"
-  prefix       = "{{product_name}}"
-  project = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
-  product = "${local.prefix}-${var.env_short}"
+  domain_short  = "{{domain_name_short}}"
+  prefix        = "{{product_name}}"
+  project       = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
+  project_short = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain_short}"
+  product       = "${local.prefix}-${var.env_short}"
 
 
   subscription_name = "${var.env}-${local.prefix}"
