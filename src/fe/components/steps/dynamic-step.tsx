@@ -226,7 +226,7 @@ export const DynamicStep: React.FC<DynamicStepProps> = ({
           <input
             type={field.type}
             name={field.key}
-            value={value || ""}
+            value={ value || field.value || "" }
             placeholder={field.placeholder}
             onChange={handleChange}
             className={inputClasses[field.type] || inputClasses.text}

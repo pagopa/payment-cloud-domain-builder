@@ -41,7 +41,7 @@ export const defaultForm: CustomFormData = (() => {
           form[field.key] = field.value;
           break;
         case 'number':
-          form[field.key] = 0;
+          form[field.key] = field.value;
           break;
         case 'select':
         case 'text':

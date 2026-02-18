@@ -85,7 +85,6 @@ export const formConfig = {
                 { name: "Tools Vnet RG name", key: "tools_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
                 { name: "Hub Vnet name", key: "hub_vnet_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-hub-vnet" },
                 { name: "Hub Vnet RG name", key: "hub_vnet_rg", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-${var.location_short}-network-hub-spoke-rg" },
-
                 { name: "Private DNS Zone RG Name", key: "private_dns_zone_rg_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
                 { name: "External Domain", key: "external_domain", type: "text", placeholder: "e.g. pagopa.it" },
                 { name: "Internal DNS Zone Resource Group Name", key: "internal_dns_zone_resource_group_name", type: "text", placeholder: "e.g. ${local.prefix}-${var.env_short}-vnet-rg" },
@@ -206,7 +205,6 @@ export const formConfig = {
                 { name: "Funcion always on", key: "app_service_function_always_on", type: "boolean", placeholder: "Function always on?", value: false },
                 { name: "Function docker image", key: "app_service_function_docker_image", type: "text", placeholder: "Function docker image. latest is configured by default" },
             ]
-        }
-
+        },
     },
 };
