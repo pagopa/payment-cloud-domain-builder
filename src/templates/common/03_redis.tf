@@ -79,7 +79,7 @@ resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_hostname" {
 }
 
 resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_connection_string" {
-  name         = "redis-${local.domain}-hostname"
+  name         = "redis-${local.domain}-connection-string"
   value        = module.redis.primary_connection_string
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
