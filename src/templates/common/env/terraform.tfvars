@@ -78,7 +78,7 @@ postgres_custom_metric_alerts = {
 {% endif %}
 
 {% if include_redis %}
-redis_idh_resource_tier = "basic"
+redis_idh_resource_tier = "balanced_0_5gb"
 {% endif %}
 
 {% if include_cosmosdb %}
