@@ -35,7 +35,7 @@ locals {
 {% if include_kubernetes %}
   aks_name = "{{aks_name}}"
   aks_rg_name = "{{aks_rg_name}}"
-  ingress_hostname = "${var.location_short}.${local.domain}"
+  ingress_hostname = "${var.location_short}${var.env}.${local.domain}"
 {% endif %}
 
 }
