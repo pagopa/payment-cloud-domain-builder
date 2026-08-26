@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "sec_rg" {
 module "key_vault" {
   source = "./.terraform/modules/__v4__/key_vault"
 
-  name                       = "${local.product}-${var.location_short}-${local.domain_short}-kv"
+  name                       = "${local.product}-${var.location_short}-${local.domain}-kv"
   location                   = azurerm_resource_group.sec_rg.location
   resource_group_name        = azurerm_resource_group.sec_rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
@@ -67,7 +67,7 @@ module "kv_access_policy_admin_dev" {
 
 # create json letsencrypt inside kv
 # requierd: Docker
-module "letsencrypt_{{ domain_name_snake }}" {
+module "letsencrypt_{{ domain_name_short_snake }}" {
   source = "./.terraform/modules/__v4__/letsencrypt_credential"
 
   prefix            = local.prefix

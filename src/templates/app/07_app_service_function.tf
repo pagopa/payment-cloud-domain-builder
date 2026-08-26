@@ -11,7 +11,7 @@ module "{{app_service_function_name_snake}}_function" {
   env                 = var.env
   idh_resource_tier   = var.{{app_service_function_name_snake}}_plan_idh_tier
   location            = var.location
-  name                = "${local.project_short}-{{app_service_function_name_kebab}}"
+  name                = "${local.project}-{{app_service_function_name_kebab}}"
   product_name        = local.prefix
   resource_group_name = azurerm_resource_group.{{app_service_function_name_snake}}_rg.name
 
