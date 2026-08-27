@@ -22,7 +22,7 @@ module "redis" {
     enabled              = true
     vnet_name            = local.spoke_data_vnet_name
     vnet_rg_name         = local.spoke_data_vnet_resource_group_name
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_cache_windows_net.id]
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_redis_azure_net.id]
   }
 
   # fixme configure the cidr list and service name allowed on this redis
