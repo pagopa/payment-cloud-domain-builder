@@ -11,6 +11,10 @@ data "azuread_group" "adgroup_externals" {
   display_name = "${local.product}-adgroup-externals"
 }
 
+data "azuread_group" "adgroup_admin_dev" {
+  display_name = "${local.product}-adgroup-admin-dev"
+}
+
 data "azuread_group" "adgroup_security" {
   display_name = "${local.product}-adgroup-security"
 }

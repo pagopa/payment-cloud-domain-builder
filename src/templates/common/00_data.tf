@@ -1,6 +1,6 @@
 data "azurerm_key_vault" "domain_kv" {
-  name                = "${local.product}-${var.location_short}-${local.domain_short}-kv"
-  resource_group_name = "${local.product}-${var.location_short}-${local.domain}-sec-rg"
+  name                = "${local.project}-kv"
+  resource_group_name = "${local.project}-sec-rg"
 }
 
 

@@ -1,9 +1,7 @@
 locals {
-  domain        = "{{domain_name}}"
-  domain_short  = "{{domain_name_short}}"
+  domain        = "{{domain_name_short}}"
   prefix        = "{{product_name}}"
   product       = "${local.prefix}-${var.env_short}"
-  project_short = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain_short}"
   project       = "${local.prefix}-${var.env_short}-${var.location_short}-${local.domain}"
 
 
@@ -35,7 +33,7 @@ locals {
 {% if include_kubernetes %}
   aks_name = "{{aks_name}}"
   aks_rg_name = "{{aks_rg_name}}"
-  ingress_hostname = "${var.location_short}.${local.domain}"
+  ingress_hostname = "${var.location_short}${var.env}.${local.domain}"
 {% endif %}
 
 }

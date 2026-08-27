@@ -17,7 +17,7 @@ data "azurerm_key_vault_secret" "pgres_flex_admin_pwd" {
 }
 
 
-module "postgres_flexible_server_{{ domain_name_snake }}" {
+module "postgres_flexible_server_{{ domain_name_short_snake }}" {
   source = "./.terraform/modules/__v4__/IDH/postgres_flexible_server"
 
   name                = "${local.project}-flexible-postgresql"

@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "redis_rg" {
 }
 
 module "redis" {
-  source = "./.terraform/modules/__v4__/IDH/redis"
+  source = "./.terraform/modules/__v4__/IDH/managed_redis"
 
   env = var.env
   idh_resource_tier = var.redis_idh_resource_tier
@@ -31,55 +31,25 @@ module "redis" {
     source_address_prefixes_name = local.domain
   }
 
-  patch_schedules = [
-    {
-      day_of_week    = "Sunday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Monday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Tuesday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Wednesday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Thursday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Friday"
-      start_hour_utc = 23
-    },
-    {
-      day_of_week    = "Saturday"
-      start_hour_utc = 23
-    }
-  ]
 
   tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_access_key" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_short_snake}}_access_key" {
   name         = "redis-${local.domain}-access-key"
   value        = module.redis.primary_access_key
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_hostname" {
+resource "azurerm_key_vault_secret" "redis_{{domain_name_short_snake}}_hostname" {
   name         = "redis-${local.domain}-hostname"
   value        = module.redis.hostname
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }
 
-resource "azurerm_key_vault_secret" "redis_{{domain_name_snake}}_connection_string" {
-  name         = "redis-${local.domain}-hostname"
+resource "azurerm_key_vault_secret" "redis_{{domain_name_short_snake}}_connection_string" {
+  name         = "redis-${local.domain}-connection-string"
   value        = module.redis.primary_connection_string
   key_vault_id = data.azurerm_key_vault.domain_kv.id
 }

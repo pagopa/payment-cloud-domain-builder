@@ -59,7 +59,7 @@ module "cosmos" {
 }
 
 
-resource "azurerm_key_vault_secret" "cosmos_{{domain_name_snake}}_pkey" {
+resource "azurerm_key_vault_secret" "cosmos_{{domain_name_short_snake}}_pkey" {
   name         = "${local.domain}-${var.env_short}-cosmos-pkey"
   value        = module.cosmos.primary_key
   content_type = "text/plain"

@@ -11,7 +11,7 @@ module "{{app_service_webapp_name_snake}}_app_service" {
   env                 = var.env
   idh_resource_tier   = var.{{app_service_webapp_name_snake}}_plan_idh_tier
   location            = var.location
-  name                = "${local.project_short}-{{app_service_webapp_name_kebab}}-wa"
+  name                = "${local.project}-{{app_service_webapp_name_kebab}}-wa"
   product_name        = local.prefix
   resource_group_name = azurerm_resource_group.{{app_service_webapp_name_snake}}_rg.name
 
