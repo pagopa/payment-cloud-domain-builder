@@ -54,7 +54,7 @@ module "kv_access_policy_admin_dev" {
   source            = "./.terraform/modules/__v4__/IDH/key_vault_access_policy"
 
   product_name      = "pagopa"
-  idh_resource_tier = "external"
+  idh_resource_tier = "admin_dev"
   env               = var.env
   key_vault_id      = module.key_vault.id
   tenant_id         = data.azurerm_client_config.current.tenant_id
