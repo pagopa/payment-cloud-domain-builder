@@ -17,6 +17,8 @@ module "workload_identity" {
   key_vault_certificate_permissions = ["Get"]
   key_vault_key_permissions         = ["Get"]
   key_vault_secret_permissions      = ["Get"]
+
+  tags = {% if include_tag_config %}module.tag_config.tags{% else %}{{ tag_source }}{% endif %}
 }
 
 resource "kubernetes_pod_disruption_budget_v1" "{{domain_name_short_snake}}_pdb" {
